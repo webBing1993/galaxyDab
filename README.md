@@ -1,7 +1,11 @@
-# buserdab
+# galaxyDab
 
-> fortrun dashboard for B
+> fortrun dashboard for Buser
 
+生态酒店基础服务平台
+
+
+>针对B端用户管理体系
 ## Build Setup
 
 ``` bash
