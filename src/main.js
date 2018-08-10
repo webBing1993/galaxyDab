@@ -23,6 +23,8 @@ router.afterEach(function (to,from) {
     console.log('成功浏览到from: ' ,from.path);
 })
 
+import divider from './UIcomponents/divide'
+Vue.component('divider',divider)
 new Vue({
   el: '#app',
   router,
