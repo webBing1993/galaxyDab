@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store';
+import './mixins'
 Vue.config.productionTip = false
 
 import 'babel-polyfill'
@@ -25,6 +26,7 @@ router.afterEach(function (to,from) {
 
 import divider from './UIcomponents/divide'
 Vue.component('divider',divider)
+
 new Vue({
   el: '#app',
   router,
