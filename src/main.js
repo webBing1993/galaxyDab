@@ -19,10 +19,10 @@ import 'iview/dist/styles/iview.css';
 Vue.use(iView);
 /* eslint-disable no-new */
 
-router.afterEach(function (to,from) {
-    console.log('成功浏览到to: ' ,to.path);
-    console.log('成功浏览到from: ' ,from.path);
-})
+// router.afterEach(function (to,from) {
+    // console.log('成功浏览到to: ' ,to.path);
+    // console.log('成功浏览到from: ' ,from.path);
+// })
 
 import divider from './UIcomponents/divide'
 Vue.component('divider',divider)

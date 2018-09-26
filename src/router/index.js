@@ -36,20 +36,17 @@ import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
 Vue.use(Router)
 
 const main=[{
-    path: '/buser',
-    name: 'Home',
+    path: '/',
     component: Home,
     children:[
         //B端用户----2级路由
         {
             path: '/',
-            name: 'Buser',
             component: Buser,
             children:[
                 //组织管理----3级路由
                 {
                     path: 'hotelOrg',
-                    name: 'hotelOrg',
                     component: hotelOrg,
                     children:[
                         //treeInfo----4级路由
@@ -63,13 +60,11 @@ const main=[{
                 //复创组织
                 {
                     path: 'fortrunOrg',
-                    name: 'fortrunOrg',
                     component: fortrunOrg,
                     children:[
                         //treeInfo----4级路由
                         {
                             path: '/',
-                            name: 'fortrunInfo',
                             component: fortrunInfo
                         }
                     ]
@@ -90,7 +85,6 @@ const main=[{
                 //用户管理
                 {
                     path: 'userManage',
-                    name: 'userManage',
                     component: userManage,
                     children:[
                         //treeInfo----4级路由
@@ -104,7 +98,6 @@ const main=[{
                 //权限管理
                 {
                     path: 'authorityManage',
-                    name: 'authorityManage',
                     component: authorityManage,
                     children:[
                         //treeInfo----4级路由
@@ -118,7 +111,6 @@ const main=[{
                 //角色管理
                 {
                     path: 'roleManage',
-                    name: 'roleManage',
                     component: roleManage,
                     children:[
                         //treeInfo----4级路由

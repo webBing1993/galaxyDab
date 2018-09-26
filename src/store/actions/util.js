@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import router from '../../router/index.js'
+import axios from 'axios'
 
 Vue.use(VueResource)
 
@@ -18,51 +19,31 @@ module.exports = {
     // console.log('router:',router)
   },
 
-  // 服务器请求
-  resource: (ctx, param) => {
-    let isRefresh = /hotel\/.+\/refresh/.test(param.url)
-    // isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
-    Vue.http({
-      // url: './gemini'+param.url,//wqtenv/wqtversion
-      url: param.url, // wqtenv/wqtversion
-      body: param.body || null,
-      headers: param.headers || {
-        // Session: sessionStorage.session_id
-      },
-      params: param.params || null,
+  request: (ctx, param) => {
+    axios({
+      url: param.url,
       method: param.method || 'GET',
-      timeout: param.timeout || 60000,
-      credentials: false,
-      emulateHTTP: false,
-      emulateJSON: false
-    }).then(
-      response => {
-        if (response.body.errcode && +response.body.errcode === 0) {
-          param.onSuccess ? param.onSuccess(response.body, response.headers) : null
-        } else {
-          ctx.dispatch('showtoast', response.body.errmsg)
-          param.onFail ? param.onFail(response.body) : null
-        }
+      baseURL: '/services',
+      headers: param.header || {},
+      params: param.params || null,
+      data: param.body || null,
+      timeout: param.timeout || 60000
+    }).then(response => {
+      if (response.config.url.match('export')) {
+        param.onSuccess && param.onSuccess(response)
+      } else if (+response.data.errcode === 0 || +response.status === 204) {
+        param.onSuccess && param.onSuccess(response.data, response.headers)
+      } else {
+        // ctx.dispatch('showtoast', {text: response.data.errmsg, type: 'error'})
+        param.onFail && param.onFail(response)
       }
-    ).catch(
+    }).catch(
       error => {
-        // ErrorCallback
-        console.log('error:', error)
-        let hint = ''
-        if (error.status === 401) {
-          hint = '登录失效!'
-        } else if (error.status === 1) {
-          hint = '请求超时!'
-        } else {
-          hint = '请求失败'
-        }
-        // ctx.dispatch('showtoast', hint);
-      }
-    ).finally(
-      final => {
-        // isRefresh ? ctx.dispatch('showprogress', {show: false, isOk: true}) : ctx.commit('LOADING');
+        console.log(error)
       }
     )
   }
 
 }
+
+
