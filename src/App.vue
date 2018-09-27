@@ -13,7 +13,7 @@ export default {
 
   },
   mounted(){
-      router.push('./buser/hotelOrg')
+//      router.push('./buser/hotelOrg')
   }
 }
 </script >

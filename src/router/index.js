@@ -50,11 +50,11 @@ const main=[{
                     component: hotelOrg,
                     children:[
                         //treeInfo----4级路由
-                        {
-                            path: '/',
-                            name: 'orgDetailedInfo',
-                            component: orgDetailedInfo
-                        }
+                        // {
+                        //     path: '/',
+                        //     name: 'orgDetailedInfo',
+                        //     component: orgDetailedInfo
+                        // }
                     ]
                 },
                 //复创组织
@@ -131,6 +131,7 @@ const main=[{
         }
     ]
 }]
+
 export default new Router({
     routes: [...main]
 })
