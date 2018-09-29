@@ -12,14 +12,20 @@
   },
   "dependencies": {
     "ajv": "^6.5.2",
+<<<<<<< HEAD
     "axios": "^0.18.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-polyfill": "^6.26.0",
     "element-china-area-data": "^4.1.1",
+=======
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-polyfill": "^6.26.0",
+>>>>>>> 9483c4063517aac9e428d98d4b57e7ad5e87f1c1
     "element-ui": "^2.4.5",
     "iview": "^3.0.0",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
+<<<<<<< HEAD
     "qs": "^6.5.2",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.1",
@@ -30,6 +36,15 @@
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "axios": "^0.18.0",
+=======
+    "vue": "^2.5.2",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.2",
+>>>>>>> 9483c4063517aac9e428d98d4b57e7ad5e87f1c1
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
@@ -55,7 +70,10 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+<<<<<<< HEAD
     "mockjs": "^1.0.1-beta3",
+=======
+>>>>>>> 9483c4063517aac9e428d98d4b57e7ad5e87f1c1
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
