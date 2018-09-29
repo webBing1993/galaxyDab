@@ -2,7 +2,7 @@ module.exports = {
   // 获取酒店组织树
   hotelOrgTree(ctx, params) {
     ctx.dispatch('request', {
-      url: `http://intg.fortrun.cn:8762/galaxy-front/org/getorgs`,
+      url: `/org/getorgs`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)

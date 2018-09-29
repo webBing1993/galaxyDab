@@ -244,26 +244,26 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
-  .third_wrap .rightWrap .rightInfo .bottomContent .item.address{
-    .el-select{
-      width: 25%;
-    }
-    .el-input{
-      width:100%;
-    }
-  }
-.dialog_item{
-  margin-bottom: 1rem;
-  .left{
-    text-align: right;
-    display: inline-block;
-    width:5rem;
-    margin-right: 1rem;
-  }
-  .el-input{
-    width: 50%;
-  }
-}
+  /*.third_wrap .rightWrap .rightInfo .bottomContent .item.address{*/
+    /*.el-select{*/
+      /*width: 25%;*/
+    /*}*/
+    /*.el-input{*/
+      /*width:100%;*/
+    /*}*/
+  /*}*/
+/*.dialog_item{*/
+  /*margin-bottom: 1rem;*/
+  /*.left{*/
+    /*text-align: right;*/
+    /*display: inline-block;*/
+    /*width:5rem;*/
+    /*margin-right: 1rem;*/
+  /*}*/
+  /*.el-input{*/
+    /*width: 50%;*/
+  /*}*/
+/*}*/
 
 
 </style>

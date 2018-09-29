@@ -20,11 +20,15 @@ module.exports = {
   },
 
   request: (ctx, param) => {
+    let headers = param.headers || {};
+    if (!param.url.match(/register/) && !param.url.match(/login/) ) {
+      headers.Session = "bdash_JGuVQ3oKnpX9VQYL1YtrtQ=="
+    }
     axios({
       url: param.url,
       method: param.method || 'GET',
-      baseURL: '/services',
-      headers: param.header || {},
+      baseURL: '',
+      headers: headers,
       params: param.params || null,
       data: param.body || null,
       timeout: param.timeout || 60000
