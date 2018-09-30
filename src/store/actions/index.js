@@ -1,5 +1,6 @@
 
 module.exports = {
   ...require('./orgManagement/hotelOrg'),
-  ...require('./util')
+  ...require('./util'),
+  ...require('./ui'),
 }

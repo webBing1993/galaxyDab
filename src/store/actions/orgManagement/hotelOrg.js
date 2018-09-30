@@ -3,6 +3,7 @@ module.exports = {
   hotelOrgTree(ctx, params) {
     ctx.dispatch('request', {
       url: `/org/getorgs`,
+      // url: "http://qa.fortrun.cn:8762/galaxy-front/org/getorgs",
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -21,7 +22,7 @@ module.exports = {
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
-      onFail: body => {
+      onFail: (body) => {
         params.onfail && params.onfail(body)
       }
     })
@@ -39,7 +40,7 @@ module.exports = {
       }
     })
   },
- // 修改组织机构详细信息 url:/org/updat eorgbyid
+  // 修改组织机构详细信息 url:/org/updat eorgbyid
   modifyHotelOrgTreeNode(ctx, params) {
     ctx.dispatch('request', {
       url: `/org/updateorgbyid`,
@@ -54,7 +55,7 @@ module.exports = {
     })
   },
   // 描述:获取集团品牌列表 url:/org/getbrands/{groupId} 请求方式get
-  getBrandList(ctx, params) {
+  BrandList(ctx, params) {
     ctx.dispatch('request', {
       url: `/org/getbrands/${params.groupId}`,
       method: 'get',
@@ -66,4 +67,22 @@ module.exports = {
       }
     })
   },
+
+  // 描述:修改酒店所属父节点
+  changeRelationship(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/`,
+      method: 'POST',
+      body: {...params.fields},
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
+// 获取酒店下品牌列表  下拉框
+  // org/getBrandsByOrgId/{orgId}
 }

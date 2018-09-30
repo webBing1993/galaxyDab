@@ -12,7 +12,7 @@
       <div style="margin-top:1rem;float: left;min-width: 400px">
         <el-tree
           class="filter-tree"
-          :data="data3"
+          :data="hotelOrgTreeDate"
           :props="defaultProps"
           node-key="id"
           default-expand-all
@@ -20,7 +20,7 @@
           :filter-node-method="filterNode"
           :check-on-click-node="true"
           :highlight-current="true"
-          ref="tree2"
+          ref="tree"
           @node-click="handleNodeClick"
         >
           <!--@check-change="choseNode(item,node,aaa)"-->
@@ -38,8 +38,15 @@
       </div>
     </div>
     <div class="rightWrap">
-      <router-view></router-view>
-      <orgDetailed-Info></orgDetailed-Info>
+      <div v-if="showNodeDetailForEdit">
+        <orgDetailed-Info
+          :currendNode="currendNode"
+          :NodeId="currentAddNodeParentId"
+          :parentNodeList="allHotelOrgNode"
+        ></orgDetailed-Info>
+        <brand-Info :NodeId="currentAddNodeParentId"
+        ></brand-Info>
+      </div>
     </div>
     <!--新增弹窗-->
     <div id="orgDialog">
@@ -118,12 +125,12 @@
             </el-form-item>
             <el-form-item label="门店地址">
               <!--<el-input v-model="hotelInfo.shopAdress" placeholder="请输入内容"></el-input>-->
-                <el-cascader
-                  @change="adressChange"
-                  :props="AdressProps"
-                  :options="area"
-                  change-on-select
-                ></el-cascader>
+              <el-cascader
+                @change="adressChange"
+                :props="AdressProps"
+                :options="area"
+                change-on-select
+              ></el-cascader>
             </el-form-item>
             <el-form-item label="详细地址">
               <el-input v-model="hotelInfo.shopDetailAdress" placeholder="请输入内容"></el-input>
@@ -160,11 +167,13 @@
 <script>
   import {mapActions, mapGetters, mapState, mapMutations} from 'vuex';
   import orgDetailedInfo from './orgDetailedInfo.vue'
+  import brandInfo from './brandInfo.vue'
   import area from '../../../../assets/json/area'
 
   export default {
     components: {
       orgDetailedInfo: orgDetailedInfo,
+      brandInfo: brandInfo,
 
     },
     name: 'hotelInfo',
@@ -198,68 +207,29 @@
         area: area,
         dialogVisible: false,
         filterText: '',
-        input: '',
         hotelOrgTreeDate: [
           {
-            id: "rootNodeId",
-            parentId: "0",
-            foreignId: "AAAA",
-            name: "顶级组织",
-            type: "ROOT",
-            subOrgs: []
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "顶级组织",
+            "type": "ROOT",
+            "subOrganizations": [],
+            "parentId": "0",
+            "orgId": "rootNodeId",
+            "status": null
           }
-        ],
-        data3: [
-          {
-            id: "rootNodeId",
-            parentId: "0",
-            foreignId: "AAAA",
-            name: "顶级组织",
-            type: "ROOT",
-            subOrgs: [{
-              id: "1223",
-              parentId: "6665",
-              foreignId: "AAAA",
-              name: "集团1",
-              type: "GROUP",
-              subOrgs: [
-                {
-                  id: "7788",
-                  parentId: "345678",
-                  foreignId: "AAAA",
-                  name: "酒店1",
-                  type: "HOTEL",
-                  subOrgs: []
-                }, {
-                  id: "565667",
-                  parentId: "345678",
-                  foreignId: "AAAA",
-                  name: "分组1",
-                  type: "SEGMENT",
-                  subOrgs: [{
-                    id: "4656576",
-                    parentId: "345678",
-                    foreignId: "AAAA",
-                    name: "部门1",
-                    type: "DEPT",
-                    subOrgs: []
-                  }]
-                }
-              ]
-            }]
-          }
-
         ],
         defaultProps: {
-          children: 'subOrgs',
-          label: 'name'
+          children: 'subOrganizations',
+          label: 'name',
+          id: 'orgId'
         },
         AdressProps: {
           value: "label",
           label: "label",
           children: "children",
         },
-        checkedNode: {},
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
 
@@ -278,8 +248,11 @@
             label: ' 部门'
           }],
         currentAddNodeParentType: '',
-        currentAddNodeParentId:'',
-        options: []
+        currentAddNodeParentId: '',
+        currendNode: {},
+        options: [],
+        showNodeDetailForEdit: false,
+        allHotelOrgNode: []
       }
     },
     computed: {
@@ -312,22 +285,31 @@
         'modifyHotelOrgTreeNode',
       ]),
       adressChange(value) {
-        console.log(value)
         this.hotelInfo.shopAdress = value
       },
       handelAdd(data) {
-        console.log(data)
         this.currentAddNodeParentType = data.type
-        this.currentAddNodeParentId = data.id
+        this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
       },
 //      获取组织树
       getHotelOrgTree() {
         this.hotelOrgTree({
           onsuccess: body => {
-            console.log(body.data)
             if (body.data) {
-              this.hotelOrgTreeDate[0].subOrgs = body.data
+              this.hotelOrgTreeDate[0].subOrganizations = body.data
+              var temp = []
+              this.getALLNode(this.hotelOrgTreeDate[0], temp)
+              temp.push({
+                "name": "顶级组织",
+                "type": "ROOT",
+                "orgId": "rootNodeId",
+              })
+              temp.map(item=>{
+                if(item.type=='SEGMENT'||item.type=="ROOT"){
+                    this.allHotelOrgNode.push(item)
+                }
+              })
             } else {
             }
           }
@@ -336,13 +318,13 @@
 
 //      添加节点
       submitAdd() {
-
-        console.log('this.addNodeType', this.addNodeType)
+        let fields = {}
         if (this.addNodeType == 'GROUP') {
-          let fields = {
-            name: this.addNodeName||"",
-            type: this.addNodeType||"",
-            parentId: this.currentAddNodeParentId,
+          fields = {
+            name: this.addNodeName || "",
+            type: this.addNodeType || "",
+//            parentId: this.currentAddNodeParentId,
+            parentId: '0',
             info: {
               name: this.groupInfo.enterpriseName,
               type: this.groupInfo.enterpriseName,
@@ -350,36 +332,36 @@
               addressCode: this.groupInfo.enterpriseName,
               tel: this.groupInfo.enterpriseName,
               province: '省',
-              city:'省',
+              city: '省',
               area: '省',
               address: '地址明细',
               logoUrl: '',
             }
           }
         }
-        else if(this.addNodeType == 'HOTEL'){
-          let fields = {
-            name: this.addNodeName||"",
-            type: this.addNodeType||"",
+        else if (this.addNodeType == 'HOTEL') {
+          fields = {
+            name: this.addNodeName || "",
+            type: this.addNodeType || "",
             parentId: this.currentAddNodeParentId,
             info: {
-              name: "组织一",
-              type: "GENERAL",
-              code: "ABC",
-              addressCode: "SHANGHAI",
-              tel: "021-56387283",
-              province: "SHANGHAI",
-              city: "SHANGHAI",
-              area: "HUANGPU",
-              address: "KONGJIANG ROAD 1555 HUANGPU SHANGHAI", "contactName": "name", "contactPhone": "182877373",
-              logoUrl: "qwewrerere1222", "memo": "", "website": "www.baidu.com"
+              name: this.hotelInfo.shopName || '',
+              type: this.hotelInfo.shopType || '',
+              code: this.hotelInfo.shopCode || '',
+              addressCode: this.hotelInfo.shopAdress || '',
+              tel: this.hotelInfo.shopName,
+              province: '',
+              city: '',
+              area: "",
+              address: this.hotelInfo.shopDetailAdress,
+              logoUrl: ""
             }
           }
         }
         else {
-          let fields = {
-            name: this.addNodeName||"",
-            type: this.addNodeType||"",
+          fields = {
+            name: this.addNodeName || "",
+            type: this.addNodeType || "",
             parentId: this.currentAddNodeParentId,
             info: {
               name: "",
@@ -399,7 +381,16 @@
           fields: fields,
           onsuccess: body => {
             this.getHotelOrgTree()
+            this.showAddNew = false
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
+            this.showAddNew = false
           }
+
         })
       },
 
@@ -438,9 +429,29 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        console.log('item:', item);
-        console.log('node:', node);
-        console.log('aaa:', aaa);
+        if (item.orgId == "rootNodeId") {
+          this.$message({
+            message: "顶级组织不可编辑",
+            type: 'error'
+          });
+          return false
+        } else {
+          this.showNodeDetailForEdit = true
+          this.currentAddNodeParentId = item.orgId
+          this.currendNode = item
+        }
+      },
+      getALLNode(tree, nodeList) {
+        if (!tree.subOrganizations) {
+          return
+        } else {
+          for (var i = 0; i < tree.subOrganizations.length; i++) {
+            nodeList.push(tree.subOrganizations[i])
+            this.getALLNode(tree.subOrganizations[i], nodeList)
+          }
+          return nodeList
+        }
+
       },
 
 //  节点过滤
@@ -449,22 +460,13 @@
         return data.name.indexOf(value) !== -1;
       },
 
-      append(data) {
-        this.showAddNew = true
-      },
-      remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.subPermissions || parent.data;
-        const index = children.findIndex(d => d.permissionId === data.permissionId);
-        children.splice(index, 1);
-      },
     },
     mounted() {
       this.getHotelOrgTree()
     },
     watch: {
       filterText(val) {
-        this.$refs.tree2.filter(val);
+        this.$refs.tree.filter(val);
       }
     }
   }
@@ -513,10 +515,10 @@
           }
         }
       }
-      .el-select-dropdown__list {
+      /deep/ .el-select-dropdown__list {
         padding-bottom: 20px;
       }
-      .el-cascader{
+      .el-cascader {
         width: 100%;
       }
     }

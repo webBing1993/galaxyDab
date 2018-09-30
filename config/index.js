@@ -11,10 +11,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '': {
-        target: 'http://intg.fortrun.cn:8762/galaxy-front',
+      '/galaxy':{
+        target: 'http://qa.fortrun.cn:8762',
         changeOrigin: true,
-
       }
     },
     // Various Dev Server settings

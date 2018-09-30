@@ -21,14 +21,12 @@ module.exports = {
 
   request: (ctx, param) => {
     let headers = param.headers || {};
-    if (!param.url.match(/register/) && !param.url.match(/login/) ) {
       headers.Session = "bdash_JGuVQ3oKnpX9VQYL1YtrtQ=="
-    }
     axios({
       url: param.url,
       method: param.method || 'GET',
-      baseURL: '',
-      headers: headers,
+      baseURL: '/galaxy-front',
+      headers: null,
       params: param.params || null,
       data: param.body || null,
       timeout: param.timeout || 60000
@@ -37,16 +35,20 @@ module.exports = {
         param.onSuccess && param.onSuccess(response)
       } else if (+response.data.errcode === 0 || +response.status === 204) {
         param.onSuccess && param.onSuccess(response.data, response.headers)
-      } else {
-        // ctx.dispatch('showtoast', {text: response.data.errmsg, type: 'error'})
+      }else if(response.data.errcode!==0){
+        param.onFail && param.onFail(response)
+      }
+      else {
         param.onFail && param.onFail(response)
       }
     }).catch(
       error => {
-        console.log(error)
+          console.log(error)
       }
     )
   }
+
+
 
 }
 
