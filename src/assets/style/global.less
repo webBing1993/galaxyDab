@@ -1,165 +1,167 @@
 
 .second_wrap,
 .third_wrap {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
+
 //二级包裹
-.second_wrap{
-    background: #ffffff;
-    //overflow: hidden;
-    .el-table th,.el-table td, .el-table th{
-        text-align: center;
-    }
-    .row{
-        height:100%;
-        overflow: hidden;
-        display: flex;
-        flex-flow:row wrap;
-        justify-content: center;
-        //侧边栏
-        .aside{
-            width: 15%;
-            border: 1px solid #eeeeee;
-            height: 100%;
-            overflow: scroll;
-            .el-menu-item{
-                text-align: left;
-                &.is-active{
-                    background: #42c640;
-                    color: #ffffff;
-                }
-            }
-            .el-submenu__title{
-                text-align: left;
-            }
-            .noIcon{
-                margin-left: 2rem;
-            }
+.second_wrap {
+  background: #ffffff;
+  //overflow: hidden;
+  .el-table th, .el-table td, .el-table th {
+    text-align: center;
+  }
+  .row {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    //侧边栏
+    .aside {
+      width: 15%;
+      border: 1px solid #eeeeee;
+      height: 100%;
+      overflow: scroll;
+      .el-menu-item {
+        text-align: left;
+        &.is-active {
+          background: #42c640;
+          color: #ffffff;
         }
-        .mainContent{
-            height: 100%;
-            overflow: hidden;
-            width: 85%;
-        }
+      }
+      .el-submenu__title {
+        text-align: left;
+      }
+      .noIcon {
+        margin-left: 2rem;
+      }
     }
+    .mainContent {
+      height: 100%;
+      overflow: hidden;
+      width: 85%;
+    }
+  }
 }
+
 //三级包裹，侧边栏右边部分
-.third_wrap{
-    display: flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    justify-content:space-around;
-    //树结构
-    .treeWrap{
-        width: 35%;
-        padding: 1rem;
-        border-right: 1px solid #eeeeee;
-        height: 100%;
-        overflow: scroll;
-        .orgTitle{
-            height: 4rem;
-            border-bottom: 1px solid #eeeeee;
-            .catalogue{
-                float: left;
-                margin-top: 0.5rem;
-                font-size: 18px;
-                font-weight: bold;
-            }
-            .el-input{
-                width: 80%;
-            }
+.third_wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  //树结构
+  .treeWrap {
+    width: 35%;
+    padding: 1rem;
+    border-right: 1px solid #eeeeee;
+    height: 100%;
+    overflow: scroll;
+    .orgTitle {
+      height: 4rem;
+      border-bottom: 1px solid #eeeeee;
+      .catalogue {
+        float: left;
+        margin-top: 0.5rem;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .el-input {
+        width: 80%;
+      }
+    }
+    //.treeHandleIcon{
+    //    display: inline-block;
+    //    width: 1rem;
+    //    height: 2rem;
+    //    border: 1px solid #23a8eb;
+    //}
+  }
+  //树架构的右边详情部分
+  .rightWrap {
+    //height: 100%;
+    width: 65%;
+    padding: 1rem;
+    height: 100%;
+    overflow: scroll;
+    font-size: 16px;
+    .rightInfo {
+      width: 100%;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      text-align: left;
+      .right {
+        width: 6rem;
+        text-align: right;
+        display: inline-block;
+      }
+
+      .topTitle {
+        //line-height: 4rem;
+        height: 4rem;
+        line-height: 4rem;
+        border-bottom: 1px solid #eeeeee;
+        .catalogue {
+          margin-bottom: 2rem;
         }
-        //.treeHandleIcon{
-        //    display: inline-block;
-        //    width: 1rem;
-        //    height: 2rem;
-        //    border: 1px solid #23a8eb;
+      }
+
+      .centerContent {
+        display: block;
+        border-bottom: 1px solid #eeeeee;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        //.item{
+        //    width: 70%;
+        //    min-width: 50%;
+        //    margin: 1rem;
+        .el-input {
+          width: 60%;
+        }
+        .el-select {
+          width: 80%;
+        }
+        //    &.address{
+        //        .el-select{
+        //            width: 30%;
+        //        }
+        //    }
         //}
-    }
-    //树架构的右边详情部分
-    .rightWrap{
-        //height: 100%;
-        width: 65%;
-        padding: 1rem;
-        height: 100%;
-        overflow: scroll;
-        font-size: 16px;
-        .rightInfo{
-            width: 100%;
-            display: flex;
-            flex-flow:column wrap;
-            justify-content: center;
-            text-align: left;
-            .right{
-                width:6rem;
-                text-align: right;
-                display: inline-block;
-            }
 
-            .topTitle{
-                //line-height: 4rem;
-                height:4rem;
-                border-bottom: 1px solid #eeeeee;
-                .catalogue{
-                    margin-bottom: 2rem;
-                }
-            }
-
-            .centerContent{
-                display: block;
-                border-bottom: 1px solid #eeeeee;
-                margin-bottom: 1rem;
-                margin-top: 1rem;
-                //.item{
-                //    width: 70%;
-                //    min-width: 50%;
-                //    margin: 1rem;
-                    .el-input{
-                        width: 60%;
-                    }
-                    .el-select{
-                        width: 80%;
-                    }
-                //    &.address{
-                //        .el-select{
-                //            width: 30%;
-                //        }
-                //    }
-                //}
-
-
-            }
-            .bottomContent{
-                //.item{
-                //    margin: 1rem;
-                //    //.right{
-                //    //    display: inline-block;
-                //    //    width: 6rem;
-                //    //}
-                    .el-input{
-                      width: 60%;
-                    }
-                    .el-select{
-                        width: 100%;
-                    }
-                //}
-            }
-
+      }
+      .bottomContent {
+        //.item{
+        //    margin: 1rem;
+        //    //.right{
+        //    //    display: inline-block;
+        //    //    width: 6rem;
+        //    //}
+        .el-input {
+          width: 60%;
         }
+        .el-select {
+          width: 100%;
+        }
+        //}
+      }
+
     }
+  }
 }
 
-
-.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
-    background-color: #25b2f9;
-    color: #ffffff;
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #25b2f9;
+  color: #ffffff;
 }
-.custom-tree-node{
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 1.5rem;
+
+.custom-tree-node {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 1.5rem;
 }

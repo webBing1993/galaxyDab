@@ -12,7 +12,7 @@
       <div style="margin-top:1rem;float: left;min-width: 400px">
         <el-tree
           class="filter-tree"
-          :data="fortrunOrgTreeDate"
+          :data="otherOrgTreeDate"
           :props="defaultProps"
           node-key="id"
           default-expand-all
@@ -39,9 +39,27 @@
     </div>
     <div class="rightWrap">
       <div v-if="showNodeDetailForEdit">
-        <fortrun-Info
-          :currendNode="currendNode"
-          :NodeId="currentAddNodeParentId"></fortrun-Info>
+        <div class="rightInfo">
+          <div class="topTitle">
+            <h4>集团 > 品牌 > 酒店</h4>
+          </div>
+          <div class="centerContent">
+            <el-form label-width="100px" label-position="left">
+              <el-form-item label="ID">
+                <el-input v-model="currendNode.orgId" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="名称">
+                <el-input v-model="currendNode.name"></el-input>
+              </el-form-item>
+              <el-form-item label="类型">
+                <el-input v-model="disableEditType" disabled></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div>
+            <el-button type="success" plain @click="submitModify">保存</el-button>
+          </div>
+        </div>
       </div>
     </div>
     <!--新增弹窗-->
@@ -80,12 +98,10 @@
 
 <script>
   import {mapActions, mapGetters, mapState, mapMutations} from 'vuex';
-  import fortrunInfo from './fortrunInfo.vue'
 
 
   export default {
     components: {
-      fortrunInfo: fortrunInfo,
 
     },
     name: 'hotelInfo',
@@ -96,7 +112,7 @@
         addNodeType: '',
         dialogVisible: false,
         filterText: '',
-        fortrunOrgTreeDate: [
+        otherOrgTreeDate: [
           {
             "foreignId": "",
             "creator": null,
@@ -108,7 +124,7 @@
                 "foreignId": "",
                 "creator": null,
                 "deleted": false,
-                "name": "研发",
+                "name": "国泰",
                 "type": "GENERAL",
                 "subOrganizations": [],
                 "parentId": "0",
@@ -119,7 +135,7 @@
                 "foreignId": "",
                 "creator": null,
                 "deleted": false,
-                "name": "商务",
+                "name": "大江",
                 "type": "GENERAL",
                 "subOrganizations": [],
                 "parentId": "0",
@@ -140,41 +156,38 @@
 
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
-//        companyType: [
-//          {
-//            value: 'UNION',
-//            label: '子公司'
-//          }, {
-//            value: 'GENERAL',
-//            label: '部⻔'
-//
-//          }
-//        ],
+        companyType: [
+          {
+            value: 'UNION',
+            label: '旅业'
+          },
+          {
+            value: 'UNION1',
+            label: '施工单位'
+          },
+          {
+            value: 'GENERAL',
+            label: '部⻔'
+          }
+        ],
 
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
         currendNode: {},
         showNodeDetailForEdit: false,
+        disableEditType:'',
       }
     },
     computed: {
       ...mapState({}),
-      companyType() {
-        if (this.currentAddNodeParentType == 'UNION') {
-          return [{ value: 'UNION',label: '子公司' }, {value: 'GENERAL',label: '部⻔' }]
-        }
-        if (this.currentAddNodeParentType == 'GENERAL') {
-          return [{value: 'GENERAL',label: '部⻔' }]
-        }
+//      顶级组织可以是旅业或施工单位，旅业、施工单位下可创建部⻔，部⻔ 下面不能创建旅业和施工单位
 
-
-
-      },
     },
     methods: {
       ...mapActions([
-        'fortrunTree',
-        'addfortrunNode',
+        'otherTree',
+        'addotherNode',
+        'modifyother',
 
       ]),
 
@@ -187,11 +200,11 @@
 
       },
 //      获取组织树
-      getFortrunOrgTree() {
-        this.fortrunTree({
+      getotherOrgTree() {
+        this.otherTree({
           onsuccess: body => {
             if (body.data) {
-//              this.fortrunOrgTreeDate[0].subOrganizations = body.data
+//              this.otherOrgTreeDate[0].subOrganizations = body.data
             } else {
             }
           }
@@ -200,11 +213,11 @@
 
 //      添加节点
       submitAdd() {
-        this.addfortrunNode({
+        this.addotherNode({
           name:this.addNodeName,
           parentId:this.currentAddNodeParentId,
           onsuccess: body => {
-            this.getFortrunOrgTree()
+            this.getotherOrgTree()
             this.showAddNew = false
           },
           onfail: body => {
@@ -219,15 +232,16 @@
       },
 
 //      修改树节点
-//      modifyTreeNode() {
-//        let fields = {}
-//        this.modifyHotelOrgTreeNode({
-//          fields: fields,
-//          onsuccess: body => {
-//            this.getFortrunOrgTree()
-//          }
-//        })
-//      },
+      submitModify() {
+        this.modifyother({
+          id: this.currendNode.orgId,
+          name: this.currendNode.name,
+          parentId: this.currendNode.parentId,
+          onsuccess: body => {
+            this.getotherOrgTree()
+          }
+        })
+      },
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
@@ -253,7 +267,7 @@
       }
     },
     mounted() {
-      this.getFortrunOrgTree();
+      this.getotherOrgTree();
 
 
     },

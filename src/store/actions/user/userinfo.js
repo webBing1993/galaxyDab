@@ -1,9 +1,8 @@
 module.exports = {
-  // 获取酒店组织树
-  hotelOrgTree(ctx, params) {
+  // 获取用户组织树
+  UserManageTree(ctx, params) {
     ctx.dispatch('request', {
       url: `/org/getorgs`,
-      // url: "http://qa.fortrun.cn:8762/galaxy-front/org/getorgs",
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -13,12 +12,28 @@ module.exports = {
       }
     })
   },
-  // 添加酒店组织
-  addHotelOrgTreeNode(ctx, params) {
+  // 根据组织机构id获取用户列表 url:/user/getusersbyorgid/{orgid}
+  userList(ctx, params) {
     ctx.dispatch('request', {
-      url: `/org/addorg`,
+      url: `/user/getusersbyorgid/${params.orgid}`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
+  // 添加用户
+  adduser(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/user/adduserinorg`,
       method: 'POST',
-      body: {...params.fields},
+      body: {
+        body: {...params.fields},
+      },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -28,7 +43,7 @@ module.exports = {
     })
   },
   // 描述:获取组织机构详细信息 url:/org/get det ailbyid/{orgid}
-  hotelOrgNodeDetail(ctx, params) {
+  userNodeDetail(ctx, params) {
     ctx.dispatch('request', {
       url: `/org/getdetailbyid/${params.orgid}`,
       method: 'get',
@@ -40,10 +55,10 @@ module.exports = {
       }
     })
   },
-  // 修改组织机构详细信息 url:/org/updat eorgbyid
-  modifyHotelOrgTreeNode(ctx, params) {
+  // 修改组织机构详细信息 url:/user/updat euser 请求方式post
+  modifyuser(ctx, params) {
     ctx.dispatch('request', {
-      url: `/org/updateorgbyid`,
+      url: `/user/updateuser`,
       method: 'POST',
       body: {...params.fields},
       onSuccess: (body) => {
@@ -56,12 +71,14 @@ module.exports = {
   },
 
 
-  // 描述:修改酒店所属父节点
-  changeRelationship(ctx, params) {
+  // 描述:修改用户所属父节点
+  delUser(ctx, params) {
     ctx.dispatch('request', {
-      url: `/`,
+      url: `/user/deleteusers`,
       method: 'POST',
-      body: {...params.fields},
+      body: {
+        userIds:params.userIds
+      },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -70,8 +87,23 @@ module.exports = {
       }
     })
   },
-
-// 获取酒店下品牌列表  下拉框
+  // 描述:生成企业微信凭证 url:/user/createcredence
+  qyWeath(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/user/createcredence`,
+      method: 'POST',
+      body: {
+        userIds:params.userIds
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+// 获取用户下品牌列表  下拉框
   hotelBrandList(ctx, params) {
     ctx.dispatch('request', {
       url: `org/getBrandsByOrgId/${params.orgId}`,

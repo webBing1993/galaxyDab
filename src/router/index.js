@@ -13,7 +13,7 @@ import orgDetailedInfo from '@/components/Buser/organization/hotelOrgClass/orgDe
 import fortrunOrg from '@/components/Buser/organization/fortrunOrgClass/fortrunOrg'
 import fortrunInfo from '@/components/Buser/organization/fortrunOrgClass/fortrunInfo'
 ////////其他组织//////////
-import elseOrg from '@/components/Buser/organization/elseOrg'
+import elseOrg from '@/components/Buser/organization/anotherOrg/elseOrg'
 
 
 /////////////////////////用户管理///////////
@@ -49,25 +49,25 @@ const main=[{
                     path: 'hotelOrg',
                     component: hotelOrg,
                     children:[
-                        //treeInfo----4级路由
-                        // {
-                        //     path: '/',
-                        //     name: 'orgDetailedInfo',
-                        //     component: orgDetailedInfo
-                        // }
+                        // treeInfo----4级路由
+                        {
+                            path: '/',
+                            name: 'orgDetailedInfo',
+                            component: orgDetailedInfo
+                        }
                     ]
                 },
                 //复创组织
                 {
                     path: 'fortrunOrg',
                     component: fortrunOrg,
-                    children:[
-                        //treeInfo----4级路由
-                        {
-                            path: '/',
-                            component: fortrunInfo
-                        }
-                    ]
+                    // children:[
+                    //     //treeInfo----4级路由
+                    //     {
+                    //         path: '/',
+                    //         component: fortrunInfo
+                    //     }
+                    // ]
                 },
                 //其他组织
                 {

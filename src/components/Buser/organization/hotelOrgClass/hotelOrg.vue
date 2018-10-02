@@ -40,12 +40,16 @@
     <div class="rightWrap">
       <div v-if="showNodeDetailForEdit">
         <orgDetailed-Info
+          @modify-hotel-org-treeNode="modifyNode"
           :currendNode="currendNode"
           :NodeId="currentAddNodeParentId"
           :parentNodeList="allHotelOrgNode"
         ></orgDetailed-Info>
-        <brand-Info :NodeId="currentAddNodeParentId"
-        ></brand-Info>
+        <div v-if="this.currendNode.type=='GROUP'">
+          <brand-Info
+            :NodeId="currentAddNodeParentId"></brand-Info>
+        </div>
+
       </div>
     </div>
     <!--新增弹窗-->
@@ -100,17 +104,17 @@
             <el-form-item label="所属品牌">
               <el-select v-model="hotelInfo.belongBrand" placeholder="请选择">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in BrandList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="门店类型">
               <el-select v-model="hotelInfo.shopType" placeholder="请选择">
                 <el-option
-                  v-for="item in options"
+                  v-for="item in shopTypeList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -216,7 +220,7 @@
             "type": "ROOT",
             "subOrganizations": [],
             "parentId": "0",
-            "orgId": "rootNodeId",
+            "orgId": "0",
             "status": null
           }
         ],
@@ -247,10 +251,20 @@
             value: 'DEPT',
             label: ' 部门'
           }],
+        shopTypeList: [
+          {
+            value: 'UNION',
+            label: '联体酒店'
+          }, {
+            value: 'GENERAL',
+            label: '普通酒店'
+
+          }
+        ],
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
         currendNode: {},
-        options: [],
+        BrandList: [],
         showNodeDetailForEdit: false,
         allHotelOrgNode: []
       }
@@ -283,6 +297,7 @@
         'addHotelOrgTreeNode',
         'hotelOrgNodeDetail',
         'modifyHotelOrgTreeNode',
+        'hotelBrandList',
       ]),
       adressChange(value) {
         this.hotelInfo.shopAdress = value
@@ -291,6 +306,8 @@
         this.currentAddNodeParentType = data.type
         this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
+        this.getHotelBrandList()
+
       },
 //      获取组织树
       getHotelOrgTree() {
@@ -303,11 +320,11 @@
               temp.push({
                 "name": "顶级组织",
                 "type": "ROOT",
-                "orgId": "rootNodeId",
+                "orgId": "0",
               })
-              temp.map(item=>{
-                if(item.type=='SEGMENT'||item.type=="ROOT"){
-                    this.allHotelOrgNode.push(item)
+              temp.map(item => {
+                if (item.type == 'SEGMENT' || item.type == "ROOT") {
+                  this.allHotelOrgNode.push(item)
                 }
               })
             } else {
@@ -348,10 +365,10 @@
               name: this.hotelInfo.shopName || '',
               type: this.hotelInfo.shopType || '',
               code: this.hotelInfo.shopCode || '',
-              addressCode: this.hotelInfo.shopAdress || '',
+              addressCode: this.hotelInfo.shopAdress.join(',') || '',
               tel: this.hotelInfo.shopName,
-              province: '',
-              city: '',
+              province: this.hotelInfo.shopAdress[0] || '',
+              city: this.hotelInfo.shopAdress[1] || '',
               area: "",
               address: this.hotelInfo.shopDetailAdress,
               logoUrl: ""
@@ -429,7 +446,7 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        if (item.orgId == "rootNodeId") {
+        if (item.orgId == "0") {
           this.$message({
             message: "顶级组织不可编辑",
             type: 'error'
@@ -441,6 +458,7 @@
           this.currendNode = item
         }
       },
+
       getALLNode(tree, nodeList) {
         if (!tree.subOrganizations) {
           return
@@ -460,9 +478,25 @@
         return data.name.indexOf(value) !== -1;
       },
 
+      getHotelBrandList() {
+        this.hotelBrandList({
+          orgId: this.currentAddNodeParentId,
+          onsuccess: body => {
+            this.BrandList = body.data
+          }
+
+        })
+      },
+      modifyNode(){
+        this.getHotelOrgTree();
+      }
+
     },
     mounted() {
-      this.getHotelOrgTree()
+      this.getHotelOrgTree();
+
+
+
     },
     watch: {
       filterText(val) {

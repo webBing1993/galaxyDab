@@ -24,22 +24,23 @@
           <el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="账户编码">
-          <el-input v-model="currentNodeDetail.code" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.pmsCode" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="企业简称">
-          <el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.memo" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="企业官网">
-          <el-input v-model="currentNodeDetail.website" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.website" placeholder="请输入内容"></el-input>
         </el-form-item>
+
         <el-form-item label="联系人姓名">
-          <el-input v-model="currentNodeDetail.contactName" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactName" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人职务">
-          <el-input v-model="currentNodeDetail.contactPhone" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactPosition" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人电话">
-          <el-input v-model="currentNodeDetail.tel" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactPhone" placeholder="请输入内容"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -75,6 +76,7 @@
         </el-form-item>
         <el-form-item label="门店地址：">
           <el-cascader
+            v-model="currentNodeDetail.info.address"
             @change="adressChange"
             :props="AdressProps"
             :options="area"
@@ -104,10 +106,8 @@
     </div>
     <!--确认按钮-->
     <div>
-      <el-button type="success" plain>保存</el-button>
-      <el-button type="primary" plain :disabled="currentNodeDetail.type!='HOTEL'" @click="changeBrandRelation=true">
-        修改所属关系
-      </el-button>
+      <el-button type="success" plain @click="submitModify">保存</el-button>
+      <el-button type="primary" plain :disabled="currentNodeDetail.type!='HOTEL'" @click="changeBrandRelation=true">修改所属关系</el-button>
     </div>
 
     <!--修改所属关系-->
@@ -241,10 +241,10 @@
           orgid: this.orgId,
           onsuccess: body => {
             this.currentNodeDetail = body.data
-            let typelist = [{value: 'GROUP', label: '集团'}, {value: 'HOTEL', label: '酒店'}, {
-              value: 'SEGMENT',
-              label: '分组'
-            }, {value: 'DEPT', label: ' 部门'}]
+            let typelist = [
+              {value: 'GROUP', label: '集团'}, {value: 'HOTEL', label: '酒店'}, {
+                value: 'SEGMENT', label: '分组'
+              }, {value: 'DEPT', label: ' 部门'}]
             typelist.map(item => {
               if (item.value == this.currentNodeDetail.type) {
                 this.disableEditType = item.label
@@ -283,6 +283,53 @@
           }
         })
 
+      },
+
+//      修改节点
+      submitModify() {
+        let fields = {}
+        if (this.disableEditType == '集团') {
+          fields = {
+            id: this.currentNodeDetail.id || "",
+            name: this.currentNodeDetail.name || "",
+            type: this.currentNodeDetail.type || "",
+            parentId: this.currentNodeDetail.parentId || "",
+            info: {
+              name: this.currentNodeDetail.info.name||'',
+              type: this.currentNodeDetail.info.type||"",
+              code: this.currentNodeDetail.info.code||"",
+              addressCode: this.currentNodeDetail.info.addressCode||"",
+              tel: this.currentNodeDetail.info.tel||"",
+              province: this.currentNodeDetail.info.province||"",
+              city: this.currentNodeDetail.info.city||"",
+              area: this.currentNodeDetail.info.area||"",
+              address: this.currentNodeDetail.info.address||"",
+              contactName: this.currentNodeDetail.info.contactName||"",
+              contactPhone: this.currentNodeDetail.info.contactPhone||"",
+              logoUrl: this.currentNodeDetail.info.logoUrl||"",
+              memo: this.currentNodeDetail.info.memo||"",
+              website: this.currentNodeDetail.info.website||"",
+            }
+          }
+        }
+        this.modifyHotelOrgTreeNode({
+          fields: fields,
+          onsuccess: body => {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            });
+            this.$emit('modify-hotel-org-treeNode')
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
+
+          }
+
+        })
       },
     },
     mounted() {
