@@ -265,7 +265,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .addBtn {
     display: none;
   }

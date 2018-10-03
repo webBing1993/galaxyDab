@@ -12,8 +12,8 @@
             v-model="filterText">
           </el-input>
           <el-button type="success" @click="handleAdd">添加新员工</el-button>
-          <el-button type="primary" @click="showSetRole=true">设置角色</el-button>
-          <el-button type="warning" @click="openCertificate">生成企业微信凭证</el-button>
+          <el-button type="primary" :disabled="selectItemList.length==0" @click="showSetRole=true">设置角色</el-button>
+          <el-button type="warning" :disabled="selectItemList.length==0" @click="openCertificate">生成企业微信凭证</el-button>
         </el-row>
       </div>
 
@@ -33,6 +33,7 @@
             <span @click="handleDel(scope.row)" type="text" class="handel">删除</span>
             <span @click="handleView(scope.row)" type="text" class="handel">查看</span>
             <span @click="handleEdit(scope.row)" type="text" class="handel">编辑</span>
+            <span @click="handleReset(scope.row)" type="text" class="handel">重置密码</span>
           </template>
         </el-table-column>
       </el-table>
@@ -43,12 +44,12 @@
       :visible.sync="showAddNew"
       width="40%"
     >
-      <el-form ref="form" label-width="80px">
+      <el-form ref="form" label-width="120px" v-if="!resetPwdStatus">
         <el-form-item label="酒店">
           <el-input v-model="getCurrendNode.name" disabled placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="addEmployeeInfo.account" placeholder="输入账号"></el-input>
+          <el-input v-model="addEmployeeInfo.account" :disabled="viewStatus" placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="姓名">
           <el-input v-model="addEmployeeInfo.name" placeholder="输入姓名"></el-input>
@@ -60,10 +61,27 @@
           <el-input v-model="addEmployeeInfo.tel" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click="showAddNew = false">取 消</el-button>
           <el-button type="primary" @click="submitAdd">确 定</el-button>
         </el-form-item>
       </el-form>
+
+      <el-form label-width="120px" v-if="resetPwdStatus">
+        <el-form-item label="姓名">
+          <el-input v-model="resetInfo.name"  disabled placeholder="输入账号"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="resetInfo.pwd" type="password" placeholder="输入账号"></el-input>
+        </el-form-item>
+        <el-form-item label="重复密码">
+          <el-input v-model="resetInfo.repwd" type="password" placeholder="输入账号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="showAddNew = false">取 消</el-button>
+          <el-button type="primary" @click="submitReset">确 定</el-button>
+        </el-form-item>
+      </el-form>
+
     </el-dialog>
     <el-dialog
       title="请选择角色"
@@ -103,6 +121,7 @@
         title: '',
         checkAll: false,
         viewStatus: false,
+        resetPwdStatus: false,
         checkedCities: ['上海', '北京'],
         cities: cityOptions,
         isIndeterminate: true,
@@ -165,6 +184,12 @@
           name: "",
           EnglishName: "",
           tel: "",
+        },
+        resetInfo: {
+          id: '',
+          name: '',
+          pwd: '',
+          repwd: '',
         }
       }
     },
@@ -175,13 +200,14 @@
         'delUser',
         'qyWeath',
         'modifyuser',
+        'resetPwd',
       ]),
 
       getEmployeeList() {
         this.userList({
           orgid: this.orgId,
           onsuccess: body => {
-            this.employeeTableList = body.data
+//            this.employeeTableList = body.data
           }
 
         })
@@ -193,6 +219,8 @@
           fields: fields,
           onsuccess: body => {
             this.getEmployeeList()
+            this.showAddNew = false
+
           },
           onFail: body => {
             this.$message({
@@ -201,6 +229,36 @@
             });
           }
         })
+      },
+
+      submitReset() {
+        if (this.resetInfo.pwd == this.resetInfo.repwd) {
+          this.resetPwd({
+            id: '1111',
+//            id: this.resetInfo.id,
+            password: this.resetInfo.pwd,
+            onsuccess: body => {
+              this.$message({
+                type: 'warning',
+                message: '修改失败!'
+              });
+              this.showAddNew = false
+
+            },
+            onFail: body => {
+              this.$message({
+                type: 'warning',
+                message: '删除失败!'
+              });
+            }
+          })
+        } else {
+          this.$message({
+            type: 'warning',
+            message: '密码和重复密码不同!'
+          });
+        }
+
       },
 
       openCertificate() {
@@ -233,16 +291,31 @@
       handleAdd() {
         this.title = '新增用户'
         this.showAddNew = true
+        this.viewStatus = false
+        this.resetPwdStatus = false
+
+
       },
       handleView() {
         this.title = '查看用户'
         this.showAddNew = true
         this.viewStatus = true
+        this.resetPwdStatus = false
       },
 
       handleEdit() {
         this.title = '编辑用户'
         this.showAddNew = true
+        this.viewStatus = false
+        this.resetPwdStatus = false
+
+      },
+
+      handleReset() {
+        this.showAddNew = true
+        this.title = '重置密码'
+        this.resetPwdStatus = true
+
       },
 
       handleDel(parm) {
@@ -289,6 +362,7 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrendNode = this.currendNode;
+      this.getEmployeeList()
 
 
     },
@@ -305,8 +379,7 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less">
+<style lang="less" scoped>
   .third_wrap .rightWrap .rightInfo .centerContent .item {
     width: 100%;
   }
@@ -319,6 +392,8 @@
 
   .handel {
     cursor: pointer;
+    color: #42c640;
+    text-decoration: underline;
   }
 
 

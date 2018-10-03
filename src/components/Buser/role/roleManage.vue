@@ -1,1 +1,179 @@
-<!--酒店组织对应区域，第三级包裹--><template>  <div class="third_wrap">    <div class="treeWrap">      <div class="orgTitle">        <span class="catalogue">搜索</span>        <el-input          placeholder="输入关键字进行筛选"          v-model="filterText">        </el-input>      </div>      <div style="margin-top:1rem">        <el-tree          class="filter-tree"          :data="data3"          :props="defaultProps"          default-expand-all          :expand-on-click-node="false"          :filter-node-method="filterNode"          :highlight-current="true"          ref="tree2" @node-click="handleNodeClick">          <!--style="display:flex;flex-flow:row wrap;width: 80%;justify-content:space-between "-->          <!--<span class="custom-tree-node" slot-scope="{node, data}">-->                <!--<span>{{ node.label }}</span>-->                <!--<span v-show="node===checkedNode">-->                  <!--<el-button-->                    <!--size="mini"-->                    <!--@click="() => append(data)">-->                    <!--+-->                  <!--</el-button>-->                  <!--&lt;!&ndash;<el-button&ndash;&gt;-->                  <!--&lt;!&ndash;type="primary"&ndash;&gt;-->                  <!--&lt;!&ndash;size="mini"&ndash;&gt;-->                  <!--&lt;!&ndash;@click="() => remove(node, data)">&ndash;&gt;-->                  <!--&lt;!&ndash; - &ndash;&gt;-->                  <!--&lt;!&ndash;</el-button>&ndash;&gt;-->              <!--</span>-->            <!--</span>-->        </el-tree>      </div>    </div>    <div class="rightWrap">      <router-view></router-view>    </div>  </div></template><script>    export default {        name:'roleManage',        data () {            return {                dialogVisible:false,                filterText: '',                data3: [                    {                        "name": "权限列表",                        "subPermissions": [                            {                                "permissionId": "1",                                "name": "第一权限",                                "tag": "root:one",                                "icon": null,                                "description": null,                                "nodeType": "MENU",                                "sortCode": null,                                "subPermissions": [                                    {                                        "name": "第一权限子权限",                                        "tag": "root:one:one",                                        "icon": null,                                        "description": null,                                        "nodeType": "URL",                                        "sortCode": null,                                        "subPermissions": [],                                        "permissionId": "3"                                    }                                ],                            },                            {                                "permissionId": "2",                                "name": "第二权限",                                "tag": "root:two",                                "icon": null,                                "description": null,                                "nodeType": "MENU",                                "sortCode": null,                                "subPermissions": [                                    {                                        "permissionId": "3",                                        "name": "第二权限子权限",                                        "tag": "root:one:one",                                        "icon": null,                                        "description": null,                                        "nodeType": "URL",                                        "sortCode": null,                                        "subPermissions": [],                                    },                                    {                                        "permissionId": "3",                                        "name": "第二权限子权限",                                        "tag": "root:one:one",                                        "icon": null,                                        "description": null,                                        "nodeType": "URL",                                        "sortCode": null,                                        "subPermissions": [                                            {                                                "name": "第二权限子权限的子权限",                                                "tag": "root:one:one",                                                "icon": null,                                                "description": null,                                                "nodeType": "URL",                                                "sortCode": null,                                                "subPermissions": [],                                                "permissionId": "3"                                            }                                        ],                                    }                                ],                            },{                                "name": "第三权限",                                "tag": "root:two",                                "icon": null,                                "description": null,                                "nodeType": "MENU",                                "sortCode": null,                                "subPermissions": [],                                "permissionId": "2"                            }]                    }                ],                defaultProps: {                    children: 'subPermissions',                    label: 'name'                }            }        },        watch: {            filterText(val) {                this.$refs.tree2.filter(val);            }        },        methods: {            //树节点点击            // handleNodeClick(data,node,comp){            //     console.log('data:',data)            //     console.log('node:',node)            //     console.log('comp:',comp)            // },            filterNode(value, data) {                if (!value) return true;                return data.name.indexOf(value) !== -1;            },            append(data) {                const newChild = { permissionId:1, name: 'testtest', subPermissions: [] };                if (!data.subPermissions) {                    this.$set(data, 'subPermissions', []);                }                data.subPermissions.push(newChild);            },            remove(node, data) {                const parent = node.parent;                const children = parent.data.subPermissions || parent.data;                const index = children.findIndex(d => d.permissionId === data.permissionId);                children.splice(index, 1);            },        }    }</script><style lang="less" >  .third_wrap{  }  .el-button--mini{    padding: 2px 10px;    text-align: center;  }  .el-button--primary{    background: #0eb4eb;    border: 1px solid #0eb4eb;  }</style>
+<!--酒店组织对应区域，第三级包裹-->
+<template>
+  <div class="third_wrap">
+    <div class="treeWrap">
+      <div class="orgTitle">
+        <span class="catalogue">搜索</span>
+        <el-input
+          placeholder="输入关键字进行筛选"
+          v-model="filterText">
+        </el-input>
+      </div>
+      <div style="margin-top:1rem">
+        <el-tree
+          class="filter-tree"
+          :data="roleManageTreeDate"
+          :props="defaultProps"
+          default-expand-all
+          :expand-on-click-node="false"
+          :filter-node-method="filterNode"
+          :highlight-current="true"
+          ref="tree2" @node-click="handleNodeClick">
+        </el-tree>
+      </div>
+    </div>
+    <div class="rightWrap">
+      <!--<router-view></router-view>-->
+      <div v-if="showNodeDetailForEdit">
+        <role-Info
+          :currendNode="currendNode"
+          :NodeId="currentAddNodeParentId"></role-Info>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+<script>
+  import {mapActions, mapGetters, mapState, mapMutations} from 'vuex';
+  import roleInfo from './roleInfo.vue'
+
+  export default {
+    components: {
+      roleInfo: roleInfo,
+    },
+    name: 'roleMamage',
+
+    data() {
+      return {
+        addNodeName: '',
+        addNodeType: '',
+        dialogVisible: false,
+        filterText: '',
+        roleManageTreeDate: [
+          {
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "顶级组织",
+            "type": "ROOT",
+            "subOrganizations": [
+              {
+                "foreignId": "",
+                "creator": null,
+                "deleted": false,
+                "name": "酒店1",
+                "type": "GENERAL",
+                "subOrganizations": [],
+                "parentId": "0",
+                "orgId": "1",
+                "status": null
+              },
+              {
+                "foreignId": "",
+                "creator": null,
+                "deleted": false,
+                "name": "酒店1",
+                "type": "GENERAL",
+                "subOrganizations": [],
+                "parentId": "0",
+                "orgId": "2",
+                "status": null
+              }
+            ],
+            "parentId": "0",
+            "orgId": "0",
+            "status": null
+          }
+        ],
+        defaultProps: {
+          children: 'subOrganizations',
+          label: 'name',
+          id: 'orgId'
+        },
+        showAddNew: false,
+        orgDialogClass: 'dialogOrg',
+
+        currentAddNodeParentType: '',
+        currentAddNodeParentId: '',
+        currendNode: {},
+        showNodeDetailForEdit: false,
+      }
+    },
+    computed: {
+      ...mapState({}),
+    },
+    methods: {
+      ...mapActions([
+        'roleManageTree',
+      ]),
+
+      adressChange(value) {
+        this.hotelInfo.shopAdress = value
+      },
+
+      handelAdd(data) {
+        this.currentAddNodeParentType = data.type
+        this.currentAddNodeParentId = data.orgId
+        this.showAddNew = true
+
+      },
+//      获取树
+      getroleManageTree() {
+        this.roleManageTree({
+          onsuccess: body => {
+            if (body.data) {
+              this.roleManageTreeDate[0].subOrganizations = body.data
+
+            } else {
+            }
+          }
+        })
+      },
+
+//    树节点点击
+      handleNodeClick(item, node, aaa) {
+        if (item.orgId == "0") {
+          this.$message({
+            message: "顶级组织不可编辑",
+            type: 'error'
+          });
+          return false
+        } else {
+          this.showNodeDetailForEdit = true
+          this.currentAddNodeParentId = item.orgId
+          this.currendNode = item
+        }
+      },
+
+//  节点过滤
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
+
+    },
+    mounted() {
+      this.getroleManageTree();
+    },
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+  .third_wrap{
+
+  }
+  .el-button--mini{
+    padding: 2px 10px;
+    text-align: center;
+  }
+  .el-button--primary{
+    background: #0eb4eb;
+    border: 1px solid #0eb4eb;
+  }
+</style>

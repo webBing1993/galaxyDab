@@ -71,13 +71,13 @@ module.exports = {
   },
 
 
-  // 描述:修改用户所属父节点
+  // 描述:删除
   delUser(ctx, params) {
     ctx.dispatch('request', {
       url: `/user/deleteusers`,
       method: 'POST',
       body: {
-        userIds:params.userIds
+        userIds: params.userIds
       },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -93,7 +93,7 @@ module.exports = {
       url: `/user/createcredence`,
       method: 'POST',
       body: {
-        userIds:params.userIds
+        userIds: params.userIds
       },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -103,11 +103,15 @@ module.exports = {
       }
     })
   },
-// 获取用户下品牌列表  下拉框
-  hotelBrandList(ctx, params) {
+// 修改密码
+  resetPwd(ctx, params) {
     ctx.dispatch('request', {
-      url: `org/getBrandsByOrgId/${params.orgId}`,
-      method: 'get',
+      url: `/user/resetpsw`,
+      method: 'POST',
+      body: {
+        id: params.id,
+        password: params.password,
+      },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -117,47 +121,5 @@ module.exports = {
     })
   },
 
-  // 描述:获取集团品牌列表 url:/org/getbrands/{groupId} 请求方式get
-  BrandList(ctx, params) {
-    ctx.dispatch('request', {
-      url: `/org/getbrands/${params.groupId}`,
-      method: 'get',
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
-      },
-      onFail: body => {
-        params.onfail && params.onfail(body)
-      }
-    })
-  },
-
-  // 添加品牌
-  addBrand(ctx, params) {
-    ctx.dispatch('request', {
-      url: `/brands/add`,
-      method: 'POST',
-      body: {...params.fields},
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
-      },
-      onFail: body => {
-        params.onfail && params.onfail(body)
-      }
-    })
-  },
-  // 修改品牌
-  modifyBrand(ctx, params) {
-    ctx.dispatch('request', {
-      url: `/brands/${params.brand_id}`,
-      method: 'POST',
-      body: {...params.fields},
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
-      },
-      onFail: body => {
-        params.onfail && params.onfail(body)
-      }
-    })
-  },
 
 }
