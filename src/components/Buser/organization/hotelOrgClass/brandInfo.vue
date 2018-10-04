@@ -232,7 +232,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-  .el-upload--picture-card {
+  /deep/.el-upload--picture-card {
     background-color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -244,7 +244,7 @@
     vertical-align: top;
   }
 
-  .el-upload {
+  /deep/.el-upload {
     display: flex;
   }
 </style>

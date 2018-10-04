@@ -45,7 +45,7 @@
       width="40%"
     >
       <el-form ref="form" label-width="120px" v-if="!resetPwdStatus">
-        <el-form-item label="酒店">
+        <el-form-item label="组织名称">
           <el-input v-model="getCurrendNode.name" disabled placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="账号">
@@ -59,6 +59,9 @@
         </el-form-item>
         <el-form-item label="手机号">
           <el-input v-model="addEmployeeInfo.tel" placeholder="输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="头像">
+          <el-input v-model="addEmployeeInfo.tel" placeholder="输入头像"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="showAddNew = false">取 消</el-button>
@@ -214,7 +217,14 @@
       },
 
       submitAdd() {
-        let fields = {}
+        let fields = {
+//          "orgId":"10000000010", "name":"user", "account":"user001", "mobile":"18673625164", "avatar":"",
+          orgId:"",
+          name:this.addEmployeeInfo.name,
+          account:this.addEmployeeInfo.name,
+          mobile:this.addEmployeeInfo.name,
+          avatar:this.addEmployeeInfo.name,
+        }
         this.adduser({
           fields: fields,
           onsuccess: body => {
@@ -267,6 +277,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          this.qyWeath({
+            userIds:userIds
+          })
           this.$message({
             type: 'success',
             message: '生成成功!'
