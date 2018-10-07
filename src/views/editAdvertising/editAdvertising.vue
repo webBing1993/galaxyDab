@@ -132,6 +132,7 @@ export default {
     this.initlist();
   },
   mounted() {
+    console.log(1232434)
     // 实例化editor编辑器
     this.editor = UE.getEditor("editor"); // console.log(this.editor.setContent("1223"))
     if (this.$store.state.editData.contentType == 1) {
@@ -158,7 +159,7 @@ export default {
       let param = new FormData(); //创建form对象
       param.append("file", file, file.name); //通过append向form对象添加数据
       param.append("chunk", "0"); //添加form表单中其他数据
-
+console.log(1111)
       let config = {
         headers: { "Content-Type": "multipart/form-data" }
       }; //添加请求头
