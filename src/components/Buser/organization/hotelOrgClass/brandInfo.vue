@@ -17,7 +17,9 @@
         <el-table-column property="logoUrl" label="品牌logo">
           <template slot-scope="scope">
             <div>
-              <img :src="scope.row.logoUrl" alt="" width="150px" height="100px">
+              <img :src="scope.row.logoUrl" alt="" width="150px" height="100px"
+                   v-if="scope.row.logoUrl!=''|| scope.row.logoUrl!=null">
+              <div class="el-icon-picture-outline" width="150px" height="100px" v-else></div>
             </div>
           </template>
         </el-table-column>
@@ -40,6 +42,12 @@
         <el-form-item label="品牌名称">
           <el-input v-model="brandInfo.name" placeholder="请输入内容"></el-input>
         </el-form-item>
+        <el-form-item label="上传信息" v-if="brandInfo.logoUrl">
+
+          <img :src="brandInfo.logoUrl" alt="" width="200px" height="100px">
+
+        </el-form-item>
+
         <el-form-item label="品牌LOGO">
           <!--<el-input v-model="brandInfo.logoUrl" placeholder="请输入内容"></el-input>-->
 
@@ -50,14 +58,13 @@
             :before-upload='beforeUploadfilter'
             :headers="setHeader"
             name="file"
-            :data='{"key":"file","value":"文件"}'
             :on-success="filterScriptSuccess"
             :on-preview="handlePictureCardPreview"
             :onError="uploadError"
             :on-progress="uploadVideoProcess"
             list-type="picture-card">
             <el-button size="small" type="primary">上传logo</el-button>
-            {{this.brandInfo.logoUrl }}
+
           </el-upload>
 
 
@@ -111,7 +118,7 @@
     computed: {
       ...mapState([]),
       scriptUpload() {
-        return "/galaxy-front/adv/picture/upload";
+        return "/galaxy-front/brands/logo/upload";
       },
       setHeader() {
         return {
@@ -159,7 +166,7 @@
 
       submit() {
         let fields = {
-          groupId: this.orgId,
+          organizationId: this.orgId,
           name: this.brandInfo.name || '',
           code: this.brandInfo.code || '',
           pmsId: "",
@@ -232,7 +239,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-  /deep/.el-upload--picture-card {
+  /deep/ .el-upload--picture-card {
     background-color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -244,7 +251,7 @@
     vertical-align: top;
   }
 
-  /deep/.el-upload {
+  /deep/ .el-upload {
     display: flex;
   }
 </style>

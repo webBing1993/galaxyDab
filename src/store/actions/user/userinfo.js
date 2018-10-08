@@ -31,9 +31,7 @@ module.exports = {
     ctx.dispatch('request', {
       url: `/user/adduserinorg`,
       method: 'POST',
-      body: {
-        body: {...params.fields},
-      },
+      body: {...params.fields},
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },

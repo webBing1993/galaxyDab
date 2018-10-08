@@ -179,6 +179,7 @@
         ],
         dialogVisible: false,
         selectItemList: [],
+        selectitem_id_list: [],
         orgId: '',
         getCurrendNode: {},
         addEmployeeInfo: {
@@ -219,7 +220,7 @@
       submitAdd() {
         let fields = {
 //          "orgId":"10000000010", "name":"user", "account":"user001", "mobile":"18673625164", "avatar":"",
-          orgId:"",
+          orgId:"10000000010",
           name:this.addEmployeeInfo.name,
           account:this.addEmployeeInfo.name,
           mobile:this.addEmployeeInfo.name,
@@ -237,6 +238,7 @@
               message: body.data.errmsg,
               type: 'error'
             });
+            this.showAddNew = false
           }
         })
       },
@@ -273,22 +275,24 @@
 
       openCertificate() {
         this.$confirm('是否生成企业微信凭证?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: '取消',
+          cancelButtonText: '确定',
           type: 'warning'
         }).then(() => {
-          this.qyWeath({
-            userIds:userIds
-          })
-          this.$message({
-            type: 'success',
-            message: '生成成功!'
-          });
-        }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消'
           });
+        }).catch(() => {
+          this.qyWeath({
+            userIds:'userIds',
+            onsuccess: body => {
+              this.$message({
+                type: 'success',
+                message: '生成成功!'
+              });
+            },
+          })
         });
       },
 
@@ -365,6 +369,10 @@
 
       handleSelectionChange(val) {
         this.selectItemList = val;
+        this. this.selectItemList.map(item=>{
+          this.selectitem_id_list.push(item.id)
+        })
+
         console.log('selectItemList', this.selectItemList)
 
       },

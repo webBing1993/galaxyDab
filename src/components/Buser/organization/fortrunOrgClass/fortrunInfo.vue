@@ -22,8 +22,6 @@
       <el-button type="success" plain @click="submitModify">保存</el-button>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -119,9 +117,10 @@
 //      修改节点
       submitModify() {
         this.modifyFortrun({
-          id:this.getCurrendNode,
-          name:this.getCurrendNode,
-          parentId:this.currentAddNodeParentId,
+          id:this.getCurrendNode.orgId,
+          name:this.getCurrendNode.name,
+//          parentId:this.currentAddNodeParentId,
+          parentId:this.getCurrendNode.parentId,
           onsuccess: body => {
             this.$message({
               message: '修改成功',
@@ -143,6 +142,7 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrendNode = this.currendNode
+      console.log('---->',this.getCurrendNode)
     },
     watch: {
       NodeId(val) {

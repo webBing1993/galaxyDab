@@ -103,32 +103,9 @@
             "deleted": false,
             "name": "顶级组织",
             "type": "ROOT",
-            "subOrganizations": [
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "研发",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "1",
-                "status": null
-              },
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "商务",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "2",
-                "status": null
-              }
-            ],
+            "subOrganizations": [],
             "parentId": "0",
-            "orgId": "0",
+            "orgId": "2",
             "status": null
           }
         ],
@@ -140,16 +117,16 @@
 
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
-//        companyType: [
-//          {
-//            value: 'UNION',
-//            label: '子公司'
-//          }, {
-//            value: 'GENERAL',
-//            label: '部⻔'
-//
-//          }
-//        ],
+        companyType: [
+          {
+            value: 'UNION',
+            label: '子公司'
+          }, {
+            value: 'GENERAL',
+            label: '部⻔'
+
+          }
+        ],
 
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
@@ -191,7 +168,7 @@
         this.fortrunTree({
           onsuccess: body => {
             if (body.data) {
-//              this.fortrunOrgTreeDate[0].subOrganizations = body.data
+              this.fortrunOrgTreeDate[0].subOrganizations = body.data
             } else {
             }
           }
@@ -203,6 +180,7 @@
         this.addfortrunNode({
           name:this.addNodeName,
           parentId:this.currentAddNodeParentId,
+          type:this.currentAddNodeParentId,
           onsuccess: body => {
             this.getFortrunOrgTree()
             this.showAddNew = false
@@ -231,7 +209,6 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        console.log(item)
         if (item.orgId == "0") {
           this.$message({
             message: "顶级组织不可编辑",

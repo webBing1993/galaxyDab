@@ -220,7 +220,7 @@
             "type": "ROOT",
             "subOrganizations": [],
             "parentId": "0",
-            "orgId": "0",
+            "orgId": "1",
             "status": null
           }
         ],
@@ -315,18 +315,22 @@
           onsuccess: body => {
             if (body.data) {
               this.hotelOrgTreeDate[0].subOrganizations = body.data
-              var temp = []
-              this.getALLNode(this.hotelOrgTreeDate[0], temp)
-              temp.push({
-                "name": "顶级组织",
-                "type": "ROOT",
-                "orgId": "0",
+              this.$nextTick(() => {
+                var temp = []
+                this.getALLNode(this.hotelOrgTreeDate[0], temp)
+                temp.push({
+                  "name": "顶级组织",
+                  "type": "ROOT",
+                  "orgId": "0",
+                })
+                temp.map(item => {
+                  if (item.type == 'SEGMENT' || item.type == "ROOT") {
+                    this.allHotelOrgNode.push(item)
+                  }
+                })
               })
-              temp.map(item => {
-                if (item.type == 'SEGMENT' || item.type == "ROOT") {
-                  this.allHotelOrgNode.push(item)
-                }
-              })
+
+
             } else {
             }
           }

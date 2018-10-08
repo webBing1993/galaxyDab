@@ -2,7 +2,7 @@ module.exports = {
   // 获取复创组织树
   fortrunTree(ctx, params) {
     ctx.dispatch('request', {
-      url: `organization/fortrun`,
+      url: `/organization/fortrun/getorgs`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -12,14 +12,18 @@ module.exports = {
       }
     })
   },
+
   // 添加复创组织
   addfortrunNode(ctx, params) {
     ctx.dispatch('request', {
-      url: `organization/fortrun/add`,
+      url: `/organization/fortrun/add`,
       method: 'POST',
       body: {
         name: params.name,
         parentId: params.parentId,
+        type: params.type,
+
+
       },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -30,7 +34,7 @@ module.exports = {
     })
   },
 
-  // 修改复创组织
+  // 修改复创组织url:organization/fortrun/update
   modifyFortrun(ctx, params) {
     ctx.dispatch('request', {
       url: `/organization/fortrun/update`,

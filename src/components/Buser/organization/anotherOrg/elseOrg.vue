@@ -119,32 +119,9 @@
             "deleted": false,
             "name": "顶级组织",
             "type": "ROOT",
-            "subOrganizations": [
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "国泰",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "1",
-                "status": null
-              },
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "大江",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "2",
-                "status": null
-              }
-            ],
+            "subOrganizations": [],
             "parentId": "0",
-            "orgId": "0",
+            "orgId": "3",
             "status": null
           }
         ],
@@ -204,7 +181,7 @@
         this.otherTree({
           onsuccess: body => {
             if (body.data) {
-//              this.otherOrgTreeDate[0].subOrganizations = body.data
+              this.otherOrgTreeDate[0].subOrganizations = body.data
             } else {
             }
           }
@@ -238,7 +215,17 @@
           name: this.currendNode.name,
           parentId: this.currendNode.parentId,
           onsuccess: body => {
+            this.$message({
+              message:'修改成功',
+              type: 'success'
+            });
             this.getotherOrgTree()
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
           }
         })
       },

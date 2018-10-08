@@ -51,7 +51,7 @@
         <el-form-item label="所属品牌：">
           <el-select v-model="currentNodeDetail.name" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in BrandList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -61,7 +61,7 @@
         <el-form-item label="门店类型：">
           <el-select v-model="currentNodeDetail.name" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in shopTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -72,11 +72,11 @@
           <el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="门店编码：">
-          <el-input v-model="currentNodeDetail.code" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.code" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="门店地址：">
           <el-cascader
-            v-model="currentNodeDetail.info.address"
+            v-model="shopAdress"
             @change="adressChange"
             :props="AdressProps"
             :options="area"
@@ -84,22 +84,22 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址：">
-          <el-input v-model="currentNodeDetail.address" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.address" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="地址编码：">
-          <el-input v-model="currentNodeDetail.addressCode" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.addressCode" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="前台电话：">
-          <el-input v-model="currentNodeDetail.tel" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.tel" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人姓名：">
-          <el-input v-model="currentNodeDetail.contactName" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactName" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人职务：">
-          <el-input v-model="currentNodeDetail.type" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.type" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：">
-          <el-input v-model="currentNodeDetail.contactPhone" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactPhone" placeholder="请输入内容"></el-input>
         </el-form-item>
       </el-form>
 
@@ -156,69 +156,45 @@
         default: ''
       },
       currendNode: {
-        type: [Object, Array],
+        type: [Object, Array,String],
         default: () => {
         }
       },
       parentNodeList: {
-        type: [Object, Array],
+        type: [Object, Array,String],
         default: () => []
       }
     },
     data() {
       return {
         choseType: {name: '集团', value: 'group'},
-        gridData: [
-          {
-            index: '1',
-            code: 6767,
-            name: '王小虎'
-          }, {
-            index: '2',
-            code: 6767,
-            name: '王小虎'
-          }, {
-            index: '3',
-            code: 6767,
-            name: '王小虎'
-          }, {
-            index: '4',
-            code: 6767,
-            name: '王小虎'
-          }, {
-            index: '5',
-            code: 6767,
-            name: '王小虎'
-          }
-        ],
+        gridData: [],
         changeBrandRelation: false,
         dialogVisible: false,
         input: '',
         area: area,
+        shopAdress:[],
         AdressProps: {
           value: "label",
           label: "label",
           children: "children",
         },
-        options: [
+        shopTypeList: [
           {
-            value: 'group',
-            label: '集团'
+            value: 'UNION',
+            label: '联体酒店'
           }, {
-            value: 'hotel',
-            label: '酒店'
-          }, {
-            value: '选项3',
-            label: '部门'
-          }, {
-            value: '选项4',
-            label: '旅业'
-          }],
+            value: 'GENERAL',
+            label: '普通酒店'
+
+          }
+        ],
+        BrandList: [],
         value: '',
 
         orgId: '',
         currentNodeDetail: {},
-        getCurrendNode: {},
+//        getCurrendNode: {},
         disableEditType: '',
         alternativeParentNode: [],//备选父节点
         toParentId: '',
@@ -233,14 +209,28 @@
       ...mapActions([
         'hotelOrgNodeDetail',
         'modifyHotelOrgTreeNode',
+        'changeRelationship',
+        'hotelBrandList',
       ]),
+//      获取所属品牌
+      getHotelBrandList() {
+        this.hotelBrandList({
+          orgId: this.orgId,
+          onsuccess: body => {
+            this.BrandList = body.data
+          }
 
+        })
+      },
 //      获取当前详情
       getCurrentDetail() {
         this.hotelOrgNodeDetail({
           orgid: this.orgId,
           onsuccess: body => {
             this.currentNodeDetail = body.data
+            this.shopAdress.push(this.currentNodeDetail.info.province)
+            this.shopAdress.push(this.currentNodeDetail.info.city)
+            this.shopAdress.push(this.currentNodeDetail.info.area)
             let typelist = [
               {value: 'GROUP', label: '集团'}, {value: 'HOTEL', label: '酒店'}, {
                 value: 'SEGMENT', label: '分组'
@@ -263,12 +253,29 @@
 
 //      修改所属关系
       changebelongRelation() {
+        let fields={
+          id:"1000",
+          parentId:"0",
+          type:"HOTEL"
+        }
+        this.changeRelationship({
+          fields: fields,
+          onsuccess: body => {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            });
+//            this.$emit('modify-hotel-org-treeNode')
+          },
+        })
         this.changeBrandRelation = false
+
       },
 
       adressChange(value) {
         console.log(value)
-//        this.hotelInfo.shopAdress = value
+        this.shopAdress = value
+
       },
 
 //      类型code转name
@@ -289,6 +296,29 @@
       submitModify() {
         let fields = {}
         if (this.disableEditType == '集团') {
+          fields = {
+            id: this.currentNodeDetail.id || "",
+            name: this.currentNodeDetail.name || "",
+            type: this.currentNodeDetail.type || "",
+            parentId: this.currentNodeDetail.parentId || "",
+            info: {
+              name: this.currentNodeDetail.info.name||'',
+              type: this.currentNodeDetail.info.type||"",
+              code: this.currentNodeDetail.info.code||"",
+              addressCode: this.currentNodeDetail.info.addressCode||"",
+              tel: this.currentNodeDetail.info.tel||"",
+              province: this.currentNodeDetail.info.province||"",
+              city: this.currentNodeDetail.info.city||"",
+              area: this.currentNodeDetail.info.area||"",
+              address: this.currentNodeDetail.info.address||"",
+              contactName: this.currentNodeDetail.info.contactName||"",
+              contactPhone: this.currentNodeDetail.info.contactPhone||"",
+              logoUrl: this.currentNodeDetail.info.logoUrl||"",
+              memo: this.currentNodeDetail.info.memo||"",
+              website: this.currentNodeDetail.info.website||"",
+            }
+          }
+        }else if(this.disableEditType == '酒店'){
           fields = {
             id: this.currentNodeDetail.id || "",
             name: this.currentNodeDetail.name || "",
@@ -335,20 +365,29 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrentDetail()
-      this.getCurrendNode = this.currendNode
+      this.getHotelBrandList()
+//      this.getCurrendNode = this.currendNode
       this.alternativeParentNode = this.parentNodeList
       console.log('this.alternativeParentNode', this.alternativeParentNode)
     },
     watch: {
       NodeId(val) {
-        this.orgId = val;
-        this.getCurrentDetail()
+        if(val){
+          this.orgId = val;
+          this.getCurrentDetail()
+        }
       },
       currendNode(val) {
-        this.getCurrendNode = val
+        console.log('====',val)
+        if(val){
+//          this.getCurrendNode = val
+        }
       },
       parentNodeList(val) {
-        this.alternativeParentNode = val
+        if(val){
+          this.alternativeParentNode = val
+
+        }
       }
     }
   }
@@ -357,6 +396,9 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
   .bottomContent {
+    h4{
+      text-align: left;
+    }
     .el-cascader {
       width: 100%;
     }
