@@ -25,7 +25,7 @@
         <el-form-item label="请求方式：">
           <el-select v-model="getCurrendNode.requestMethod" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in requestType"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -73,13 +73,21 @@
         dialogVisible: false,
         orgId: '',
         getCurrendNode: {},
-        options: [{
-          value: 'group',
-          label: '子公司'
+        requestType: [{
+          value: 'GET',
+          label: 'GET'
         }, {
-          value: 'hotel',
-          label: '分组'
-        }],
+          value: 'POST',
+          label: 'POST'
+        },
+          {
+            value: 'DELETE',
+            label: 'DELETE'
+          },
+          {
+            value: 'PUT',
+            label: 'PUT'
+          }],
       }
     },
     methods: {
@@ -90,12 +98,12 @@
         'delAuth',
       ]),
 
-      getCurrentDetail(){
+      getCurrentDetail() {
         this.authNodeDetail({
-          permissionid:this.orgId,
+          permissionid: this.orgId,
           onsuccess: body => {
             if (body.data) {
-              this.getCurrendNode=body.data
+              this.getCurrendNode = body.data
             } else {
             }
           }
@@ -103,8 +111,8 @@
         })
       },
 
-      submitChange(){
-        let fields=this.getCurrendNode
+      submitChange() {
+        let fields = this.getCurrendNode
         this.modifyAuth({
           fields: fields,
           onsuccess: body => {
@@ -154,11 +162,14 @@
         });
       },
 
-      handleClick() {},
+      handleClick() {
+      },
 
-      handleSelectionChange() {},
+      handleSelectionChange() {
+      },
 
-      handleClose() {}
+      handleClose() {
+      }
     },
     mounted() {
       this.orgId = this.NodeId;
@@ -177,8 +188,7 @@
   }
 </script>
 
-<style lang="less"scoped>
-
+<style lang="less" scoped>
 
 
 </style>

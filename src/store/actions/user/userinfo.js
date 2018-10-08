@@ -101,6 +101,24 @@ module.exports = {
       }
     })
   },
+
+//  给用户设置角色
+  setRoles(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/user/setroles`,
+      method: 'POST',
+      body: {
+        userId: params.userId,
+        roleIds: params.roleIds
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 // 修改密码
   resetPwd(ctx, params) {
     ctx.dispatch('request', {

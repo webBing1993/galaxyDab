@@ -66,7 +66,7 @@
           <el-form-item label="请求方式">
             <el-select v-model="authInfo.requestMethods" placeholder="请选择">
               <el-option
-                v-for="item in options"
+                v-for="item in requestType"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -109,30 +109,7 @@
             "parentId": "0",
             "orgId": "0",
             "status": null,
-            "subOrganizations": [
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "E卡通",
-                "type": "ek",
-                "parentId": "0",
-                "orgId": "1",
-                "status": null,
-                "subOrganizations": [],
-              },
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "支付通",
-                "type": "zf",
-                "parentId": "0",
-                "orgId": "23",
-                "status": null,
-                "subOrganizations": [],
-              }
-            ],
+            "subOrganizations": [],
           }
         ],
         defaultProps: {
@@ -150,28 +127,27 @@
         },
         showAddNew: false,
 
-        defaultShopType: [
-          {
-            value: 'GROUP',
-            label: '集团'
-          }, {
-            value: 'HOTEL',
-            label: '酒店'
-          }, {
-            value: 'SEGMENT',
-            label: '分组'
-          }, {
-            value: 'DEPT',
-            label: ' 部门'
-          }],
-
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
         currendNode: {},
 
         showNodeDetailForEdit: false,
 
-        options:[],
+        requestType: [{
+          value: 'GET',
+          label: 'GET'
+        }, {
+          value: 'POST',
+          label: 'POST'
+        },
+          {
+            value: 'DELETE',
+            label: 'DELETE'
+          },
+          {
+            value: 'PUT',
+            label: 'PUT'
+          }],
       }
     },
     computed: {
@@ -223,7 +199,7 @@
         this.authTree({
           onsuccess: body => {
             if (body.data) {
-//              this.authTreeDate[0].subOrganizations = body.data
+              this.authTreeDate[0].subOrganizations = body.data
             } else {
             }
           }
@@ -307,18 +283,6 @@
         }
       },
 
-      getALLNode(tree, nodeList) {
-        if (!tree.subOrganizations) {
-          return
-        } else {
-          for (var i = 0; i < tree.subOrganizations.length; i++) {
-            nodeList.push(tree.subOrganizations[i])
-            this.getALLNode(tree.subOrganizations[i], nodeList)
-          }
-          return nodeList
-        }
-
-      },
 
 //  节点过滤
       filterNode(value, data) {

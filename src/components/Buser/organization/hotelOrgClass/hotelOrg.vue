@@ -236,7 +236,6 @@
         },
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
-
         defaultShopType: [
           {
             value: 'GROUP',
@@ -307,6 +306,26 @@
         this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
         this.getHotelBrandList()
+//        添加初始化
+        this.groupInfo.enterpriseName='';
+        this.groupInfo.accountName='';
+        this.groupInfo.enterpriseShorterName='';
+        this.groupInfo.enterpriseNet='';
+        this.groupInfo.linkmanName='';
+        this.groupInfo.linkmanJob='';
+        this.groupInfo.linkmanTel='';
+
+        this.hotelInfo.belongBrand='';
+        this.hotelInfo.shopType='';
+        this.hotelInfo.shopName='';
+        this.hotelInfo.shopCode='';
+        this.hotelInfo.shopAdress='';
+        this.hotelInfo.shopDetailAdress='';
+        this.hotelInfo.adressCode='';
+        this.hotelInfo.stageTel='';
+        this.hotelInfo.linkmanName='';
+        this.hotelInfo.linkmanJob='';
+        this.hotelInfo.linkmanTel='';
 
       },
 //      获取组织树
@@ -398,6 +417,7 @@
             }
           }
         }
+
         this.addHotelOrgTreeNode({
           fields: fields,
           onsuccess: body => {

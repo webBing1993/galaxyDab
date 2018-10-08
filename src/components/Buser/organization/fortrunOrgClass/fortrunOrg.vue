@@ -117,16 +117,16 @@
 
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
-        companyType: [
-          {
-            value: 'UNION',
-            label: '子公司'
-          }, {
-            value: 'GENERAL',
-            label: '部⻔'
-
-          }
-        ],
+//        companyType: [
+//          {
+//            value: 'UNION',
+//            label: '子公司'
+//          }, {
+//            value: 'GENERAL',
+//            label: '部⻔'
+//
+//          }
+//        ],
 
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
@@ -134,17 +134,16 @@
         showNodeDetailForEdit: false,
       }
     },
-    computed: {
+
+  computed: {
       ...mapState({}),
       companyType() {
-        if (this.currentAddNodeParentType == 'UNION') {
-          return [{ value: 'UNION',label: '子公司' }, {value: 'GENERAL',label: '部⻔' }]
+        if (this.currentAddNodeParentType == 'SUBSIDIARY'||this.currentAddNodeParentType == 'ROOT') {
+          return [{value: 'SUBSIDIARY', label: '子公司'}, {value: 'DEPT', label: '部⻔'}]
         }
-        if (this.currentAddNodeParentType == 'GENERAL') {
-          return [{value: 'GENERAL',label: '部⻔' }]
+        if (this.currentAddNodeParentType == 'DEPT') {
+          return [{value: 'DEPT', label: '部⻔'}]
         }
-
-
 
       },
     },
@@ -160,7 +159,10 @@
         this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
         this.currendNode = data
-
+//        添加初始化
+        this.currendNode.name='';
+        this.addNodeName='';
+        this.addNodeType='';
 
       },
 //      获取组织树
@@ -178,9 +180,9 @@
 //      添加节点
       submitAdd() {
         this.addfortrunNode({
-          name:this.addNodeName,
-          parentId:this.currentAddNodeParentId,
-          type:this.currentAddNodeParentId,
+          name: this.addNodeName,
+          parentId: this.currentAddNodeParentId,
+          type: this.currentAddNodeParentId,
           onsuccess: body => {
             this.getFortrunOrgTree()
             this.showAddNew = false

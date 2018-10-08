@@ -101,9 +101,7 @@
 
 
   export default {
-    components: {
-
-    },
+    components: {},
     name: 'hotelInfo',
 
     data() {
@@ -133,31 +131,44 @@
 
         showAddNew: false,
         orgDialogClass: 'dialogOrg',
-        companyType: [
-          {
-            value: 'UNION',
-            label: '旅业'
-          },
-          {
-            value: 'UNION1',
-            label: '施工单位'
-          },
-          {
-            value: 'GENERAL',
-            label: '部⻔'
-          }
-        ],
+//        companyType: [
+//          {
+//            value: 'UNION',
+//            label: '旅业'
+//          },
+//          {
+//            value: 'UNION1',
+//            label: '施工单位'
+//          },
+//          {
+//            value: 'GENERAL',
+//            label: '部⻔'
+//          }
+//        ],
 
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
         currendNode: {},
         showNodeDetailForEdit: false,
-        disableEditType:'',
+//        disableEditType: '',
       }
     },
     computed: {
       ...mapState({}),
-//      顶级组织可以是旅业或施工单位，旅业、施工单位下可创建部⻔，部⻔ 下面不能创建旅业和施工单位
+      companyType() {
+        if (this.currentAddNodeParentType == 'ROOT') {
+          return [{value: 'LVYE', label: '旅业'}, {value: 'BUILDER', label: '施工单位'}, {value: 'DEPT', label: '部⻔'}]
+        }
+        if (this.currentAddNodeParentType == 'LVYE' || this.currentAddNodeParentType == 'BUILDER') {
+          return [{value: 'DEPT', label: '部⻔'}]
+        }
+      },
+      disableEditType(){
+        if(this.currentAddNodeParentType.type=='LVYE')return '旅业'
+        if(this.currentAddNodeParentType.type=='BUILDER')return '施工单位'
+        if(this.currentAddNodeParentType.type=='DEPT')return '部⻔'
+
+      },
 
     },
     methods: {
@@ -191,8 +202,8 @@
 //      添加节点
       submitAdd() {
         this.addotherNode({
-          name:this.addNodeName,
-          parentId:this.currentAddNodeParentId,
+          name: this.addNodeName,
+          parentId: this.currentAddNodeParentId,
           onsuccess: body => {
             this.getotherOrgTree()
             this.showAddNew = false
@@ -216,7 +227,7 @@
           parentId: this.currendNode.parentId,
           onsuccess: body => {
             this.$message({
-              message:'修改成功',
+              message: '修改成功',
               type: 'success'
             });
             this.getotherOrgTree()

@@ -2,7 +2,7 @@ module.exports = {
   // 获取角色模板列表
   roleTemplateList(ctx, params) {
     ctx.dispatch('request', {
-      url: `/permission/getall`,
+      url: `/role/getroletemplates`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)

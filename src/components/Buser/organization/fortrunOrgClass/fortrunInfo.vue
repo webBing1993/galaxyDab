@@ -63,8 +63,8 @@
     computed: {
       ...mapState({}),
       disableEditType(){
-        if(this.getCurrendNode.type=='UNION')return '子公司'
-        if(this.getCurrendNode.type=='GENERAL')return '部⻔'
+        if(this.getCurrendNode.type=='SUBSIDIARY')return '子公司'
+        if(this.getCurrendNode.type=='DEPT')return '部⻔'
 
       },
 

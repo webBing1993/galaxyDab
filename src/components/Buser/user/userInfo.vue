@@ -23,7 +23,7 @@
           width="55">
         </el-table-column>
         <el-table-column property="count" label="账号"></el-table-column>
-        <el-table-column property="phone" label="手机号"></el-table-column>
+        <el-table-column property="mobile" label="手机号"></el-table-column>
         <el-table-column property="depart" label="部门"></el-table-column>
         <el-table-column property="duty" label="职务"></el-table-column>
         <el-table-column property="certificateQY" label="企业微信凭证"></el-table-column>
@@ -71,7 +71,7 @@
 
       <el-form label-width="120px" v-if="resetPwdStatus">
         <el-form-item label="姓名">
-          <el-input v-model="resetInfo.name"  disabled placeholder="输入账号"></el-input>
+          <el-input v-model="resetInfo.name" disabled placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="密码">
           <el-input v-model="resetInfo.pwd" type="password" placeholder="输入账号"></el-input>
@@ -96,6 +96,8 @@
       <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
         <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
       </el-checkbox-group>
+      <el-button @click="showSetRole = false">取 消</el-button>
+      <el-button type="primary" @click="submitSetRole">确 定</el-button>
     </el-dialog>
 
   </div>
@@ -133,48 +135,25 @@
         filterText: '',
         employeeTableList: [
           {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          }, {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
+            id: "100000021",
+            name: "张三",
+            account: "user001",
+            mobile: "18673625164",
+            avatar: "",
           },
           {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
+            id: "1000000222",
+            name: "李四",
+            account: "user001",
+            mobile: "18673625164",
+            avatar: "",
           },
           {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          },
-          {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
+            id: "10000009999",
+            name: "王二",
+            account: "user001",
+            mobile: "18673625164",
+            avatar: "",
           },
         ],
         dialogVisible: false,
@@ -203,6 +182,7 @@
         'adduser',
         'delUser',
         'qyWeath',
+        'setRoles',
         'modifyuser',
         'resetPwd',
       ]),
@@ -220,11 +200,11 @@
       submitAdd() {
         let fields = {
 //          "orgId":"10000000010", "name":"user", "account":"user001", "mobile":"18673625164", "avatar":"",
-          orgId:"10000000010",
-          name:this.addEmployeeInfo.name,
-          account:this.addEmployeeInfo.name,
-          mobile:this.addEmployeeInfo.name,
-          avatar:this.addEmployeeInfo.name,
+          orgId: "10000000010",
+          name: this.addEmployeeInfo.name,
+          account: this.addEmployeeInfo.name,
+          mobile: this.addEmployeeInfo.name,
+          avatar: this.addEmployeeInfo.name,
         }
         this.adduser({
           fields: fields,
@@ -246,13 +226,12 @@
       submitReset() {
         if (this.resetInfo.pwd == this.resetInfo.repwd) {
           this.resetPwd({
-            id: '1111',
-//            id: this.resetInfo.id,
+            id: this.resetInfo.id,
             password: this.resetInfo.pwd,
             onsuccess: body => {
               this.$message({
                 type: 'warning',
-                message: '修改失败!'
+                message: '修改成功!'
               });
               this.showAddNew = false
 
@@ -260,7 +239,7 @@
             onFail: body => {
               this.$message({
                 type: 'warning',
-                message: '删除失败!'
+                message: '修改失败!'
               });
             }
           })
@@ -271,6 +250,13 @@
           });
         }
 
+      },
+
+      submitSetRole(){
+        this.setRoles({
+//          userId: params.userId,
+//          roleIds: params.roleIds
+        })
       },
 
       openCertificate() {
@@ -285,7 +271,7 @@
           });
         }).catch(() => {
           this.qyWeath({
-            userIds:'userIds',
+            userIds: this.selectitem_id_list,
             onsuccess: body => {
               this.$message({
                 type: 'success',
@@ -328,11 +314,11 @@
 
       },
 
-      handleReset() {
+      handleReset(parm) {
         this.showAddNew = true
         this.title = '重置密码'
         this.resetPwdStatus = true
-
+        this.resetInfo.id=parm.id
       },
 
       handleDel(parm) {
@@ -368,12 +354,13 @@
       },
 
       handleSelectionChange(val) {
+        console.log('valvalval',val)
         this.selectItemList = val;
-        this. this.selectItemList.map(item=>{
+        this.selectitem_id_list=[]
+        this.selectItemList.map(item => {
           this.selectitem_id_list.push(item.id)
         })
 
-        console.log('selectItemList', this.selectItemList)
 
       },
       handleClose() {
