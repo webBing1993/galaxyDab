@@ -134,7 +134,6 @@
         showNodeDetailForEdit: false,
       }
     },
-
   computed: {
       ...mapState({}),
       companyType() {

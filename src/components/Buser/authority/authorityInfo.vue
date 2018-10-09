@@ -36,7 +36,6 @@
           <el-input v-model="getCurrendNode.description" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item>
-          无操作
           <!--<el-button type="success" @click="submitChange">修 改</el-button>-->
           <!--<el-button type="danger" @click="submitDelete">删 除</el-button>-->
         </el-form-item>

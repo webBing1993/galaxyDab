@@ -64,4 +64,38 @@ module.exports = {
       }
     })
   },
+  // 描述:从⻆色模版复制 url:/role/copyroletemp
+  copyroletemp(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/copyroletemp`,
+      method: 'POST',
+      body: {
+        orgId: params.orgId,
+        tempIds: params.tempIds,
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: (body) => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+  // 描述:从⻆色模版引用 url:/role/refersroletemp
+  refersroletemp(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/refersroletemp`,
+      method: 'POST',
+      body: {
+        orgId: params.orgId,
+        tempIds: params.tempIds,
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: (body) => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 }

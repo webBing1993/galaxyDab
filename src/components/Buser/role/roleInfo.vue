@@ -2,18 +2,18 @@
 <template>
   <div class="rightInfo">
     <div class="topTitle">
-      <h4>员工列表</h4>
+      <h4>角色列表</h4>
     </div>
     <div class="centerContent">
       <div class="item role">
         <el-row>
           <el-input
-            placeholder="筛选员工"
+            placeholder="筛选角色"
             v-model="filterText">
           </el-input>
           <el-button type="success" @click="handleAdd">添加角色</el-button>
-          <el-button type="primary" :disabled="selectItemList.length==0" @click="showSetRole=true">从模板复制</el-button>
-          <el-button type="warning" :disabled="selectItemList.length==0" @click="showSetRole=true">从模板引用</el-button>
+          <el-button type="primary" :disabled="selectItemList.length==0" @click="handelCopeTemplate">从模板复制</el-button>
+          <el-button type="warning" :disabled="selectItemList.length==0" @click="handelLinkTemplate">从模板引用</el-button>
         </el-row>
       </div>
 
@@ -65,14 +65,18 @@
       title="组织名称"
       :visible.sync="showSetRole"
       width="40%">
-      <el-table :data="roleTableList" border stripe @selection-change="handleSelectTemplate">
+      <el-table :data="TemplateList" border stripe @selection-change="handleSelectTemplate">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column property="count" label="角色ID"></el-table-column>
-        <el-table-column property="phone" label="角色名称"></el-table-column>
+        <el-table-column property="roleTemplateId" label="角色ID"></el-table-column>
+        <el-table-column property="name" label="角色名称"></el-table-column>
       </el-table>
+      <div style="margin-top: 20px">
+        <el-button @click="showSetRole = false">取 消</el-button>
+        <el-button type="primary" @click="submitSaveTemplate">保 存</el-button>
+      </div>
     </el-dialog>
 
   </div>
@@ -82,7 +86,6 @@
 <script>
   import {mapActions, mapGetters, mapState, mapMutations} from 'vuex';
 
-  const cityOptions = ['上海', '北京', '广州', '深圳'];
   export default {
     name: 'roleInfo',
     props: {
@@ -102,7 +105,6 @@
         checkAll: false,
         editStatus: false,
         checkedCities: ['上海', '北京'],
-        cities: cityOptions,
         isIndeterminate: true,
         showSetRole: false,
         showAddNew: false,
@@ -169,7 +171,9 @@
           name: '',
           pwd: '',
           repwd: '',
-        }
+        },
+        TemplateList:[],
+        copeStatus:false
       }
     },
     methods: {
@@ -177,8 +181,17 @@
         'roleList',
         'addrole',
         'changeRole',
+        'roleTemplateList',
+        'copyroletemp',
+        'refersroletemp',
       ]),
-
+      getTemplateList(){
+        this.roleTemplateList({
+          onsuccess: body => {
+            this.TemplateList=body.data
+          },
+        })
+      },
       getTableRoleList() {
         this.roleList({
           orgid: this.orgId,
@@ -231,44 +244,42 @@
 
       },
 
-      submitReset() {
-        if (this.resetInfo.pwd == this.resetInfo.repwd) {
-          this.resetPwd({
-            id: '1111',
-//            id: this.resetInfo.id,
-            password: this.resetInfo.pwd,
-            onsuccess: body => {
-              this.$message({
-                type: 'warning',
-                message: '修改失败!'
-              });
-              this.showAddNew = false
+      submitSaveTemplate(){
+        if(this.copeStatus){
+          this.copyroletemp({
 
-            },
-            onFail: body => {
-              this.$message({
-                type: 'warning',
-                message: '删除失败!'
-              });
-            }
           })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: '密码和重复密码不同!'
-          });
-        }
+        }else {
+          this.refersroletemp({
 
+          })
+        }
       },
 
       handleAdd() {
         this.title = '新增角色'
         this.showAddNew = true
         this.editStatus = false
-
+//        数据初始化
+        this.addRoleInfo.id=''
+        this.addRoleInfo.name=''
+        this.addRoleInfo.alias=''
+        this.addRoleInfo.description=''
       },
 
+      handelCopeTemplate(){
+        this.showSetRole=true
+        this.getTemplateList()
+        this.copeStatus=true
+      },
+      handelLinkTemplate(){
+        this.showSetRole=true
+        this.getTemplateList()
+        this.copeStatus=false
+
+      },
       handleChange(parm) {
+        console.log(parm)
         this.title = '编辑角色'
         this.showAddNew = true;
         this.editStatus = true
@@ -286,6 +297,7 @@
       },
       handleSelectTemplate(val) {
         this.selectedTemplate = val;
+        console.log('选择的模板',this.selectedTemplate)
       },
 
       handleClose() {

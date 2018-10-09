@@ -192,6 +192,13 @@
         this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
 
+//        数据初始化
+        this.authInfo.name='';
+        this.authInfo.tag='';
+        this.authInfo.iconAdress='';
+        this.authInfo.linkAdress='';
+        this.authInfo.requestMethods='';
+        this.authInfo.describe='';
 
       },
 //      获取组织树

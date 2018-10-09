@@ -101,6 +101,19 @@ module.exports = {
       }
     })
   },
+  // 角色列表 http://qa.fortrun.cn:8762/galaxy-front/role/getroletemplates
+  readyRoleList(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/getroletemplates`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 
 //  给用户设置角色
   setRoles(ctx, params) {

@@ -49,8 +49,6 @@
         </el-form-item>
 
         <el-form-item label="品牌LOGO">
-          <!--<el-input v-model="brandInfo.logoUrl" placeholder="请输入内容"></el-input>-->
-
           <el-upload
             class="upload-demo el-right"
             :action="scriptUpload"
@@ -64,7 +62,6 @@
             :on-progress="uploadVideoProcess"
             list-type="picture-card">
             <el-button size="small" type="primary">上传logo</el-button>
-
           </el-upload>
 
 
