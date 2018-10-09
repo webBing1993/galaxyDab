@@ -17,6 +17,8 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
 Vue.use(iView);
+
+Vue.config.devtools = true
 /* eslint-disable no-new */
 
 // router.afterEach(function (to,from) {

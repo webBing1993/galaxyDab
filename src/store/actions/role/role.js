@@ -2,7 +2,8 @@ module.exports = {
   // 获取角色组织树
   roleManageTree(ctx, params) {
     ctx.dispatch('request', {
-      url: `/permission/getall`,
+      // url: `/permission/getall`,
+      url: `/org/getOrganizationTree`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)

@@ -134,27 +134,27 @@
         showAddNew: false,
         filterText: '',
         employeeTableList: [
-          {
-            id: "100000021",
-            name: "张三",
-            account: "user001",
-            mobile: "18673625164",
-            avatar: "",
-          },
-          {
-            id: "1000000222",
-            name: "李四",
-            account: "user001",
-            mobile: "18673625164",
-            avatar: "",
-          },
-          {
-            id: "10000009999",
-            name: "王二",
-            account: "user001",
-            mobile: "18673625164",
-            avatar: "",
-          },
+//          {
+//            id: "100000021",
+//            name: "张三",
+//            account: "user001",
+//            mobile: "18673625164",
+//            avatar: "",
+//          },
+//          {
+//            id: "1000000222",
+//            name: "李四",
+//            account: "user001",
+//            mobile: "18673625164",
+//            avatar: "",
+//          },
+//          {
+//            id: "10000009999",
+//            name: "王二",
+//            account: "user001",
+//            mobile: "18673625164",
+//            avatar: "",
+//          },
         ],
         dialogVisible: false,
         selectItemList: [],
@@ -191,7 +191,7 @@
         this.userList({
           orgid: this.orgId,
           onsuccess: body => {
-//            this.employeeTableList = body.data
+            this.employeeTableList = body.data
           }
 
         })

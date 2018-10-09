@@ -2,7 +2,7 @@ module.exports = {
   // 获取用户组织树
   UserManageTree(ctx, params) {
     ctx.dispatch('request', {
-      url: `/org/getorgs`,
+      url: `/org/getOrganizationTree`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -12,7 +12,7 @@ module.exports = {
       }
     })
   },
-  // 根据组织机构id获取用户列表 url:/user/getusersbyorgid/{orgid}
+  // 根据组织机构id获取用户列表
   userList(ctx, params) {
     ctx.dispatch('request', {
       url: `/user/getusersbyorgid/${params.orgid}`,

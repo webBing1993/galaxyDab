@@ -115,7 +115,7 @@
             "foreignId": "",
             "creator": null,
             "deleted": false,
-            "name": "顶级组织",
+            "name": "其他组织",
             "type": "ROOT",
             "subOrganizations": [],
             "parentId": "0",

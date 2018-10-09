@@ -101,7 +101,7 @@
             "foreignId": "",
             "creator": null,
             "deleted": false,
-            "name": "顶级组织",
+            "name": "复创组织",
             "type": "ROOT",
             "subOrganizations": [],
             "parentId": "0",

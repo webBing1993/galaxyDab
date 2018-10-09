@@ -195,7 +195,7 @@
         orgId: '',
         currentNodeDetail: {},
 //        getCurrendNode: {},
-        disableEditType: '',
+//        disableEditType: '',
         alternativeParentNode: [],//备选父节点
         toParentId: '',
 
@@ -203,6 +203,12 @@
     },
     computed: {
       ...mapState({}),
+      disableEditType(){
+        if(this.currentNodeDetail.type=='HOTEL') return "酒店"
+        if(this.currentNodeDetail.type=='GROUP') return "集团"
+        if(this.currentNodeDetail.type=='DEPT') return "部门"
+        if(this.currentNodeDetail.type=='SEGMENT') return "分组"
+      }
 
     },
     methods: {
@@ -228,6 +234,9 @@
           orgid: this.orgId,
           onsuccess: body => {
             this.currentNodeDetail = body.data
+            if(this.currentNodeDetail.type=='HOTEL'){
+              this.getHotelBrandList()
+            }
             this.shopAdress.push(this.currentNodeDetail.info.province)
             this.shopAdress.push(this.currentNodeDetail.info.city)
             this.shopAdress.push(this.currentNodeDetail.info.area)
@@ -365,7 +374,7 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrentDetail()
-      this.getHotelBrandList()
+//      this.getHotelBrandList()
 //      this.getCurrendNode = this.currendNode
       this.alternativeParentNode = this.parentNodeList
       console.log('this.alternativeParentNode', this.alternativeParentNode)

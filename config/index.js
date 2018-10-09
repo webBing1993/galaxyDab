@@ -12,8 +12,12 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/galaxy':{
-        target: 'http://qa.fortrun.cn:8762',
+        // target: 'http://qa.fortrun.cn:8762',
+        target: 'http://qa.fortrun.cn:9201',
         changeOrigin: true,
+        pathRewrite: {
+          '^/galaxy-front': ''
+        }
       }
     },
     // Various Dev Server settings

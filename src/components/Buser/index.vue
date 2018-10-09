@@ -8,6 +8,7 @@
             <el-col :span="24">
               <el-menu
                 default-active="2"
+                :router="true"
                 class="el-menu-vertical-demo">
                 <el-menu-item index="1" @click="goto('./hotelOrg')">
                   <i class="el-icon-menu"></i>

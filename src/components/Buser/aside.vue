@@ -85,10 +85,14 @@
 </template>
 
 <script>
+  const test={
+
+  }
     export default {
         name: 'Home',
         data () {
-            const data = [{
+            const data = [
+              {
                 id: 1,
                 label: '集团一',
                 children: [{

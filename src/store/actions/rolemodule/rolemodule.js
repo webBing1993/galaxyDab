@@ -65,22 +65,22 @@ module.exports = {
   },
 
 
-  // 描述:删除 url:/permission/delete
-  authTree(ctx, params) {
-    ctx.dispatch('request', {
-      url: `/permission/delete`,
-      method: 'POST',
-      body: {
-        ids: params.ids
-      },
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
-      },
-      onFail: body => {
-        params.onfail && params.onfail(body)
-      }
-    })
-  },
+  // // 描述:删除 url:/permission/delete
+  // delTree(ctx, params) {
+  //   ctx.dispatch('request', {
+  //     url: `/permission/delete`,
+  //     method: 'POST',
+  //     body: {
+  //       ids: params.ids
+  //     },
+  //     onSuccess: (body) => {
+  //       params.onsuccess && params.onsuccess(body)
+  //     },
+  //     onFail: body => {
+  //       params.onfail && params.onfail(body)
+  //     }
+  //   })
+  // },
 
 
 }

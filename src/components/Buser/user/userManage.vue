@@ -18,7 +18,7 @@
           :expand-on-click-node="false"
           :filter-node-method="filterNode"
           :highlight-current="true"
-          ref="tree2" @node-click="handleNodeClick">
+          ref="tree" @node-click="handleNodeClick">
         </el-tree>
       </div>
     </div>

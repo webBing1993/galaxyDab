@@ -2,8 +2,8 @@ module.exports = {
   // 获取酒店组织树
   hotelOrgTree(ctx, params) {
     ctx.dispatch('request', {
+      // url: `/org/getorgs`,
       url: `/org/getorgs`,
-      // url: "http://qa.fortrun.cn:8762/galaxy-front/org/getorgs",
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -56,7 +56,7 @@ module.exports = {
   },
 
 
-  // 描述:修改酒店所属父节点
+  // 描述:修改酒店所属父节点url:/org/getbrands/{groupId}
   changeRelationship(ctx, params) {
     ctx.dispatch('request', {
       url: `/`,

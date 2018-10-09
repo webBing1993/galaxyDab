@@ -51,8 +51,8 @@
         :visible.sync="showAddNew"
         width="40%">
         <el-form ref="form" label-width="80px">
-          <el-form-item label="酒店">
-            <el-input v-model="authInfo.hotel" placeholder="请输入内容"></el-input>
+          <el-form-item label="名称">
+            <el-input v-model="authInfo.name" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="TAG">
             <el-input v-model="authInfo.tag" placeholder="请输入内容"></el-input>
@@ -118,7 +118,7 @@
           id: 'orgId'
         },
         authInfo:{
-          hotel:'',
+          name:'',
           tag:'',
           iconAdress:'',
           linkAdress:'',
@@ -209,14 +209,23 @@
 //      添加节点
       submitAdd() {
         let fields = {
-          parentId:this.currentAddNodeParentId,
-          name:this.authInfo.hotel,
-          tag:this.authInfo.tag,
-          icon:this.authInfo.iconAdress,
-          url:this.authInfo.linkAdress,
-          requestMethod:this.authInfo.requestMethods,
-          description:this.authInfo.describe,
-          noteType:this.authInfo.hotel
+//          parentId:this.currentAddNodeParentId,
+//          name:this.authInfo.hotel,
+//          tag:this.authInfo.tag,
+//          icon:this.authInfo.iconAdress,
+//          url:this.authInfo.linkAdress,
+//          requestMethod:this.authInfo.requestMethods,
+//          description:this.authInfo.describe,
+//          noteType:this.authInfo.hotel
+
+          "parentId":this.currentAddNodeParentId,
+          "name":this.authInfo.name,
+          "requestMethod":this.authInfo.requestMethods,
+          "description":this.authInfo.describe,
+          "tag":this.authInfo.tag,
+          "nodeType":'',
+          "url":this.authInfo.linkAdress,
+
         }
         this.addauth({
           fields: fields,
@@ -346,7 +355,7 @@
     }
     .el-input {
       width: 60%;
-      margin-bottom: 1rem;
+      /*margin-bottom: 1rem;*/
     }
   }
 </style>

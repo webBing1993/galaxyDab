@@ -57,30 +57,7 @@
             "deleted": false,
             "name": "顶级组织",
             "type": "ROOT",
-            "subOrganizations": [
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "酒店1",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "1",
-                "status": null
-              },
-              {
-                "foreignId": "",
-                "creator": null,
-                "deleted": false,
-                "name": "酒店1",
-                "type": "GENERAL",
-                "subOrganizations": [],
-                "parentId": "0",
-                "orgId": "2",
-                "status": null
-              }
-            ],
+            "subOrganizations": [],
             "parentId": "0",
             "orgId": "0",
             "status": null
