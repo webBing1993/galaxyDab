@@ -69,14 +69,12 @@ module.exports = {
   },
 
 
-  // 描述:删除
+  // 描述:删除  http://qa.fortrun.cn:9201/user/deleteusers/1740cb0adbf547ae96f79a8b77ffd1d7
+  // Method :delete
   delUser(ctx, params) {
     ctx.dispatch('request', {
-      url: `/user/deleteusers`,
-      method: 'POST',
-      body: {
-        userIds: params.userIds
-      },
+      url: `/user/deleteusers/${params.userId}`,
+      method: 'delete',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -101,10 +99,11 @@ module.exports = {
       }
     })
   },
-  // 角色列表 http://qa.fortrun.cn:8762/galaxy-front/role/getroletemplates
+// role/getrolesbyorgid/100000000000000136
+  // 获取备选角色列表
   readyRoleList(ctx, params) {
     ctx.dispatch('request', {
-      url: `/role/getroletemplates`,
+      url: `/role/getrolesbyorgid/${params.orgid}`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -114,14 +113,13 @@ module.exports = {
       }
     })
   },
-
 //  给用户设置角色
   setRoles(ctx, params) {
     ctx.dispatch('request', {
       url: `/user/setroles`,
       method: 'POST',
       body: {
-        userId: params.userId,
+        userIds: params.userIds,
         roleIds: params.roleIds
       },
       onSuccess: (body) => {
@@ -138,7 +136,7 @@ module.exports = {
       url: `/user/resetpsw`,
       method: 'POST',
       body: {
-        id: params.id,
+        userId: params.userId,
         password: params.password,
       },
       onSuccess: (body) => {

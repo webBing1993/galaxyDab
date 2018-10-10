@@ -111,12 +111,15 @@
       :visible.sync="showSetRole"
       width="40%"
     >
-      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-      <div style="margin: 15px 0;"></div>
-      <el-checkbox-group v-model="checkedRoles" @change="handlecheckedRolesChange">
-        <el-checkbox v-for="item in alternativeRoleList" :label="item.name" :key="item.roleTemplateId">{{item.name}}
-        </el-checkbox>
-      </el-checkbox-group>
+      <div v-if="alternativeRoleList && alternativeRoleList.length>0">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-model="checkedRoles" @change="handlecheckedRolesChange">
+          <el-checkbox v-for="item in alternativeRoleList" :label="item.id" :key="item.id">{{item.name}}
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <div v-if="alternativeRoleList && alternativeRoleList.length===0">暂无数据</div>
       <el-button @click="showSetRole = false">取 消</el-button>
       <el-button type="primary" @click="submitSetRole">确 定</el-button>
     </el-dialog>
@@ -205,11 +208,12 @@
 
       getRoleList() {
         this.readyRoleList({
+          orgid: this.orgId,
           onsuccess: body => {
             this.allCheckedId = []
             this.alternativeRoleList = body.data
             this.alternativeRoleList.map(item => {
-              this.allCheckedId.push(item.roleTemplateId)
+              this.allCheckedId.push(item.id)
             })
           },
         })
@@ -228,12 +232,13 @@
       submitAdd() {
         if(this.editStatus){
           let fields = {
-            id:  this.addEmployeeInfo.userId,
+            userId:  this.addEmployeeInfo.userId,
             orgId: this.orgId,
             name: this.addEmployeeInfo.name,
             account: this.addEmployeeInfo.account,
             mobile: this.addEmployeeInfo.tel,
             englishName: this.addEmployeeInfo.EnglishName,
+            avatar: this.addEmployeeInfo.picUrl
           }
           this.modifyuser({
             fields: fields,
@@ -260,6 +265,8 @@
             account: this.addEmployeeInfo.account,
             mobile: this.addEmployeeInfo.tel,
             englishName: this.addEmployeeInfo.EnglishName,
+            avatar: this.addEmployeeInfo.picUrl
+
           }
           this.adduser({
             fields: fields,
@@ -282,11 +289,11 @@
       submitReset() {
         if (this.resetInfo.pwd == this.resetInfo.repwd) {
           this.resetPwd({
-            id: this.resetInfo.id,
+            userId: this.resetInfo.id,
             password: this.resetInfo.pwd,
             onsuccess: body => {
               this.$message({
-                type: 'warning',
+                type: 'success',
                 message: '修改成功!'
               });
               this.showAddNew = false
@@ -311,12 +318,12 @@
 
       submitSetRole() {
         this.setRoles({
-          userId: this.selectitem_id_list,
+          userIds: this.selectitem_id_list,
           roleIds: this.haveCheckedId,
           onsuccess: body => {
             this.$message({
-              type: 'warning',
-              message: '设置失败!'
+              type: 'success',
+              message: '设置成功!'
             });
             this.showSetRole = false
           },
@@ -400,6 +407,7 @@
         this.addEmployeeInfo.name = parm.name
         this.addEmployeeInfo.EnglishName = parm.englishName
         this.addEmployeeInfo.tel = parm.mobile
+        this.addEmployeeInfo.picUrl = parm.avatar
 
         this.editStatus=false
       },
@@ -415,6 +423,7 @@
         this.addEmployeeInfo.name = parm.name
         this.addEmployeeInfo.EnglishName = parm.englishName
         this.addEmployeeInfo.tel = parm.mobile
+        this.addEmployeeInfo.picUrl = parm.avatar
 
         this.editStatus=true
 
@@ -440,7 +449,7 @@
         }).then(() => {
           console.log(parm)
           this.delUser({
-            userIds: parm.id,
+            userId: parm.userId,
             onsuccess: body => {
               this.$message({
                 type: 'success',

@@ -43,6 +43,7 @@
           @modify-hotel-org-treeNode="modifyNode"
           :currendNode="currendNode"
           :NodeId="currentAddNodeParentId"
+          :Nav="BreadcrumbNavigation"
           :parentNodeList="allHotelOrgNode"
         ></orgDetailed-Info>
         <div v-if="this.currendNode.type=='GROUP'">
@@ -265,7 +266,8 @@
         currendNode: {},
         BrandList: [],
         showNodeDetailForEdit: false,
-        allHotelOrgNode: []
+        allHotelOrgNode: [],
+        BreadcrumbNavigation:''
       }
     },
     computed: {
@@ -307,25 +309,25 @@
         this.showAddNew = true
         this.getHotelBrandList()
 //        添加初始化
-        this.groupInfo.enterpriseName='';
-        this.groupInfo.accountName='';
-        this.groupInfo.enterpriseShorterName='';
-        this.groupInfo.enterpriseNet='';
-        this.groupInfo.linkmanName='';
-        this.groupInfo.linkmanJob='';
-        this.groupInfo.linkmanTel='';
+        this.groupInfo.enterpriseName = '';
+        this.groupInfo.accountName = '';
+        this.groupInfo.enterpriseShorterName = '';
+        this.groupInfo.enterpriseNet = '';
+        this.groupInfo.linkmanName = '';
+        this.groupInfo.linkmanJob = '';
+        this.groupInfo.linkmanTel = '';
 
-        this.hotelInfo.belongBrand='';
-        this.hotelInfo.shopType='';
-        this.hotelInfo.shopName='';
-        this.hotelInfo.shopCode='';
-        this.hotelInfo.shopAdress='';
-        this.hotelInfo.shopDetailAdress='';
-        this.hotelInfo.adressCode='';
-        this.hotelInfo.stageTel='';
-        this.hotelInfo.linkmanName='';
-        this.hotelInfo.linkmanJob='';
-        this.hotelInfo.linkmanTel='';
+        this.hotelInfo.belongBrand = '';
+        this.hotelInfo.shopType = '';
+        this.hotelInfo.shopName = '';
+        this.hotelInfo.shopCode = '';
+        this.hotelInfo.shopAdress = '';
+        this.hotelInfo.shopDetailAdress = '';
+        this.hotelInfo.adressCode = '';
+        this.hotelInfo.stageTel = '';
+        this.hotelInfo.linkmanName = '';
+        this.hotelInfo.linkmanJob = '';
+        this.hotelInfo.linkmanTel = '';
 
       },
 //      获取组织树
@@ -470,6 +472,18 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
+        console.log('nodenode', node)
+//        let temp = []
+//        let temp2=[]
+//        this.getParNode(node, temp)
+//        let len=temp.length
+//        for (var i=len;i>0;i--){
+//          temp2.push(temp[i])
+//        }
+//        console.log('temp2',temp2)
+//        this.BreadcrumbNavigation=temp2.join(' > ').slice(0,len-3)
+
+
         if (item.orgId == "0") {
           this.$message({
             message: "顶级组织不可编辑",
@@ -480,6 +494,16 @@
           this.showNodeDetailForEdit = true
           this.currentAddNodeParentId = item.orgId
           this.currendNode = item
+        }
+      },
+
+      getParNode(node, parentList) {
+        if (!node.parent) {
+          return
+        } else {
+          parentList.push(node.parent.data.name)
+          this.getParNode(node.parent, parentList)
+          return parentList
         }
       },
 
@@ -511,14 +535,13 @@
 
         })
       },
-      modifyNode(){
+      modifyNode() {
         this.getHotelOrgTree();
       }
 
     },
     mounted() {
       this.getHotelOrgTree();
-
 
 
     },

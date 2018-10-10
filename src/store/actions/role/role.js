@@ -69,10 +69,7 @@ module.exports = {
     ctx.dispatch('request', {
       url: `/role/copyroletemp`,
       method: 'POST',
-      body: {
-        orgId: params.orgId,
-        tempIds: params.tempIds,
-      },
+      body: {...params.fields},
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -86,10 +83,35 @@ module.exports = {
     ctx.dispatch('request', {
       url: `/role/refersroletemp`,
       method: 'POST',
-      body: {
-        orgId: params.orgId,
-        tempIds: params.tempIds,
+      body: {...params.fields},
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
       },
+      onFail: (body) => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
+  // 1.根据角色查看权限 qa.fortrun.cn:9201/role/getpermissionbyrole/499360081234624512
+  getAuthByAuth(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/getpermissionbyrole/${params.roleId}`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: (body) => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+  // 2.给角色设置权限qa.fortrun.cn:9201/role/setpermission
+  setAuth(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/setpermission`,
+      method: 'POST',
+      body: {...params.fields},
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },

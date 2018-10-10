@@ -159,7 +159,7 @@
         this.showAddNew = true
         this.currendNode = data
 //        添加初始化
-        this.currendNode.name='';
+//        this.currendNode.name='';
         this.addNodeName='';
         this.addNodeType='';
 

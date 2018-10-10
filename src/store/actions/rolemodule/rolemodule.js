@@ -1,4 +1,6 @@
 module.exports = {
+
+
   // 获取角色模板列表
   roleTemplateList(ctx, params) {
     ctx.dispatch('request', {
@@ -13,15 +15,16 @@ module.exports = {
     })
   },
 
+
   // 添加角色模板列表url:/role/addrole
   addRole(ctx, params) {
     ctx.dispatch('request', {
       url: `/role/addrole`,
       method: 'POST',
       body: {
-        name:params.name,
-        alias:params.alias,
-        description:params.description,
+        name: params.name,
+        alias: params.alias,
+        description: params.description,
       },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -31,29 +34,17 @@ module.exports = {
       }
     })
   },
-  // 描述:获取详情表 url:/permission/getbyid/{permissionid}
-  // authNodeDetail(ctx, params) {
-  //   ctx.dispatch('request', {
-  //     url: `/permission/getbyid/${params.permissionid}`,
-  //     method: 'get',
-  //     onSuccess: (body) => {
-  //       params.onsuccess && params.onsuccess(body)
-  //     },
-  //     onFail: body => {
-  //       params.onfail && params.onfail(body)
-  //     }
-  //   })
-  // },
+
   // 修改组织机构详细信息url:/role/updaterole
   modifyRole(ctx, params) {
     ctx.dispatch('request', {
       url: `/role/updaterole`,
       method: 'POST',
       body: {
-        id:params.id,
-        name:params.name,
-        alias:params.alias,
-        description:params.description,
+        id: params.id,
+        name: params.name,
+        alias: params.alias,
+        description: params.description,
       },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -63,24 +54,33 @@ module.exports = {
       }
     })
   },
+  // 3.根据模版角色查看权限1/role/getpermissionbytemp/a165d8b9c7304b789b991bac18e914fe
 
-
-  // // 描述:删除 url:/permission/delete
-  // delTree(ctx, params) {
-  //   ctx.dispatch('request', {
-  //     url: `/permission/delete`,
-  //     method: 'POST',
-  //     body: {
-  //       ids: params.ids
-  //     },
-  //     onSuccess: (body) => {
-  //       params.onsuccess && params.onsuccess(body)
-  //     },
-  //     onFail: body => {
-  //       params.onfail && params.onfail(body)
-  //     }
-  //   })
-  // },
-
+  getAuthByTemp(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/getpermissionbytemp/${params.tempid}`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+  // qa.fortrun.cn:9201/role/setpermissiontotemp
+  setTempAuth(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/setpermissiontotemp`,
+      method: 'POST',
+      body: {...params.fields},
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 
 }

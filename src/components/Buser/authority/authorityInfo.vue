@@ -183,6 +183,7 @@
       },
       currendNode(val) {
         this.getCurrendNode = val
+        console.log(this.getCurrendNode)
       }
     }
   }

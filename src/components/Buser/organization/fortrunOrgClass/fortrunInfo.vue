@@ -2,7 +2,7 @@
 <template>
   <div class="rightInfo">
     <div class="topTitle">
-      <h4>集团 > 品牌 > 酒店</h4>
+      <h4>复创组织详情</h4>
     </div>
 
     <div class="centerContent">

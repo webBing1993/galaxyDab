@@ -2,7 +2,7 @@
 <template>
   <div class="rightInfo">
     <div class="topTitle">
-      <h4>集团 > 品牌 > 酒店</h4>
+      <h4>酒店组织详情</h4>
     </div>
 
     <div class="centerContent">
@@ -152,6 +152,11 @@
     props: {
 
       NodeId: {
+        type: [String],
+        default: ''
+      },
+
+      Nav: {
         type: [String],
         default: ''
       },

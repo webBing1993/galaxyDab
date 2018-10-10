@@ -16,8 +16,8 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="handeMmodify(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="handleClick(scope.row)" type="text" size="small">设置权限</el-button>
-          <el-button type="text" size="small">查看权限</el-button>
+          <el-button @click="handleSetAuth(scope.row)" type="text" size="small">设置权限</el-button>
+          <el-button @click="handleViewAuth(scope.row)" type="text" size="small">查看权限</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +44,25 @@
             <el-button type="primary" @click="submitAddOrChange">确 定</el-button>
           </span>
     </el-dialog>
+    <el-dialog
+      :title="authTitle"
+      :visible.sync="showSetAuth"
+      width="40%">
+      <!---->
+      <el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">
+        <el-table-column v-if="setAuthStatus"
+                         type="selection"
+                         width="55">
+        </el-table-column>
+        <el-table-column property="permissionId" label="权限Id"></el-table-column>
+        <el-table-column property="name" label="权限名称"></el-table-column>
+        <el-table-column property="description" label="权限描述"></el-table-column>
+      </el-table>
+      <div style="margin-top: 20px" v-if="setAuthStatus">
+        <el-button @click="showSetAuth = false">取 消</el-button>
+        <el-button type="primary" @click="submitSetAuth">保 存</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -63,14 +82,21 @@
           children: 'subPermissions',
           label: 'name'
         },
-        addInfo:{
-          id:'',
-          name:'',
-          alias:'',
-          description:'',
+        addInfo: {
+          id: '',
+          name: '',
+          alias: '',
+          description: '',
         },
         dialogTitle: '',
         selectItemList: '',
+        authTitle: '',
+        showSetAuth: false,
+        authTableDate: [],
+        selectedAuthId: [],
+        currentTempItemId: [],
+        setAuthStatus: false
+
       }
     },
     methods: {
@@ -78,62 +104,116 @@
         'roleTemplateList',
         'addRole',
         'modifyRole',
+        'getAuthByTemp',
+        'setTempAuth',
       ]),
+      handleSelectAuth(val) {
+        this.selectedAuthId = []
+        val.map(item => {
+          this.selectedAuthId.push(item.permissionId)
+        })
+      },
+      handleSetAuth(parm) {
+        this.authTitle = '设置权限'
+        this.showSetAuth = true
+        this.setAuthStatus = true
+        this.currentTempItemId = parm.id
+        this.getAuthByTemp({
+          tempid: parm.id,
+          onsuccess: body => {
+            this.authTableDate = body.data
+          }
+        })
+      },
 
-      getList(){
+      handleViewAuth(parm) {
+        this.authTitle = '查看权限'
+        this.showSetAuth = true
+        this.setAuthStatus = false
+
+        console.log(parm)
+        this.getAuthByTemp({
+          tempid: parm.id,
+          onsuccess: body => {
+            this.authTableDate = body.data
+          }
+        })
+      },
+      getList() {
         this.roleTemplateList({
           onsuccess: body => {
-            this.gridData=body.data
+            this.gridData = body.data
           },
         })
       },
-      submitAddOrChange(){
-        if(this.dialogTitle == '修改角色模板'){
-            this.modifyRole({
-              id:this.addInfo.id,
-              name:this.addInfo.name,
-              alias:this.addInfo.alias,
-              description:this.addInfo.description,
-              onsuccess: body => {
-                this.$message({
-                  type: 'success',
-                  message: '修改成功!'
-                });
-                this.getList()
-                this.showAddNew=false;
-              },
-            })
-        }else {
+      submitAddOrChange() {
+        if (this.dialogTitle == '修改角色模板') {
+          this.modifyRole({
+            id: this.addInfo.id,
+            name: this.addInfo.name,
+            alias: this.addInfo.alias,
+            description: this.addInfo.description,
+            onsuccess: body => {
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.getList()
+              this.showAddNew = false;
+            },
+          })
+        } else {
 //          添加
           this.addRole({
-            name:this.addInfo.name,
-            alias:this.addInfo.alias,
-            description:this.addInfo.description,
+            name: this.addInfo.name,
+            alias: this.addInfo.alias,
+            description: this.addInfo.description,
             onsuccess: body => {
               this.$message({
                 type: 'success',
                 message: '添加成功!'
               });
               this.getList()
-              this.showAddNew=false;
+              this.showAddNew = false;
             },
           })
         }
 
       },
-    HandelAdd(){
-      this.showAddNew=true;
-      this.dialogTitle='新增角色模板'
-      this.addInfo.name=''
-      this.addInfo.alias=''
-      this.addInfo.description=''
-      this.addInfo.id=''
-    },
+
+      submitSetAuth() {
+        let fields = {
+          roleTempId: this.currentTempItemId,
+          pemissionIds: this.selectedAuthId,
+        }
+        this.setTempAuth({
+          fields: fields,
+          onsuccess: body => {
+            this.roleTableList = body.data
+            this.showSetAuth = false
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
+            this.showSetAuth = false
+          },
+        })
+      },
+      HandelAdd() {
+        this.showAddNew = true;
+        this.dialogTitle = '新增角色模板'
+        this.addInfo.name = ''
+        this.addInfo.alias = ''
+        this.addInfo.description = ''
+        this.addInfo.id = ''
+      },
       handeMmodify(parm) {
-        this.addInfo.name=parm.name
-        this.addInfo.alias=parm.alias
-        this.addInfo.description=parm.description
-        this.addInfo.id=parm.roleId
+        this.addInfo.name = parm.name
+        this.addInfo.alias = parm.alias
+        this.addInfo.description = parm.description
+        this.addInfo.id = parm.roleId
 
         this.showAddNew = true;
         this.dialogTitle = '修改角色模板'
@@ -145,10 +225,9 @@
       },
     },
     mounted() {
-     this.getList()
+      this.getList()
     },
-    watch: {
-    }
+    watch: {}
   }
 </script>
 

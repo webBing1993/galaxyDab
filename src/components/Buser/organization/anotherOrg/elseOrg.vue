@@ -41,7 +41,7 @@
       <div v-if="showNodeDetailForEdit">
         <div class="rightInfo">
           <div class="topTitle">
-            <h4>集团 > 品牌 > 酒店</h4>
+            <h4>其他组织详情</h4>
           </div>
           <div class="centerContent">
             <el-form label-width="100px" label-position="left">

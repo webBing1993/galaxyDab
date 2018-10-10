@@ -21,12 +21,13 @@ module.exports = {
 
   request: (ctx, param) => {
     let headers = param.headers || {};
-      headers.Session = "bdash_JGuVQ3oKnpX9VQYL1YtrtQ=="
+      // headers.Session = "bdash_JGuVQ3oKnpX9VQYL1YtrtQ=="
+      headers.Session = "bdash_BtLMdrbfRsC7C5E6rMgAkA=="
     axios({
       url: param.url,
       method: param.method || 'GET',
       baseURL: '/galaxy-front',
-      headers: null,
+      headers: headers,
       params: param.params || null,
       data: param.body || null,
       timeout: param.timeout || 60000

@@ -12,19 +12,19 @@
             v-model="filterText">
           </el-input>
           <el-button type="success" @click="handleAdd">添加角色</el-button>
-          <el-button type="primary" :disabled="selectItemList.length==0" @click="handelCopeTemplate">从模板复制</el-button>
-          <el-button type="warning" :disabled="selectItemList.length==0" @click="handelLinkTemplate">从模板引用</el-button>
+          <el-button type="primary" @click="handelCopeTemplate">从模板复制</el-button>
+          <el-button type="warning" @click="handelLinkTemplate">从模板引用</el-button>
         </el-row>
       </div>
 
-      <el-table :data="roleTableList" border stripe @selection-change="handleSelectionChange">
+      <el-table :data="roleTableList" border stripe @selection-change="handleSelectionChange" style="margin-top: 20px">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column property="count" label="id"></el-table-column>
-        <el-table-column property="phone" label="名称"></el-table-column>
-        <el-table-column property="depart" label="组织名称"></el-table-column>
+        <el-table-column property="id" label="id"></el-table-column>
+        <el-table-column property="name" label="名称"></el-table-column>
+        <el-table-column property="" label="组织名称"></el-table-column>
         <el-table-column property="duty" label="是否引用模板"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -62,20 +62,40 @@
     </el-dialog>
 
     <el-dialog
-      title="组织名称"
+      :title="templateTitle"
       :visible.sync="showSetRole"
       width="40%">
-      <el-table :data="TemplateList" border stripe @selection-change="handleSelectTemplate">
+      <el-table :data="templateList" border stripe @selection-change="handleSelectTemplate">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column property="roleTemplateId" label="角色ID"></el-table-column>
+        <el-table-column property="id" label="角色ID"></el-table-column>
         <el-table-column property="name" label="角色名称"></el-table-column>
       </el-table>
       <div style="margin-top: 20px">
         <el-button @click="showSetRole = false">取 消</el-button>
         <el-button type="primary" @click="submitSaveTemplate">保 存</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :title="authTitle"
+      :visible.sync="showSetAuth"
+      width="40%">
+      <!---->
+      <el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">
+        <el-table-column v-if="setAuthStatus"
+                         type="selection"
+                         width="55">
+        </el-table-column>
+        <el-table-column property="permissionId" label="权限Id"></el-table-column>
+        <el-table-column property="name" label="权限名称"></el-table-column>
+        <el-table-column property="description" label="权限描述"></el-table-column>
+      </el-table>
+      <div style="margin-top: 20px" v-if="setAuthStatus">
+        <el-button @click="showSetAuth = false">取 消</el-button>
+        <el-button type="primary" @click="submitSetAuth">保 存</el-button>
       </div>
     </el-dialog>
 
@@ -102,62 +122,24 @@
     data() {
       return {
         title: '',
+        templateTitle: '',
+        authTitle: '',
         checkAll: false,
         editStatus: false,
+        setAuthStatus: false,
         checkedCities: ['上海', '北京'],
         isIndeterminate: true,
         showSetRole: false,
+        showSetAuth: false,
         showAddNew: false,
         filterText: '',
-        roleTableList: [
-          {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          }, {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          },
-          {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          },
-          {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          },
-          {
-            count: '11111241',
-            name: '王小虎',
-            phone: '18723555234',
-            depart: '技术部',
-            duty: '前端',
-            certificateQY: '是',
-            role: '前端',
-          },
-        ],
+        roleTableList: [],
         dialogVisible: false,
         selectItemList: [],
+        selectItemList_id: [],
         selectedTemplate: [],
+        selectedTemplateId: [],
+        selectedAuthId: [],
         orgId: '',
         getCurrendNode: {},
         addRoleInfo: {
@@ -172,8 +154,11 @@
           pwd: '',
           repwd: '',
         },
-        TemplateList:[],
-        copeStatus:false
+        roleItems: [],
+        copeStatus: false,
+        templateList: [],
+        authTableDate: [],
+        currentRoleItemId: '',
       }
     },
     methods: {
@@ -181,29 +166,34 @@
         'roleList',
         'addrole',
         'changeRole',
-        'roleTemplateList',
+        'roleroleItems',
+        'thisOrgRoleList',
         'copyroletemp',
         'refersroletemp',
+        'roleTemplateList',
+        'getAuthByAuth',
+        'setAuth',
       ]),
-      getTemplateList(){
+      getTemplateList() {
         this.roleTemplateList({
           onsuccess: body => {
-            this.TemplateList=body.data
+            this.templateList = body.data
           },
         })
       },
+
       getTableRoleList() {
         this.roleList({
           orgid: this.orgId,
           onsuccess: body => {
-//            this.roleTableList = body.data
+            this.roleTableList = body.data
           }
 
         })
       },
 
       submitAdd() {
-        if(this.editStatus){
+        if (this.editStatus) {
           this.changeRole({
             id: this.addRoleInfo.id,
             name: this.addRoleInfo.name,
@@ -222,7 +212,7 @@
               this.showAddNew = false
             }
           })
-        }else {
+        } else {
           this.addrole({
             name: this.addRoleInfo.name,
             alias: this.addRoleInfo.alias,
@@ -244,14 +234,51 @@
 
       },
 
-      submitSaveTemplate(){
-        if(this.copeStatus){
+      submitSetAuth() {
+        let fields = {
+          roleId: this.currentRoleItemId,
+          pemissionIds: this.selectedAuthId,
+        }
+        this.setAuth({
+          fields: fields,
+          onsuccess: body => {
+            this.roleTableList = body.data
+            this.showSetAuth = false
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
+            this.showSetAuth = false
+          },
+        })
+      },
+
+      submitSaveTemplate() {
+        let fields = {
+          orgId: this.orgId,
+          tempIds: this.selectedTemplateId
+        }
+        if (this.copeStatus) {
           this.copyroletemp({
-
+            fields: fields,
+            onsuccess: body => {
+              this.showSetRole = false
+            },
+            onfail: body => {
+              this.showSetRole = false
+            },
           })
-        }else {
+        } else {
           this.refersroletemp({
-
+            fields: fields,
+            onsuccess: body => {
+              this.showSetRole = false
+            },
+            onfail: body => {
+              this.showSetRole = false
+            },
           })
         }
       },
@@ -261,45 +288,84 @@
         this.showAddNew = true
         this.editStatus = false
 //        数据初始化
-        this.addRoleInfo.id=''
-        this.addRoleInfo.name=''
-        this.addRoleInfo.alias=''
-        this.addRoleInfo.description=''
+        this.addRoleInfo.id = ''
+        this.addRoleInfo.name = ''
+        this.addRoleInfo.alias = ''
+        this.addRoleInfo.description = ''
       },
 
-      handelCopeTemplate(){
-        this.showSetRole=true
+      handelCopeTemplate() {
+        this.showSetRole = true
         this.getTemplateList()
-        this.copeStatus=true
+        this.copeStatus = true
+        this.templateTitle = '从模板复制'
       },
-      handelLinkTemplate(){
-        this.showSetRole=true
+
+      handelLinkTemplate() {
+        this.showSetRole = true
         this.getTemplateList()
-        this.copeStatus=false
+        this.copeStatus = false
+        this.templateTitle = '从模板引用'
 
       },
+
       handleChange(parm) {
         console.log(parm)
         this.title = '编辑角色'
         this.showAddNew = true;
         this.editStatus = true
       },
+
       handleSetAuth(parm) {
-
+        this.authTitle = '设置权限'
+        this.showSetAuth = true
+        this.setAuthStatus = true
+        this.currentRoleItemId = parm.id
+        this.getAuthByAuth({
+          roleId: parm.id,
+          onsuccess: body => {
+            this.authTableDate = body.data
+          }
+        })
       },
-      handleViewAuth(parm) {
 
+      handleViewAuth(parm) {
+        this.authTitle = '查看权限'
+        this.showSetAuth = true
+        this.setAuthStatus = false
+
+        console.log(parm)
+        this.getAuthByAuth({
+          roleId: parm.id,
+          onsuccess: body => {
+            this.authTableDate = body.data
+          }
+        })
       },
 
       handleSelectionChange(val) {
+        console.log(val)
         this.selectItemList = val;
-        console.log('selectItemList', this.selectItemList)
+        this.selectItemList_id = []
+        this.selectItemList.map(item => {
+          this.selectItemList_id.push(item.id)
+        })
       },
       handleSelectTemplate(val) {
         this.selectedTemplate = val;
-        console.log('选择的模板',this.selectedTemplate)
+        console.log('选择的模板', this.selectedTemplate)
+        this.selectedTemplateId = []
+        this.selectedTemplate.map(item => {
+          this.selectedTemplateId.push(item.id)
+        })
       },
+      handleSelectAuth(val) {
+        this.selectedAuthId = []
+        val.map(item => {
+          this.selectedAuthId.push(item.permissionId)
+        })
 
+      },
       handleClose() {
       },
     },
