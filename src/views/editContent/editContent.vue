@@ -28,6 +28,11 @@
       <el-form-item label="地址" prop="address">
         <el-input v-model="contentForm.address" autocomplete="off"></el-input>
       </el-form-item>
+      <el-form-item label="获取定位">
+        <div>
+          <b-map-component></b-map-component>
+        </div>
+      </el-form-item>
       <el-form-item label="介绍" prop="introduce">
         <div>　
           <!--editor的div为富文本的承载容器-->
@@ -48,8 +53,12 @@
 </template>
 <script>
 import { regionDataPlus } from "element-china-area-data";
+import BMapComponent from "@/views/BMapComponent";
 import qs from "qs";
 export default {
+  components: {
+    BMapComponent
+  },
   data() {
     return {
       lianxi: "",
