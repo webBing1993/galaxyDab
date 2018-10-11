@@ -13,7 +13,7 @@ import orgDetailedInfo from '@/components/Buser/organization/hotelOrgClass/orgDe
 import fortrunOrg from '@/components/Buser/organization/fortrunOrgClass/fortrunOrg'
 import fortrunInfo from '@/components/Buser/organization/fortrunOrgClass/fortrunInfo'
 ////////其他组织//////////
-import elseOrg from '@/components/Buser/organization/elseOrg'
+import elseOrg from '@/components/Buser/organization/anotherOrg/elseOrg'
 
 
 /////////////////////////用户管理///////////
