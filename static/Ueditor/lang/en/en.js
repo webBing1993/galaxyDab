@@ -252,7 +252,6 @@ UE.I18N['en'] = {
         'noUploadImage':"No pictures has been uploaded！",
         'toggleSelect':'Change the active state by click!\n Image Size: '
     },
-    //===============dialog i18N=======================
     'insertimage':{
         'static':{
             'lang_tab_remote':"Insert",

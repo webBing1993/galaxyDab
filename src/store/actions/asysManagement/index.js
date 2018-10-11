@@ -1,6 +1,6 @@
 module.exports = {
-    ...require('./advertising'),
-    ...require('./classify'),
-    ...require('./content'),
-    ...require('./service')
+  ...require('./advertising'),
+  ...require('./classify'),
+  ...require('./content'),
+  ...require('./service')
 }
