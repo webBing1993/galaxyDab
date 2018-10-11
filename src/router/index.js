@@ -13,7 +13,7 @@ import orgDetailedInfo from '@/components/Buser/organization/hotelOrgClass/orgDe
 import fortrunOrg from '@/components/Buser/organization/fortrunOrgClass/fortrunOrg'
 import fortrunInfo from '@/components/Buser/organization/fortrunOrgClass/fortrunInfo'
 ////////其他组织//////////
-import elseOrg from '@/components/Buser/organization/anotherOrg/elseOrg'
+import elseOrg from '@/components/Buser/organization/elseOrg'
 
 
 /////////////////////////用户管理///////////
@@ -30,108 +30,199 @@ import roleManage from '@/components/Buser/role/roleManage'
 import roleInfo from '@/components/Buser/role/roleInfo'
 
 /////////////////////////角色模板管理////////
+// /////////--------------------我的部分 =-----------------
 import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
+//////////////////////////////// 主页菜单/////////////
+// const Whome = () => import('@/views/Whome')
+// const Classify = () => import('@/views/classify/Classify')
+// const Content = () => import('@/views/content/Content')
+// const Service = () => import('@/views/service/Service')
+// const Advertising = () => import('@/views/advertising/Advertising')
 
-
+import Whome from '@/views/Whome'
+import Classify from '@/views/classify/Classify'
+import Content from '@/views/content/Content'
+import Service from '@/views/service/Service'
+import Advertising from '@/views/advertising/Advertising'
+import Establish from '@/views/establishContent/establish'
+import esadvertising from '@/views/establishAdvertising/esAdvertising'
+import editAdvertising from '@/views/editAdvertising/editAdvertising'
+import editContent from '@/views/editContent/editContent'
 Vue.use(Router)
 
-const main=[{
-    path: '/',
-    component: Home,
-    children:[
-        //B端用户----2级路由
+const main = [{
+  path: '/buser',
+  name: 'Home',
+  component: Home,
+  children: [
+    //B端用户----2级路由
+    {
+      path: '/',
+      name: 'Buser',
+      component: Buser,
+      redirect: {
+        path: '/buser/hotelOrg'
+      },
+      children: [
+        //组织管理----3级路由
         {
-            path: '/',
-            component: Buser,
-            children:[
-                //组织管理----3级路由
-                {
-                    path: 'hotelOrg',
-                    component: hotelOrg,
-                    children:[
-                        // treeInfo----4级路由
-                        {
-                            path: '/',
-                            name: 'orgDetailedInfo',
-                            component: orgDetailedInfo
-                        }
-                    ]
-                },
-                //复创组织
-                {
-                    path: 'fortrunOrg',
-                    component: fortrunOrg,
-                    // children:[
-                    //     //treeInfo----4级路由
-                    //     {
-                    //         path: '/',
-                    //         component: fortrunInfo
-                    //     }
-                    // ]
-                },
-                //其他组织
-                {
-                    path: 'elseOrg',
-                    name: 'elseOrg',
-                    component: elseOrg,
-                    children:[
-                        // {
-                        //     path: 'hotelOrg',
-                        //     name: 'hotelOrg',
-                        //     component: hotelOrg,
-                        // }
-                    ]
-                },
-                //用户管理
-                {
-                    path: 'userManage',
-                    component: userManage,
-                    children:[
-                        //treeInfo----4级路由
-                        {
-                            path: '/',
-                            name: 'userInfo',
-                            component: userInfo
-                        }
-                    ]
-                },
-                //权限管理
-                {
-                    path: 'authorityManage',
-                    component: authorityManage,
-                    children:[
-                        //treeInfo----4级路由
-                        {
-                            path: '/',
-                            name: 'authorityInfo',
-                            component: authorityInfo
-                        }
-                    ]
-                },
-                //角色管理
-                {
-                    path: 'roleManage',
-                    component: roleManage,
-                    children:[
-                        //treeInfo----4级路由
-                        {
-                            path: '/',
-                            name: 'roleInfo',
-                            component: roleInfo
-                        }
-]
-                },
-                //角色模板管理
-                {
-                    path: 'roleModuleManage',
-                    name: 'roleModuleManage',
-                    component: roleModuleManage,
-                }
-            ]
-        }
-    ]
-}]
+          path: 'hotelOrg',
+          name: 'hotelOrg',
+          component: hotelOrg,
+          children: [
+            //treeInfo----4级路由
+            {
+              path: '/',
+              name: 'orgDetailedInfo',
+              component: orgDetailedInfo
+            }
+          ]
+        },
+        //复创组织
+        {
+          path: 'fortrunOrg',
+          name: 'fortrunOrg',
+          component: fortrunOrg,
+          children: [
+            //treeInfo----4级路由
+            {
+              path: '/',
+              name: 'fortrunInfo',
+              component: fortrunInfo
+            }
+          ]
+        },
+        //其他组织
+        {
+          path: 'elseOrg',
+          name: 'elseOrg',
+          component: elseOrg,
+          children: [
+            // {
+            //     path: 'hotelOrg',
+            //     name: 'hotelOrg',
+            //     component: hotelOrg,
+            // }
+          ]
+        },
+        //用户管理
+        {
+          path: 'userManage',
+          name: 'userManage',
+          component: userManage,
+          children: [
+            //treeInfo----4级路由
+            {
+              path: '/',
+              name: 'userInfo',
+              component: userInfo
+            }
+          ]
+        },
+        //权限管理
+        {
+          path: 'authorityManage',
+          name: 'authorityManage',
+          component: authorityManage,
+          children: [
+            //treeInfo----4级路由
+            {
+              path: '/',
+              name: 'authorityInfo',
+              component: authorityInfo
+            }
+          ]
+        },
+        //角色管理
+        {
+          path: 'roleManage',
+          name: 'roleManage',
+          component: roleManage,
+          children: [
+            //treeInfo----4级路由
+            {
+              path: '/',
+              name: 'roleInfo',
+              component: roleInfo
+            }
+          ]
+        },
+        //角色模板管理
+        {
+          path: 'roleModuleManage',
+          name: 'roleModuleManage',
+          component: roleModuleManage,
+        },
 
+      ]
+    },
+    ///////--------------配置管理开始------------
+    {
+      path: 'whome',
+      name: 'Whome',
+      component: Whome,
+      redirect: {
+        name: 'classify'
+      },
+      children: [
+        // 添加分类
+        {
+          name: 'classify',
+          path: 'classify',
+          component: Classify
+        },
+        // 内容管理
+        {
+          name: 'content',
+          path: 'content',
+          component: Content,
+
+        },
+        // 广告管理
+        {
+          name: 'advertising',
+          path: 'advertising',
+          component: Advertising,
+        },
+        // 基础服务
+        {
+          name: 'service',
+          path: 'service',
+          component: Service
+        },
+        // 创建内容
+        {
+          name: "establish",
+          path: "establish",
+          component: Establish
+        },
+        //创建广告 编辑广告
+        {
+          name: 'esadvertising',
+          path: 'esadvertising',
+          component: esadvertising
+        },
+        // 编辑广告
+        {
+          name: 'editAdvertising',
+          path: 'editAdvertising',
+          component: editAdvertising
+
+        },
+        // 编辑内容
+        {
+          name: 'editContent',
+          path: 'editContent',
+          component: editContent
+        }
+
+      ],
+
+    }
+  ]
+},
+
+]
 export default new Router({
-    routes: [...main]
+  routes: [...main]
 })
