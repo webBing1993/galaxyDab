@@ -69,7 +69,6 @@
     },
     methods:{
       handleClick(tab){
-        console.log(tab.label)
         if(tab.label=='B端用户管理'){
           this.$router.push({name:'hotelOrg'})
 
