@@ -39,7 +39,7 @@ import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
 // const Service = () => import('@/views/service/Service')
 // const Advertising = () => import('@/views/advertising/Advertising')
 
-import Whome from '@/components/Whome'
+import Whome from '@/components/whome'
 import Classify from '@/components/collection/classify/Classify'
 import Content from '@/components/collection/content/Content'
 import Service from '@/components/collection/service/Service'
