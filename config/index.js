@@ -10,8 +10,17 @@ module.exports = {
         // Paths
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        proxyTable: {},
-
+        // proxyTable: {},
+        proxyTable: {
+          '/galaxy':{
+            // target: 'http://qa.fortrun.cn:8762',
+            target: 'http://qa.fortrun.cn:9201',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/galaxy-front': ''
+            }
+          }
+        },
         // Various Dev Server settings
         host: 'localhost', // can be overwritten by process.env.HOST
         port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
