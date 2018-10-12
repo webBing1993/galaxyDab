@@ -49,17 +49,17 @@
       <h4>酒店信息</h4>
       <el-form label-width="100px" label-position="left">
         <el-form-item label="所属品牌：">
-          <el-select v-model="currentNodeDetail.name" placeholder="请选择">
+          <el-select v-model="currentNodeDetail.info.brandId" placeholder="请选择">
             <el-option
               v-for="item in BrandList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="门店类型：">
-          <el-select v-model="currentNodeDetail.name" placeholder="请选择">
+          <el-select v-model="currentNodeDetail.info.type" placeholder="请选择">
             <el-option
               v-for="item in shopTypeList"
               :key="item.value"
@@ -316,6 +316,7 @@
             type: this.currentNodeDetail.type || "",
             parentId: this.currentNodeDetail.parentId || "",
             info: {
+              id: this.currentNodeDetail.info.id || "",
               name: this.currentNodeDetail.info.name||'',
               type: this.currentNodeDetail.info.type||"",
               code: this.currentNodeDetail.info.code||"",
@@ -330,6 +331,7 @@
               logoUrl: this.currentNodeDetail.info.logoUrl||"",
               memo: this.currentNodeDetail.info.memo||"",
               website: this.currentNodeDetail.info.website||"",
+              wxOrgId: this.currentNodeDetail.info.wxOrgId||"",
             }
           }
         }else if(this.disableEditType == '酒店'){
@@ -339,6 +341,7 @@
             type: this.currentNodeDetail.type || "",
             parentId: this.currentNodeDetail.parentId || "",
             info: {
+              id: this.currentNodeDetail.info.id || "",
               name: this.currentNodeDetail.info.name||'',
               type: this.currentNodeDetail.info.type||"",
               code: this.currentNodeDetail.info.code||"",
@@ -353,6 +356,31 @@
               logoUrl: this.currentNodeDetail.info.logoUrl||"",
               memo: this.currentNodeDetail.info.memo||"",
               website: this.currentNodeDetail.info.website||"",
+              wxHotelId: this.currentNodeDetail.info.wxHotelId||"",
+
+            }
+          }
+        }else {
+          fields = {
+            id: this.currentNodeDetail.id || "",
+            name: this.currentNodeDetail.name || "",
+            type: this.currentNodeDetail.type || "",
+            parentId: this.currentNodeDetail.parentId || "",
+            info: {
+              name: '',
+              type: "",
+              code: "",
+              addressCode: "",
+              tel: "",
+              province: "",
+              city: "",
+              area:"",
+              address: "",
+              contactName: "",
+              contactPhone: "",
+              logoUrl: "",
+              memo: "",
+              website: "",
             }
           }
         }

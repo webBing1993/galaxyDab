@@ -17,7 +17,7 @@
         </el-row>
       </div>
 
-      <el-table :data="employeeTableList" border stripe @selection-change="handleSelectionChange">
+      <el-table :data="employeeTableList" border stripe @selection-change="handleSelectionChange" style="margin-top: 20px">
         <el-table-column
           type="selection"
           width="55">
@@ -33,7 +33,7 @@
           </template>
         </el-table-column>
         <el-table-column property="roleNames" label="角色"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作"width="180" >
           <template slot-scope="scope">
             <span @click="handleDel(scope.row)" type="text" class="handel">删除</span>
             <span @click="handleView(scope.row)" type="text" class="handel">查看</span>
@@ -57,13 +57,13 @@
           <el-input v-model="addEmployeeInfo.account" :disabled="viewStatus" placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="姓名">
-          <el-input v-model="addEmployeeInfo.name" placeholder="输入姓名"></el-input>
+          <el-input v-model="addEmployeeInfo.name" :disabled="viewStatus"placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="英文名">
-          <el-input v-model="addEmployeeInfo.EnglishName" placeholder="输入英文名"></el-input>
+          <el-input v-model="addEmployeeInfo.EnglishName" :disabled="viewStatus"placeholder="输入英文名"></el-input>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="addEmployeeInfo.tel" placeholder="输入手机号"></el-input>
+          <el-input v-model="addEmployeeInfo.tel":disabled="viewStatus" placeholder="输入手机号"></el-input>
         </el-form-item>
         <!--<el-form-item label="头像">-->
         <!--<el-input v-model="addEmployeeInfo.tel" placeholder="输入头像"></el-input>-->
@@ -80,10 +80,10 @@
             name="file"
             :on-success="filterScriptSuccess"
             list-type="picture-card">
-            <el-button size="small" type="primary">头像上传</el-button>
+            <el-button size="small" type="primary" :disabled="viewStatus">头像上传</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="!viewStatus">
           <el-button @click="showAddNew = false">取 消</el-button>
           <el-button type="primary" @click="submitAdd">确 定</el-button>
         </el-form-item>
@@ -297,7 +297,7 @@
                 message: '修改成功!'
               });
               this.showAddNew = false
-
+              this.getEmployeeList()
             },
             onFail: body => {
               this.$message({
@@ -326,6 +326,8 @@
               message: '设置成功!'
             });
             this.showSetRole = false
+            this.getEmployeeList()
+
           },
           onfail: body => {
             this.$message({

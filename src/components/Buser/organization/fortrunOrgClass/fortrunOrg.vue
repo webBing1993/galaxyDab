@@ -181,7 +181,7 @@
         this.addfortrunNode({
           name: this.addNodeName,
           parentId: this.currentAddNodeParentId,
-          type: this.currentAddNodeParentId,
+          type: this.addNodeType,
           onsuccess: body => {
             this.getFortrunOrgTree()
             this.showAddNew = false
@@ -210,7 +210,7 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        if (item.orgId == "0") {
+        if (item.orgId == "2") {
           this.$message({
             message: "顶级组织不可编辑",
             type: 'error'

@@ -107,15 +107,15 @@
             "name": "顶级组织",
             "type": "ROOT",
             "parentId": "0",
-            "orgId": "0",
+            "id": "0",
             "status": null,
-            "subOrganizations": [],
+            "subPermissions": [],
           }
         ],
         defaultProps: {
-          children: 'subOrganizations',
+          children: 'subPermissions',
           label: 'name',
-          id: 'orgId'
+          id: 'id'
         },
         authInfo:{
           name:'',
@@ -189,7 +189,7 @@
       },
       handelAdd(data) {
         this.currentAddNodeParentType = data.type
-        this.currentAddNodeParentId = data.orgId
+        this.currentAddNodeParentId = data.id
         this.showAddNew = true
 
 //        数据初始化
@@ -206,7 +206,7 @@
         this.authTree({
           onsuccess: body => {
             if (body.data) {
-              this.authTreeDate[0].subOrganizations = body.data
+              this.authTreeDate[0].subPermissions = body.data
             } else {
             }
           }
@@ -286,7 +286,7 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        if (item.orgId == "0") {
+        if (item.id == "0") {
           this.$message({
             message: "顶级组织不可编辑",
             type: 'error'
@@ -294,7 +294,7 @@
           return false
         } else {
           this.showNodeDetailForEdit = true
-          this.currentAddNodeParentId = item.orgId
+          this.currentAddNodeParentId = item.id
           this.currendNode = item
         }
       },
@@ -306,15 +306,7 @@
         return data.name.indexOf(value) !== -1;
       },
 
-      getHotelBrandList() {
-        this.hotelBrandList({
-          orgId: this.currentAddNodeParentId,
-          onsuccess: body => {
-            this.BrandList = body.data
-          }
 
-        })
-      },
       modifyNode() {
         this.getauthTree();
       }
