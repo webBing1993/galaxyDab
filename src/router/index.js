@@ -39,15 +39,15 @@ import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
 // const Service = () => import('@/views/service/Service')
 // const Advertising = () => import('@/views/advertising/Advertising')
 
-import Whome from '@/views/Whome'
-import Classify from '@/views/classify/Classify'
-import Content from '@/views/content/Content'
-import Service from '@/views/service/Service'
-import Advertising from '@/views/advertising/Advertising'
-import Establish from '@/views/establishContent/establish'
-import esadvertising from '@/views/establishAdvertising/esAdvertising'
-import editAdvertising from '@/views/editAdvertising/editAdvertising'
-import editContent from '@/views/editContent/editContent'
+import Whome from '@/components/Whome'
+import Classify from '@/components/collection/classify/Classify'
+import Content from '@/components/collection/content/Content'
+import Service from '@/components/collection/service/Service'
+import Advertising from '@/components/collection/advertising/Advertising'
+import Establish from '@/components/collection/establishContent/establish'
+import esadvertising from '@/components/collection/establishAdvertising/esAdvertising'
+import editAdvertising from '@/components/collection/editAdvertising/editAdvertising'
+import editContent from '@/components/collection/editContent/editContent'
 Vue.use(Router)
 
 const main = [{
