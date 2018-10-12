@@ -33,6 +33,7 @@ module.exports = {
       url: `/role/addrole`,
       method: 'POST',
       body: {
+        orgId: params.orgId,
         name: params.name,
         alias: params.alias,
         description: params.description,
@@ -51,7 +52,7 @@ module.exports = {
       url: `/role/updaterole`,
       method: 'POST',
       body: {
-        id: params.id,
+        roleId: params.roleId,
         name: params.name,
         alias: params.alias,
         description: params.description,
@@ -120,4 +121,18 @@ module.exports = {
       }
     })
   },
+  // 角色名称筛选的：http://qa.fortrun.cn:9201/role/getrolesbyorgid/100000000000000136?name=孙书敬你是谁
+  searchRole(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/role/getrolesbyorgid/${params.orgid}?name=${params.name}`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
 }

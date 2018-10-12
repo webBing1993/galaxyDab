@@ -4,23 +4,20 @@
     <div style="text-align: left;margin-bottom: 2rem">
       <el-button type="primary" @click="HandelAdd">新增角色模板</el-button>
     </div>
-    <el-table :data="gridData" border stripe @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
-      <el-table-column property="id" label="ID" width="150"></el-table-column>
-      <el-table-column property="name" label="名称"></el-table-column>
-      <el-table-column property="alias" label="别名"></el-table-column>
-      <el-table-column property="description" label="描述"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button @click="handeMmodify(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="handleSetAuth(scope.row)" type="text" size="small">设置权限</el-button>
-          <el-button @click="handleViewAuth(scope.row)" type="text" size="small">查看权限</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-table :data="roleTemplateTableList" border stripe @selection-change="handleSelectionChange">
+        <el-table-column property="id" label="ID" width="150"></el-table-column>
+        <el-table-column property="name" label="名称"></el-table-column>
+        <el-table-column property="alias" label="别名"></el-table-column>
+        <el-table-column property="description" label="描述"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="handeMmodify(scope.row)" type="text" size="small">修改</el-button>
+            <el-button @click="handleSetAuth(scope.row)" type="text" size="small">设置权限</el-button>
+            <el-button @click="handleViewAuth(scope.row)" type="text" size="small">查看权限</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
 
     <el-dialog
       :title="dialogTitle"
@@ -76,7 +73,7 @@
       return {
         input: false,
         showAddNew: false,
-        gridData: [],
+        roleTemplateTableList: [],
         dialogVisible: false,
         defaultProps: {
           children: 'subPermissions',
@@ -142,14 +139,14 @@
       getList() {
         this.roleTemplateList({
           onsuccess: body => {
-            this.gridData = body.data
+            this.roleTemplateTableList = body.data
           },
         })
       },
       submitAddOrChange() {
         if (this.dialogTitle == '修改角色模板') {
           this.modifyRole({
-            id: this.addInfo.id,
+            roleId: this.addInfo.id,
             name: this.addInfo.name,
             alias: this.addInfo.alias,
             description: this.addInfo.description,
