@@ -109,11 +109,11 @@
             "parentId": "0",
             "id": "0",
             "status": null,
-            "subOrganizations": [],
+            "subPermissions": [],
           }
         ],
         defaultProps: {
-          children: 'subOrganizations',
+          children: 'subPermissions',
           label: 'name',
           id: 'id'
         },
@@ -206,7 +206,7 @@
         this.authTree({
           onsuccess: body => {
             if (body.data) {
-              this.authTreeDate[0].subOrganizations = body.data
+              this.authTreeDate[0].subPermissions = body.data
             } else {
             }
           }
