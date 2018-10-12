@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import router from '../../router/index.js'
@@ -34,12 +33,10 @@ module.exports = {
     }).then(response => {
       if (response.config.url.match('export')) {
         param.onSuccess && param.onSuccess(response)
-      } else if (status === 401) {
-        router.push('/login')
       }
       else if (+response.data.errcode === 0 || +response.status === 204) {
         param.onSuccess && param.onSuccess(response.data, response.headers)
-      }else if(response.data.errcode!==0){
+      } else if (response.data.errcode !== 0) {
         param.onFail && param.onFail(response)
       }
       else {
@@ -47,11 +44,14 @@ module.exports = {
       }
     }).catch(
       error => {
-          console.log(error)
+        console.log(error)
+        let status = error.response.status;
+        if (status === 401) {
+          router.push('/login')
+        }
       }
     )
   }
-
 
 
 }

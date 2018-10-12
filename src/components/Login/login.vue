@@ -12,10 +12,8 @@
         <el-form-item >
           <el-button type="primary" @click="loginToSystem">登录</el-button>
         </el-form-item>
-
       </el-form>
     </div>
-
   </div>
 </template>
 
