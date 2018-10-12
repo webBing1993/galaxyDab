@@ -1,1 +1,0 @@
-<template>  <div class="ui_divide"></div></template><!-- Add "scoped" attribute to limit CSS to this component only --><style lang="less" scoped> .ui_divide{   width: 100%;   border-top: 1px solid #eeeeee;   margin: 2rem 0; }</style>

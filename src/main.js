@@ -16,7 +16,6 @@ Vue.prototype.Home = '/api'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 //Ueditor  基础文件引入
-import './mock/mock.js'
 import '../static/Ueditor/ueditor.config.js'
 import '../static/Ueditor/ueditor.all.min.js'
 import '../static/Ueditor/lang/zh-cn/zh-cn.js'
@@ -30,8 +29,8 @@ router.afterEach(function(to, from) {
   console.log('成功浏览到from: ', from.path)
 })
 
-import divider from './UIcomponents/divide'
-Vue.component('divider', divider)
+// import divider from './UIcomponents/divide'
+// Vue.component('divider', divider)
 new Vue({
   el: '#app',
   router,
