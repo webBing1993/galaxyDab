@@ -5,5 +5,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: require('./states'),
   actions: require('./actions'),
-  mutations: require('./mutations')
+  mutations: require('./mutations'),
+  // modules: {
+  //   utils: require('./modules/utils'),
+  // },
 })
