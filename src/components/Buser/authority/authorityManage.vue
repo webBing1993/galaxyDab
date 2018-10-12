@@ -315,7 +315,6 @@
     mounted() {
       this.getauthTree();
 
-
     },
     watch: {
       filterText(val) {

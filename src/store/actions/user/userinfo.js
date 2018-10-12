@@ -147,6 +147,17 @@ module.exports = {
       }
     })
   },
-
-
+ // 搜索用户用户名称筛选：http://qa.fortrun.cn:9201/user/getusersbyorgid/100000000000000160?name=唐启东
+  searchUser(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/user/getusersbyorgid/${params.orgid}?name=${params.name}`,
+      method: 'get',
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 }

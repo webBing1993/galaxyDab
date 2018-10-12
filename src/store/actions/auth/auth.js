@@ -1,4 +1,5 @@
 module.exports = {
+
   // 获取权限组织树
   authTree(ctx, params) {
     ctx.dispatch('request', {

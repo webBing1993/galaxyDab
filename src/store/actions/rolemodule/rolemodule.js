@@ -16,10 +16,10 @@ module.exports = {
   },
 
 
-  // 添加角色模板列表url:/role/addrole
+  // 添加角色模板列表url:/role/addroletemplate
   addRole(ctx, params) {
     ctx.dispatch('request', {
-      url: `/role/addrole`,
+      url: `/role/addroletemplate`,
       method: 'POST',
       body: {
         name: params.name,
@@ -35,13 +35,13 @@ module.exports = {
     })
   },
 
-  // 修改组织机构详细信息url:/role/updaterole
+  // 修改组织机构详细信息url:/role/updateroletemplate
   modifyRole(ctx, params) {
     ctx.dispatch('request', {
-      url: `/role/updaterole`,
+      url: `/role/updateroletemplate`,
       method: 'POST',
       body: {
-        id: params.id,
+        roleId: params.roleId,
         name: params.name,
         alias: params.alias,
         description: params.description,

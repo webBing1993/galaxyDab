@@ -59,7 +59,7 @@ module.exports = {
   // 描述:修改酒店所属父节点url:/org/getbrands/{groupId}
   changeRelationship(ctx, params) {
     ctx.dispatch('request', {
-      url: `/`,
+      url: `/org/updaterelation`,
       method: 'POST',
       body: {...params.fields},
       onSuccess: (body) => {

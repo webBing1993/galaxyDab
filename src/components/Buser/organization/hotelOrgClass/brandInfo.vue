@@ -109,7 +109,9 @@
           logoUrl: '',
         },
         editStatus: false,
-        currentBrandId: ''
+        currentBrandId: '',
+        currentBrandGroupId: '',
+        getCurrendNode:{}
       }
     },
     computed: {
@@ -146,6 +148,7 @@
         this.title = '修改品牌'
         this.editStatus = true
         this.currentBrandId = parm.id
+        this.currentBrandGroupId = parm.groupId
 
         this.brandInfo.name = parm.name;
         this.brandInfo.code = parm.code;
@@ -162,16 +165,17 @@
       },
 
       submit() {
-        let fields = {
-          groupId: this.orgId,
-          name: this.brandInfo.name || '',
-          code: this.brandInfo.code || '',
-          pmsId: "",
-          pmsCode: "",
-          logoUrl: this.brandInfo.logoUrl || ''
-        }
+
         if (this.editStatus) {
 //          编辑
+          let fields = {
+            groupId: this.currentBrandGroupId,
+            name: this.brandInfo.name || '',
+            code: this.brandInfo.code || '',
+            pmsId: "",
+            pmsCode: "",
+            logoUrl: this.brandInfo.logoUrl || ''
+          }
           this.modifyBrand({
             fields: fields,
             brand_id: this.currentBrandId,
@@ -188,6 +192,15 @@
           })
         } else {
 //          保存
+          let fields = {
+            organizationId: this.orgId,
+            groupId: this.getCurrendNode.foreignId,
+            name: this.brandInfo.name || '',
+            code: this.brandInfo.code || '',
+            pmsId: "",
+            pmsCode: "",
+            logoUrl: this.brandInfo.logoUrl || ''
+          }
           this.addBrand({
             fields: fields,
             onsuccess: body => {
@@ -223,12 +236,14 @@
       this.orgId = this.NodeId;
       this.getBrandList()
 
+
     },
     watch: {
       NodeId(val) {
         this.orgId = val;
         this.getBrandList()
-      }
+        this.getCurrendNode = this.currendNode
+      },
     }
 
   }

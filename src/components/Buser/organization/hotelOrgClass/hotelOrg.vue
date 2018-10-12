@@ -48,6 +48,7 @@
         ></orgDetailed-Info>
         <div v-if="this.currendNode.type=='GROUP'">
           <brand-Info
+            :currendNode="currendNode"
             :NodeId="currentAddNodeParentId"></brand-Info>
         </div>
 

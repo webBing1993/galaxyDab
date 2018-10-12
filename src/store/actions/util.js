@@ -19,10 +19,10 @@ module.exports = {
     // console.log('router:',router)
   },
 
+
   request: (ctx, param) => {
     let headers = param.headers || {};
-      // headers.Session = "bdash_JGuVQ3oKnpX9VQYL1YtrtQ=="
-      headers.Session = "bdash_BtLMdrbfRsC7C5E6rMgAkA=="
+    headers.Session = sessionStorage.getItem('session_id');
     axios({
       url: param.url,
       method: param.method || 'GET',
@@ -34,7 +34,10 @@ module.exports = {
     }).then(response => {
       if (response.config.url.match('export')) {
         param.onSuccess && param.onSuccess(response)
-      } else if (+response.data.errcode === 0 || +response.status === 204) {
+      } else if (status === 401) {
+        router.push('/login')
+      }
+      else if (+response.data.errcode === 0 || +response.status === 204) {
         param.onSuccess && param.onSuccess(response.data, response.headers)
       }else if(response.data.errcode!==0){
         param.onFail && param.onFail(response)

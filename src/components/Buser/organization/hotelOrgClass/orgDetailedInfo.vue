@@ -268,9 +268,11 @@
 //      修改所属关系
       changebelongRelation() {
         let fields={
-          id:"1000",
-          parentId:"0",
-          type:"HOTEL"
+          id:this.orgId,//要更改所属关系的组织
+          name:this.currendNode.name,//名称
+          type:"HOTEL",//类型
+          parentId:this.toParentId,//它将要更改到的组织orgId
+          wxHotelId:this.currendNode.foreignId//如果是酒店，就把酒店详情info里的wxHotelId带上
         }
         this.changeRelationship({
           fields: fields,
@@ -407,8 +409,6 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrentDetail()
-//      this.getHotelBrandList()
-//      this.getCurrendNode = this.currendNode
       this.alternativeParentNode = this.parentNodeList
       console.log('this.alternativeParentNode', this.alternativeParentNode)
     },

@@ -9,4 +9,5 @@ module.exports = {
   ...require('./role/role'),
   ...require('./util'),
   ...require('./ui'),
+  ...require('./login'),
 }

@@ -8,8 +8,8 @@
       <div class="item role">
         <el-row>
           <el-input
-            placeholder="筛选角色"
-            v-model="filterText">
+            v-model="searchVal" @keyup.13.native="searchRoleList"
+            placeholder="筛选角色">
           </el-input>
           <el-button type="success" @click="handleAdd">添加角色</el-button>
           <el-button type="primary" @click="handelCopeTemplate">从模板复制</el-button>
@@ -132,7 +132,7 @@
         showSetRole: false,
         showSetAuth: false,
         showAddNew: false,
-        filterText: '',
+        searchVal: '',
         roleTableList: [],
         dialogVisible: false,
         selectItemList: [],
@@ -173,7 +173,18 @@
         'roleTemplateList',
         'getAuthByAuth',
         'setAuth',
+        'searchRole',
       ]),
+      searchRoleList() {
+        this.searchRole({
+          orgid: this.orgId,
+          name: this.searchVal,
+          onsuccess: body => {
+            this.roleTableList = body.data
+          }
+        })
+      },
+
       getTemplateList() {
         this.roleTemplateList({
           onsuccess: body => {
@@ -195,7 +206,7 @@
       submitAdd() {
         if (this.editStatus) {
           this.changeRole({
-            id: this.addRoleInfo.id,
+            roleId: this.addRoleInfo.id,
             name: this.addRoleInfo.name,
             alias: this.addRoleInfo.alias,
             description: this.addRoleInfo.description,
@@ -214,6 +225,7 @@
           })
         } else {
           this.addrole({
+            orgId: this.orgId,
             name: this.addRoleInfo.name,
             alias: this.addRoleInfo.alias,
             description: this.addRoleInfo.description,

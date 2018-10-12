@@ -8,8 +8,8 @@
       <div class="item user">
         <el-row>
           <el-input
-            placeholder="筛选员工"
-            v-model="filterText">
+            v-model="searchVal" @keyup.13.native="searchUserList"
+            placeholder="筛选员工">
           </el-input>
           <el-button type="success" @click="handleAdd">添加新员工</el-button>
           <el-button type="primary" :disabled="selectItemList.length==0" @click="handelSetRole">设置角色</el-button>
@@ -156,7 +156,7 @@
         isIndeterminate: true,
         showSetRole: false,
         showAddNew: false,
-        filterText: '',
+        searchVal: '',
         employeeTableList: [],
         dialogVisible: false,
         selectItemList: [],
@@ -204,7 +204,17 @@
         'modifyuser',
         'resetPwd',
         'readyRoleList',
+        'searchUser',
       ]),
+      searchUserList(){
+        this.searchUser({
+          orgid: this.orgId,
+          name:this.searchVal,
+          onsuccess: body => {
+            this.employeeTableList = body.data
+          }
+        })
+      },
 
       getRoleList() {
         this.readyRoleList({
