@@ -116,7 +116,7 @@ export default {
   methods: {
     initlist() {
       this.axios
-        .get("http://intg.fortrun.cn:8762/galaxy-front/config/getAll")
+        .get("http://qa.fortrun.cn:9201/config/getAll")
         .then(res => {
           console.log(res);
           if (res.status === 200) {
@@ -147,7 +147,7 @@ export default {
       console.log(id);
       console.log(key);
       this.axios
-        .post("http://intg.fortrun.cn:8762/galaxy-front/config/update", {
+        .post("http://qa.fortrun.cn:9201/galaxy-front/config/update", {
           id: id,
           key: key,
           open: $event

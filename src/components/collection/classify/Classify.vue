@@ -140,13 +140,14 @@ export default {
     initlist() {
       this.axios
         .post(
-          `http://123.206.180.61:8121/discoveryCatalog/page/${
+          `http://qa.fortrun.cn:8121/discoveryCatalog/page/${
             this.pagenum
           }?pageSize=${this.pagesize}&name=${this.searchName}`
         )
         .then(res => {
           if (res.status == 200) {
             console.log(res);
+            console.log(1)
             this.classifyList = res.data.data.items;
             this.total = res.data.data.totalNum;
             this.$store.commit("getAddclassifyData", res.data.data.items);
@@ -171,7 +172,7 @@ export default {
           console.log(row.id);
           this.axios
             .post(
-              `http://123.206.180.61:8121/discoveryCatalog/delete?id=${row.id}`
+              `http://qa.fortrun.cn:8121/discoveryCatalog/delete?id=${row.id}`
             )
             .then(res => {
               console.log(res);
@@ -199,7 +200,7 @@ export default {
         if (valide) {
           this.axios
             .post(
-              `http://123.206.180.61:8121/discoveryCatalog/save?name=${
+              `http://qa.fortrun.cn:8121/discoveryCatalog/save?name=${
                 this.addClassifyForm.classifyName
               }&sort=${this.addClassifyForm.classifySort}`
             )
@@ -237,7 +238,7 @@ export default {
         if (valide) {
           this.axios
             .post(
-              `http://123.206.180.61:8121/discoveryCatalog/update?id=${
+              `http://qa.fortrun.cn:8121/discoveryCatalog/update?id=${
                 this.editId
               }&name=${this.editClassifyForm.editclassifyName}&sort=${
                 this.editClassifyForm.editclassifySort

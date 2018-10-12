@@ -52,22 +52,6 @@
 export default {
   data() {
     //url验证
-    // var checkUrl = urlString => {
-    //   if (urlString != "") {
-    //     var reg =;
-    //     if (!reg.test(urlString)) {
-    //       this.$message({
-    //         type: "error",
-    //         message: "网址格式有误,请重新验证!"
-    //       });
-    //     }
-    //   } else {
-    //     this.$message({
-    //       type: "error",
-    //       message: "超级链接不能为空!"
-    //     });
-    //   }
-    // };
     return {
       isDisabled: false,
       officialId: "",
@@ -165,7 +149,7 @@ console.log(1111)
       }; //添加请求头
       this.axios
         .post(
-          "http://intg.fortrun.cn:8762/galaxy-front/adv/picture/upload",
+          "http://qa.fortrun.cn:9201/adv/picture/upload",
           param,
           config
         )
@@ -199,7 +183,7 @@ console.log(1111)
         this.$refs[formname].validate(valide => {
           if (valide) {
             this.axios
-              .post("http://intg.fortrun.cn:8762/galaxy-front/adv/update", {
+              .post("http://qa.fortrun.cn:9201/adv/update", {
                 id: this.$store.state.editData.id,
                 type: this.officialId,
                 name: this.esAdvertisingForm.advertisingName,

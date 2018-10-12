@@ -147,7 +147,7 @@ export default {
         headers: { "Content-Type": "multipart/form-data" }
       }; //添加请求头
       this.axios
-        .post("http://123.206.180.61:8121/upload/image", param, config)
+        .post("http://qa.fortrun.cn:8121/upload/image", param, config)
         .then(res => {
           if (res.status == 200) {
             this.imgarr.push({
@@ -178,7 +178,7 @@ export default {
         { indices: false }
       );
       this.axios({
-        url: "http://123.206.180.61:8121/discoveryContent/update",
+        url: "http://qa.fortrun.cn:8121/discoveryContent/update",
         method: "post",
         data: postData,
         headers: {

@@ -102,7 +102,7 @@ export default {
     //总分类列表
     getallclassify() {
       this.axios
-        .get("http://123.206.180.61:8121/discoveryCatalog/all")
+        .get("http://qa.fortrun.cn:8121/discoveryCatalog/all")
         .then(res => {
           // console.log(res.data.data);
           if (res.status == 200) {
@@ -115,7 +115,7 @@ export default {
       this.loading = true;
       this.axios
         .post(
-          `http://123.206.180.61:8121/discoveryContent/page/${
+          `http://qa.fortrun.cn:8121/discoveryContent/page/${
             this.pagenum
           }?pageSize=${this.pagesize}&catalogId=${this.selectClassify}&name=${
             this.writeName
@@ -175,7 +175,7 @@ export default {
           // console.log(row.id);
           this.axios
             .post(
-              `http://123.206.180.61:8121/discoveryContent/delete?id=${row.id}`
+              `http://qa.fortrun.cn:8121/discoveryContent/delete?id=${row.id}`
             )
             .then(res => {
               // console.log(res);

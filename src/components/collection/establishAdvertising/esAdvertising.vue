@@ -129,7 +129,7 @@ export default {
       }; //添加请求头
       this.axios
         .post(
-          "http://intg.fortrun.cn:8762/galaxy-front/adv/picture/upload",
+          "http://qa.fortrun.cn:9201/adv/picture/upload",
           param,
           config
         )
@@ -162,7 +162,7 @@ export default {
         this.$refs[formname].validate(valide => {
           if (valide) {
             this.axios
-              .post("http://intg.fortrun.cn:8762/galaxy-front/adv/add", {
+              .post("http://qa.fortrun.cn:9201/adv/add", {
                 type: this.officialId,
                 name: this.esAdvertisingForm.advertisingName,
                 picture: this.imgurl,

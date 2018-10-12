@@ -12,7 +12,7 @@
         <el-button type="success" class="search" @click="advertisingSearch">搜索</el-button>
       </div>
     </el-row>
-    <el-table :data="AdvertisingTableData" style="width: 100%" border="1" v-loading="loading" ref="advertisForm" prop="adverForm">
+    <el-table :data="AdvertisingTableData" style="width: 100%"  v-loading="loading" ref="advertisForm" prop="adverForm">
       <el-table-column type="index" :index="typeIndex" label="编号" width="80">
       </el-table-column>
       <el-table-column prop="typeName" label="类别" width="100">
@@ -102,7 +102,7 @@ export default {
       this.loading = true;
       this.axios
         .get(
-          `http://intg.fortrun.cn:8762/galaxy-front/adv/queryAll?name=${
+          `http://qa.fortrun.cn:9201/adv/queryAll?name=${
             this.wrname
           }&type=1`,
           {
@@ -126,7 +126,7 @@ export default {
     advertisingSearch() {
       this.axios
         .get(
-          `http://intg.fortrun.cn:8762/galaxy-front/adv/queryAll?name=${
+          `http://qa.fortrun.cn:9201/adv/queryAll?name=${
             this.wrname
           }&type=1`,
           {
@@ -166,7 +166,7 @@ export default {
           // console.log(row.id);
           this.axios
             .delete(
-              `http://intg.fortrun.cn:8762/galaxy-front/adv/delete/${row.id}`
+              `http://qa.fortrun.cn:9201/adv/delete/${row.id}`
             )
             .then(res => {
               // console.log(res);
