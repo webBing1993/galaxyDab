@@ -25,7 +25,8 @@ module.exports = {
     axios({
       url: param.url,
       method: param.method || 'GET',
-      baseURL: '/galaxy-front',
+      // baseURL: '/galaxy-front',
+      baseURL: '',
       headers: headers,
       params: param.params || null,
       data: param.body || null,
