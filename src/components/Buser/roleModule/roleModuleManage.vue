@@ -9,7 +9,7 @@
         type="selection"
         width="55">
       </el-table-column>
-      <el-table-column property="roleId" label="ID" width="150"></el-table-column>
+      <el-table-column property="id" label="ID" width="150"></el-table-column>
       <el-table-column property="name" label="名称"></el-table-column>
       <el-table-column property="alias" label="别名"></el-table-column>
       <el-table-column property="description" label="描述"></el-table-column>
@@ -213,7 +213,7 @@
         this.addInfo.name = parm.name
         this.addInfo.alias = parm.alias
         this.addInfo.description = parm.description
-        this.addInfo.id = parm.roleId
+        this.addInfo.id = parm.id
 
         this.showAddNew = true;
         this.dialogTitle = '修改角色模板'

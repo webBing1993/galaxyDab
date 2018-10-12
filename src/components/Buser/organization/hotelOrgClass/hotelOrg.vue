@@ -309,6 +309,9 @@
         this.showAddNew = true
         this.getHotelBrandList()
 //        添加初始化
+
+        this.addNodeName = '';
+        this.addNodeType = '';
         this.groupInfo.enterpriseName = '';
         this.groupInfo.accountName = '';
         this.groupInfo.enterpriseShorterName = '';
@@ -472,7 +475,7 @@
 
 //    树节点点击
       handleNodeClick(item, node, aaa) {
-        console.log('nodenode', node)
+        console.log('nodenode', item)
 //        let temp = []
 //        let temp2=[]
 //        this.getParNode(node, temp)
@@ -484,7 +487,7 @@
 //        this.BreadcrumbNavigation=temp2.join(' > ').slice(0,len-3)
 
 
-        if (item.orgId == "0") {
+        if (item.orgId == "1") {
           this.$message({
             message: "顶级组织不可编辑",
             type: 'error'
@@ -600,7 +603,7 @@
         padding-bottom: 20px;
       }
       .el-cascader {
-        width: 100%;
+        width: 60%;
       }
     }
   }

@@ -163,7 +163,7 @@
 
       submit() {
         let fields = {
-          organizationId: this.orgId,
+          groupId: this.orgId,
           name: this.brandInfo.name || '',
           code: this.brandInfo.code || '',
           pmsId: "",

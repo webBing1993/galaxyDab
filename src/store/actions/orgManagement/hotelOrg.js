@@ -85,10 +85,10 @@ module.exports = {
     })
   },
 
-  // 描述:获取集团品牌列表 url:/org/getbrands/{groupId} 请求方式get
+  // 描述:获取集团品牌列表 qa.fortrun.cn:9201/org/getBrandsByOrgId/495692440657723392
   BrandList(ctx, params) {
     ctx.dispatch('request', {
-      url: `/org/getbrands/${params.groupId}`,
+      url: `/org/getBrandsByOrgId/${params.groupId}`,
       method: 'get',
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
@@ -117,7 +117,7 @@ module.exports = {
   modifyBrand(ctx, params) {
     ctx.dispatch('request', {
       url: `/brands/${params.brand_id}`,
-      method: 'POST',
+      method: 'PUT',
       body: {...params.fields},
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)

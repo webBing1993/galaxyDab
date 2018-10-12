@@ -231,7 +231,6 @@
             }
           })
         }
-
       },
 
       submitSetAuth() {
@@ -312,8 +311,13 @@
       handleChange(parm) {
         console.log(parm)
         this.title = '编辑角色'
-        this.showAddNew = true;
+        this.showAddNew = true
         this.editStatus = true
+//        数据归整
+        this.addRoleInfo.id = parm.id
+        this.addRoleInfo.name = parm.name
+        this.addRoleInfo.alias = parm.alias
+        this.addRoleInfo.description = parm.description
       },
 
       handleSetAuth(parm) {
