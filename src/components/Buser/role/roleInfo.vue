@@ -24,8 +24,12 @@
         </el-table-column>
         <el-table-column property="id" label="id"></el-table-column>
         <el-table-column property="name" label="名称"></el-table-column>
-        <el-table-column property="" label="组织名称"></el-table-column>
-        <el-table-column property="duty" label="是否引用模板"></el-table-column>
+        <el-table-column property="orgName" label="组织名称"></el-table-column>
+        <el-table-column label="是否引用模板">
+          <template slot-scope="scope">
+            {{scope.row.synchronization?"是":"否"}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <span @click="handleChange(scope.row)" type="text" class="handel">修改</span>
@@ -83,16 +87,31 @@
       :title="authTitle"
       :visible.sync="showSetAuth"
       width="40%">
-      <!---->
-      <el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">
-        <el-table-column v-if="setAuthStatus"
-                         type="selection"
-                         width="55">
-        </el-table-column>
-        <el-table-column property="permissionId" label="权限Id"></el-table-column>
-        <el-table-column property="name" label="权限名称"></el-table-column>
-        <el-table-column property="description" label="权限描述"></el-table-column>
-      </el-table>
+      <!--<el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">-->
+        <!--<el-table-column v-if="setAuthStatus"-->
+                         <!--type="selection"-->
+                         <!--width="55">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column property="permissionId" label="权限Id"></el-table-column>-->
+        <!--<el-table-column property="name" label="权限名称"></el-table-column>-->
+        <!--<el-table-column property="description" label="权限描述"></el-table-column>-->
+      <!--</el-table>-->
+      <el-tree
+        class="filter-tree"
+        :data="AuthNodeTree"
+        :props="defaultProps"
+        :expand-on-click-node="false"
+        :check-on-click-node="true"
+        :highlight-current="true"
+        :default-checked-keys="haveSetedAuth"
+        check-strictly
+        ref="tree"
+        node-key="id"
+        default-expand-all
+        show-checkbox
+        @check="handelNodeChecked"
+        >
+      </el-tree>
       <div style="margin-top: 20px" v-if="setAuthStatus">
         <el-button @click="showSetAuth = false">取 消</el-button>
         <el-button type="primary" @click="submitSetAuth">保 存</el-button>
@@ -159,6 +178,26 @@
         templateList: [],
         authTableDate: [],
         currentRoleItemId: '',
+        haveSetedAuth:[],
+        AuthNodeTree:[
+          {
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "顶级权限",
+            "type": "ROOT",
+            "parentId": "0",
+            "id": "0",
+            "status": null,
+            "subPermissions": [],
+            disabled: true
+          }
+        ],
+        defaultProps: {
+          children: 'subPermissions',
+          label: 'name',
+          id: 'id'
+        },
       }
     },
     methods: {
@@ -174,6 +213,7 @@
         'getAuthByAuth',
         'setAuth',
         'searchRole',
+        'authTree',
       ]),
       searchRoleList() {
         this.searchRole({
@@ -253,7 +293,8 @@
         this.setAuth({
           fields: fields,
           onsuccess: body => {
-            this.roleTableList = body.data
+//            this.roleTableList = body.data
+            this.getTableRoleList()
             this.showSetAuth = false
           },
           onfail: body => {
@@ -341,6 +382,23 @@
           roleId: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
+            this.haveSetedAuth=[]
+
+          }
+        })
+        this.authTree({
+          onsuccess: body => {
+            if (body.data) {
+              this.AuthNodeTree[0].subPermissions = body.data
+              let temp=[]
+              this.authTableDate.map(item=>{
+                temp.push(item.permissionId)
+              })
+              this.$nextTick(function () {
+                this.haveSetedAuth = temp
+              })
+            } else {
+            }
           }
         })
       },
@@ -350,11 +408,34 @@
         this.showSetAuth = true
         this.setAuthStatus = false
 
-        console.log(parm)
+//        console.log(parm)
+//        this.getAuthByAuth({
+//          roleId: parm.id,
+//          onsuccess: body => {
+//            this.authTableDate = body.data
+//          }
+//        })
         this.getAuthByAuth({
           roleId: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
+            this.haveSetedAuth=[]
+
+          }
+        })
+        this.authTree({
+          onsuccess: body => {
+            if (body.data) {
+              this.AuthNodeTree[0].subPermissions = body.data
+              let temp=[]
+              this.authTableDate.map(item=>{
+                temp.push(item.permissionId)
+              })
+              this.$nextTick(function () {
+                this.haveSetedAuth = temp
+              })
+            } else {
+            }
           }
         })
       },
@@ -375,14 +456,14 @@
           this.selectedTemplateId.push(item.id)
         })
       },
-      handleSelectAuth(val) {
-        this.selectedAuthId = []
-        val.map(item => {
-          this.selectedAuthId.push(item.permissionId)
-        })
-
-      },
-      handleClose() {
+//      handleSelectAuth(val) {
+//        this.selectedAuthId = []
+//        val.map(item => {
+//          this.selectedAuthId.push(item.permissionId)
+//        })
+//      },
+      handelNodeChecked(parm1,parm2){
+          this.selectedAuthId = parm2.checkedKeys
       },
     },
 

@@ -104,7 +104,7 @@
             "foreignId": "",
             "creator": null,
             "deleted": false,
-            "name": "顶级组织",
+            "name": "顶级权限",
             "type": "ROOT",
             "parentId": "0",
             "id": "0",

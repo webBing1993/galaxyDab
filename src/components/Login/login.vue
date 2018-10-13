@@ -50,7 +50,12 @@
               message: '登录成功!'
             });
             this.goto('/hotelOrg')
-
+          },
+          onfail: body => {
+            this.$message({
+              message: body.data.errmsg,
+              type: 'error'
+            });
           }
         })
       },

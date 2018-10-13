@@ -24,7 +24,7 @@
           <el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="账户编码">
-          <el-input v-model="currentNodeDetail.info.pmsCode" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.code" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="企业简称">
           <el-input v-model="currentNodeDetail.info.memo" placeholder="请输入内容"></el-input>

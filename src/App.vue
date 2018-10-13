@@ -13,7 +13,8 @@
 
     },
     mounted () {
-      // router.push('./buser/hotelOrg')
+//       router.push('./buser/hotelOrg')
+       router.push('./hotelOrg')
     }
   }
 </script >

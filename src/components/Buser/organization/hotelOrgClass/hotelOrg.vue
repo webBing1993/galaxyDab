@@ -349,7 +349,7 @@
                   "orgId": "0",
                 })
                 temp.map(item => {
-                  if (item.type == 'SEGMENT' || item.type == "ROOT") {
+                  if (item.type == 'SEGMENT' || item.type == "ROOT"||item.type == "GROUP") {
                     this.allHotelOrgNode.push(item)
                   }
                 })
@@ -364,24 +364,42 @@
 
 //      添加节点
       submitAdd() {
+        if(this.addNodeType==null||this.addNodeType==""){
+          this.$message({
+            message:"请选择组织类型",
+            type: 'error'
+          });
+          return false
+        }else if(this.addNodeName==""){
+          this.$message({
+            message:"组织名称不可为空",
+            type: 'error'
+          });
+          return false
+        }
+
         let fields = {}
         if (this.addNodeType == 'GROUP') {
           fields = {
             name: this.addNodeName || "",
             type: this.addNodeType || "",
 //            parentId: this.currentAddNodeParentId,
-            parentId: '0',
+            parentId: '1',
             info: {
               name: this.groupInfo.enterpriseName,
-              type: this.groupInfo.enterpriseName,
+              type: this.addNodeType,
               code: this.groupInfo.enterpriseName,
               addressCode: this.groupInfo.enterpriseName,
               tel: this.groupInfo.enterpriseName,
-              province: '省',
-              city: '省',
-              area: '省',
-              address: '地址明细',
+              province: this.hotelInfo.shopAdress[0] || '',
+              city: this.hotelInfo.shopAdress[1] || '',
+              area: "",
+              address: this.groupInfo.shopDetailAdress,
               logoUrl: '',
+//
+              contactName:this.groupInfo.linkmanName,
+              contactPhone:this.groupInfo.linkmanTel,
+              contactPosition:this.groupInfo.linkmanJob,
             }
           }
         }
@@ -394,13 +412,18 @@
               name: this.hotelInfo.shopName || '',
               type: this.hotelInfo.shopType || '',
               code: this.hotelInfo.shopCode || '',
-              addressCode: this.hotelInfo.shopAdress.join(',') || '',
+              addressCode: this.hotelInfo.shopAdress?this.hotelInfo.shopAdress.join(',') : '',
               tel: this.hotelInfo.shopName,
               province: this.hotelInfo.shopAdress[0] || '',
               city: this.hotelInfo.shopAdress[1] || '',
               area: "",
               address: this.hotelInfo.shopDetailAdress,
-              logoUrl: ""
+              logoUrl: "",
+//
+              contactName:this.hotelInfo.linkmanName,
+              contactPhone:this.hotelInfo.linkmanTel,
+              contactPosition:this.hotelInfo.linkmanJob,
+              brandId:this.hotelInfo.belongBrand,
             }
           }
         }

@@ -189,7 +189,7 @@
       },
       setHeader() {
         return {
-//          Session: sessionStorage.getItem('session_id'),
+          Session: sessionStorage.getItem('session_id'),
           enctype: "multipart/form-data"
         }
       }
