@@ -45,16 +45,31 @@
       :title="authTitle"
       :visible.sync="showSetAuth"
       width="40%">
-      <!---->
-      <el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">
-        <el-table-column v-if="setAuthStatus"
-                         type="selection"
-                         width="55">
-        </el-table-column>
-        <el-table-column property="permissionId" label="权限Id"></el-table-column>
-        <el-table-column property="name" label="权限名称"></el-table-column>
-        <el-table-column property="description" label="权限描述"></el-table-column>
-      </el-table>
+      <!--<el-table :data="authTableDate" border stripe @selection-change="handleSelectAuth">-->
+        <!--<el-table-column v-if="setAuthStatus"-->
+                         <!--type="selection"-->
+                         <!--width="55">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column property="permissionId" label="权限Id"></el-table-column>-->
+        <!--<el-table-column property="name" label="权限名称"></el-table-column>-->
+        <!--<el-table-column property="description" label="权限描述"></el-table-column>-->
+      <!--</el-table>-->
+      <el-tree
+        class="filter-tree"
+        :data="AuthNodeTree"
+        :props="defaultProps"
+        :expand-on-click-node="false"
+        :check-on-click-node="true"
+        :highlight-current="true"
+        :default-checked-keys="haveSetedAuth"
+        check-strictly
+        ref="tree"
+        node-key="id"
+        default-expand-all
+        show-checkbox
+        @check="handelNodeChecked"
+      >
+      </el-tree>
       <div style="margin-top: 20px" v-if="setAuthStatus">
         <el-button @click="showSetAuth = false">取 消</el-button>
         <el-button type="primary" @click="submitSetAuth">保 存</el-button>
@@ -92,7 +107,28 @@
         authTableDate: [],
         selectedAuthId: [],
         currentTempItemId: [],
-        setAuthStatus: false
+        setAuthStatus: false,
+
+        haveSetedAuth:[],
+        AuthNodeTree:[
+          {
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "顶级权限",
+            "type": "ROOT",
+            "parentId": "0",
+            "id": "0",
+            "status": null,
+            "subPermissions": [],
+            disabled: true
+          }
+        ],
+        defaultProps: {
+          children: 'subPermissions',
+          label: 'name',
+          id: 'id'
+        },
 
       }
     },
@@ -103,12 +139,16 @@
         'modifyRole',
         'getAuthByTemp',
         'setTempAuth',
+        'authTree',
       ]),
-      handleSelectAuth(val) {
-        this.selectedAuthId = []
-        val.map(item => {
-          this.selectedAuthId.push(item.permissionId)
-        })
+//      handleSelectAuth(val) {
+//        this.selectedAuthId = []
+//        val.map(item => {
+//          this.selectedAuthId.push(item.permissionId)
+//        })
+//      },
+      handelNodeChecked(parm1,parm2){
+        this.selectedAuthId = parm2.checkedKeys
       },
       handleSetAuth(parm) {
         this.authTitle = '设置权限'
@@ -121,6 +161,21 @@
             this.authTableDate = body.data
           }
         })
+        this.authTree({
+          onsuccess: body => {
+            if (body.data) {
+              this.AuthNodeTree[0].subPermissions = body.data
+              let temp=[]
+              this.authTableDate.map(item=>{
+                temp.push(item.id)
+              })
+              this.$nextTick(function () {
+                this.haveSetedAuth = temp
+              })
+            } else {
+            }
+          }
+        })
       },
 
       handleViewAuth(parm) {
@@ -129,10 +184,31 @@
         this.setAuthStatus = false
 
         console.log(parm)
+//        this.getAuthByTemp({
+//          tempid: parm.id,
+//          onsuccess: body => {
+//            this.authTableDate = body.data
+//          }
+//        })
         this.getAuthByTemp({
           tempid: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
+          }
+        })
+        this.authTree({
+          onsuccess: body => {
+            if (body.data) {
+              this.AuthNodeTree[0].subPermissions = body.data
+              let temp=[]
+              this.authTableDate.map(item=>{
+                temp.push(item.id)
+              })
+              this.$nextTick(function () {
+                this.haveSetedAuth = temp
+              })
+            } else {
+            }
           }
         })
       },
