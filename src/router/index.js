@@ -34,7 +34,16 @@ import roleInfo from '@/components/Buser/role/roleInfo'
 /////////////////////////角色模板管理////////
 import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
 
-
+//配置管理
+import Whome from '@/components/Whome'
+import Classify from '@/components/collection/classify/Classify'
+import Content from '@/components/collection/content/Content'
+import Service from '@/components/collection/service/Service'
+import Advertising from '@/components/collection/advertising/Advertising'
+import Establish from '@/components/collection/establishContent/establish'
+import esadvertising from '@/components/collection/establishAdvertising/esAdvertising'
+import editAdvertising from '@/components/collection/editAdvertising/editAdvertising'
+import editContent from '@/components/collection/editContent/editContent'
 Vue.use(Router)
 
 const main = [
@@ -131,6 +140,69 @@ const main = [
             component: roleModuleManage,
           }
         ]
+      },
+      ///////--------------配置管理开始------------
+      {
+        path: 'whome',
+        name: 'Whome',
+        component: Whome,
+        redirect: {
+          name: 'classify'
+        },
+        children: [
+          // 添加分类
+          {
+            name: 'classify',
+            path: 'classify',
+            component: Classify
+          },
+          // 内容管理
+          {
+            name: 'content',
+            path: 'content',
+            component: Content,
+
+          },
+          // 广告管理
+          {
+            name: 'advertising',
+            path: 'advertising',
+            component: Advertising,
+          },
+          // 基础服务
+          {
+            name: 'service',
+            path: 'service',
+            component: Service
+          },
+          // 创建内容
+          {
+            name: "establish",
+            path: "establish",
+            component: Establish
+          },
+          // 创建广告 编辑广告
+          {
+            name: 'esadvertising',
+            path: 'esadvertising',
+            component: esadvertising
+          },
+          // 编辑广告
+          {
+            name: 'editAdvertising',
+            path: 'editAdvertising',
+            component: editAdvertising
+
+          },
+          // 编辑内容
+          {
+            name: 'editContent',
+            path: 'editContent',
+            component: editContent
+          }
+
+        ],
+
       }
     ]
   },

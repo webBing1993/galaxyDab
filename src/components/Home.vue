@@ -73,7 +73,7 @@
           this.$router.push({name:'hotelOrg'})
 
         }else{
-          this.$router.push({name:'content'})
+          this.$router.push({name:'classify'})
         }
 
       }
