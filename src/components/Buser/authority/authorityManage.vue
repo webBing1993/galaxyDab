@@ -216,15 +216,6 @@
 //      添加节点
       submitAdd() {
         let fields = {
-//          parentId:this.currentAddNodeParentId,
-//          name:this.authInfo.hotel,
-//          tag:this.authInfo.tag,
-//          icon:this.authInfo.iconAdress,
-//          url:this.authInfo.linkAdress,
-//          requestMethod:this.authInfo.requestMethods,
-//          description:this.authInfo.describe,
-//          noteType:this.authInfo.hotel
-
           "parentId":this.currentAddNodeParentId,
           "name":this.authInfo.name,
           "requestMethod":this.authInfo.requestMethods,

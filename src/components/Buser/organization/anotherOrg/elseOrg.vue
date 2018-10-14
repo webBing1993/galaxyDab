@@ -203,6 +203,19 @@
 
 //      添加节点
       submitAdd() {
+        if(this.addNodeName==""){
+          this.$message({
+            message:"组织名称不可为空",
+            type: 'error'
+          });
+          return false
+        }else if(this.addNodeType==null||this.addNodeType==""){
+          this.$message({
+            message:"请选择组织类型",
+            type: 'error'
+          });
+          return false
+        }
         this.addotherNode({
           name: this.addNodeName,
           parentId: this.currentAddNodeParentId,
