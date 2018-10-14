@@ -9,7 +9,7 @@
         </el-select>
         <el-input placeholder="请输入名称" v-model="wrname" class="writeName" clearable>
         </el-input>
-        <el-button type="success" class="search" @click="advertisingSearch">搜索</el-button>
+        <el-button type="success" class="search" @click="initlist">搜索</el-button>
       </div>
     </el-row>
     <el-table :data="AdvertisingTableData" style="width: 100%"  v-loading="loading" ref="advertisForm" prop="adverForm">
@@ -50,144 +50,137 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
         :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
-    </div>
-  </div>
+     </div>
+   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      changshi: "",
+      changshi: '',
       total: 0,
       page: 1,
       pagesize: 5,
       pagenum: 1,
       loading: false,
-      index: "1",
-      wrname: "",
-      value: "",
+      index: '1',
+      wrname: '',
+      value: '',
       options: [
         {
-          value: "1",
-          label: "1"
+          value: '1',
+          label: '1'
         }
       ],
       AdvertisingTableData: []
-    };
+    }
   },
   mounted() {
-    this.initlist();
+    this.initlist()
   },
   methods: {
-    fun(row) {
+    ...mapActions([
+      'advertisinList',
+      'deleteAdver'
+    ]),
+    fun (row) {
       // console.log(row.picture);
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       // console.log(`每页 ${val} 条`);
-      this.pagesize = val;
-      this.initlist();
+      this.pagesize = val
+      this.initlist()
     },
-    handleCurrentChange(val) {
-      this.pagenum = val;
-      this.page = val;
+    handleCurrentChange (val) {
+      this.pagenum = val
+      this.page = val
       // console.log(`当前页: ${val}`);
-      this.initlist();
+      this.initlist()
     },
-    typeIndex(index) {
-      return index + (this.page - 1) * this.pagesize + 1;
+    typeIndex (index) {
+      return index + (this.page - 1) * this.pagesize + 1
     },
     // ...mapActions(["advertisingList"]),
-    //分页方法
-    initlist() {
-      this.loading = true;
-      this.axios
-        .get(
-          `http://qa.fortrun.cn:9201/adv/queryAll?name=${
-            this.wrname
-          }&type=1`,
-          {
-            headers: {
-              "X-Current-Page": this.pagenum,
-              "X-Page-Size": this.pagesize
-            }
+    // 分页方法
+    initlist () {
+      this.loading = true
+      var that = this
+      // console.log(that.wrname)
+      this.advertisinList({
+        name: that.wrname,
+        type: 1,
+        headers: {
+          'X-Current-Page': this.pagenum,
+          'X-Page-Size': this.pagesize
+        },
+        onsuccess: body => {
+          if (body) {
+            console.log(body)
+            this.AdvertisingTableData = body.data
+            this.loading = false
+          } else {
           }
-        )
-        .then(res => {
-          console.log(res);
-          if (res.status == 200) {
-            this.loading = false;
-            this.total = Number(res.headers["x-total"]);
-            this.AdvertisingTableData = res.data.data;
-            // this.$store.commit("setEadvertising", res.data.data);
-            // console.log(res.data.data.picture);
-          }
-        });
+        }
+      })
     },
-    advertisingSearch() {
-      this.axios
-        .get(
-          `http://qa.fortrun.cn:9201/adv/queryAll?name=${
-            this.wrname
-          }&type=1`,
-          {
-            headers: {
-              "X-Current-Page": 1,
-              "X-Page-Size": 1
-            }
-          }
-        )
-        .then(res => {
-          this.total = Number(res.headers["x-total"]);
-          this.pagesize = res.headers["x-page-size"];
-          this.pagenum = res.headers["x-current-page"];
-          this.AdvertisingTableData = res.data.data;
-        });
-    },
-    establishAdvertising() {
+    establishAdvertising () {
       this.$router.push({
-        name: "esadvertising"
-      });
+        name: 'esadvertising'
+      })
     },
-    editAdvertising(row) {
+    editAdvertising (row) {
       // console.log(row);
-      this.$store.commit("geteData", row);
+      this.$store.commit('geteData', row)
       this.$router.push({
-        name: "editAdvertising"
-      });
+        name: 'editAdvertising'
+      })
     },
-    deleteAdvertising(row) {
+    deleteAdvertising (row) {
       // console.log(row);
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          // console.log(row.id);
-          this.axios
-            .delete(
-              `http://qa.fortrun.cn:9201/adv/delete/${row.id}`
-            )
-            .then(res => {
-              // console.log(res);
-              if (res.status === 200) {
+          this.deleteAdver({
+            id: row.id,
+            onsuccess: body => {
+              if (body.data) {
                 this.$message({
-                  type: "success",
-                  message: "删除成功!"
-                });
-                this.initlist();
+                  type: 'success',
+                  message: '删除成功!'
+                })
+              } else {
               }
-            });
+            }
+          })
+          // console.log(row.id);
+          // this.axios
+          //   .delete(
+          //     `http://qa.fortrun.cn:9201/adv/delete/${row.id}`
+          //   )
+          //   .then(res => {
+          //     // console.log(res);
+          //     if (res.status === 200) {
+          //       this.$message({
+          //         type: 'success',
+          //         message: '删除成功!'
+          //       })
+          //       this.initlist()
+          //     }
+          //   })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .el-row {

@@ -87,6 +87,7 @@
   </div>
 </template>
 <script>
+  import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -114,50 +115,68 @@ export default {
     this.initlist();
   },
   methods: {
+    ...mapActions([
+      'service',
+      'changeSta'
+    ]),
     initlist() {
-      this.axios
-        .get("http://qa.fortrun.cn:9201/config/getAll")
-        .then(res => {
-          console.log(res);
-          if (res.status === 200) {
-            this.c_status = res.data.data[0].open;
-            this.c_id = res.data.data[0].id;
-            this.c_key = res.data.data[0].key;
-            this.j_status = res.data.data[1].open;
-            this.j_id = res.data.data[1].id;
-            this.j_key = res.data.data[1].key;
-            this.w_status = res.data.data[2].open;
-            this.w_id = res.data.data[2].id;
-            this.w_key = res.data.data[2].key;
-            this.h_status = res.data.data[3].open;
-            this.h_id = res.data.data[3].id;
-            this.h_key = res.data.data[3].key;
-            this.s_status = res.data.data[4].open;
-            this.s_id = res.data.data[4].id;
-            this.s_key = res.data.data[4].key;
-            this.y_status = res.data.data[5].open;
-            this.y_id = res.data.data[5].id;
-            this.y_key = res.data.data[5].key;
-          }
-        });
+      this.service({
+        onsuccess: body => {
+        if (body) {
+           console.log(body.data)
+                this.c_status = body.data[0].open;
+                this.c_id = body.data[0].id;
+                this.c_key = body.data[0].key;
+                this.j_status = body.data[1].open;
+                this.j_id = body.data[1].id;
+                this.j_key = body.data[1].key;
+                this.w_status = body.data[2].open;
+                this.w_id = body.data[2].id;
+                this.w_key = body.data[2].key;
+                this.h_status = body.data[3].open;
+                this.h_id = body.data[3].id;
+                this.h_key = body.data[3].key;
+                this.s_status = body.data[4].open;
+                this.s_id = body.data[4].id;
+                this.s_key = body.data[4].key;
+                this.y_status = body.data[5].open;
+                this.y_id = body.data[5].id;
+                this.y_key = body.data[5].key;
+            }
+        }
+      })
     },
     changestatus: function($event, num, id, key) {
-      console.log($event);
-      console.log(num);
-      console.log(id);
-      console.log(key);
-      this.axios
-        .post("http://qa.fortrun.cn:9201/galaxy-front/config/update", {
-          id: id,
-          key: key,
-          open: $event
-        })
-        .then(res => {
-          console.log(res);
-        });
+      // console.log($event);
+      // console.log(num);
+      // console.log(id);
+      // console.log(key);
+      this.changeSta({
+          id:id,
+          key:key,
+          open:open,
+        onsuccess: body => {
+        if (body) {
+          this.$message({
+            message: '修改状态成功',
+            type: 'success'
+          });
+         }
+       }
+
+      })
+      // this.axios
+      //   .post("http://qa.fortrun.cn:9201/galaxy-front/config/update", {
+      //     id: id,
+      //     key: key,
+      //     open: $event
+      //   })
+      //   .then(res => {
+      //     console.log(res)
+      //   })
     }
   }
-};
+}
 </script>
 <style scoped>
 .el-row {

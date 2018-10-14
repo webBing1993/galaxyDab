@@ -228,8 +228,9 @@ export default {
     }
   },
   mounted() {
-    UE.delEditor("editor");
+    // UE.delEditor("editor");
     this.editor = UE.getEditor("editor");
+    UE.getEditor('editor').render('editor')
   }
 };
 </script>
@@ -240,6 +241,7 @@ export default {
 
 #editor {
   width: 700px;
+  position:relative;
 }
 
 .file {

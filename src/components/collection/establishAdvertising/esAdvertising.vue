@@ -33,9 +33,9 @@
         <el-input type="url" v-model="esAdvertisingForm.superURL"></el-input>
       </el-form-item>
       <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
-        <div>　
+        <div>
           <!--editor的div为富文本的承载容器-->
-          　　<div id="editor" v-model="esAdvertisingForm.introduce"></div>
+          <div id="editor"></div>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
@@ -49,158 +49,192 @@
   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       isDisabled: false,
-      officialId: "",
+      officialId: '',
       isDis: true,
-      radio: "1",
+      radio: '1',
       chaolian: true,
-      addressId: "",
-      imgurl: "",
-      classifyId: "",
+      addressId: '',
+      imgurl: '',
+      classifyId: '',
       introContent: false,
       editor: null,
-      editorContent: "",
+      editorContent: '',
       contentType: 1,
       roleList: [
         {
           id: 1,
-          roleName: "首页"
+          roleName: '首页'
         },
         {
           id: 2,
-          roleName: "正文"
+          roleName: '正文'
         }
       ],
       classifyList: [
         {
           id: 1,
-          classifyName: "官方广告"
+          classifyName: '官方广告'
         }
       ],
       establist: [],
       esAdvertisingForm: {
-        viewAdvertising: "",
-        advertisingName: "",
-        adverAdress: "",
-        superURL: "",
-        //还没有获取里面的内容注意王文本框里面没写数值
-        sort: "",
-        introduce: "",
-        superURL: ""
+        viewAdvertising: '',
+        advertisingName: '',
+        adverAdress: '',
+        superURL: '',
+        // 还没有获取里面的内容注意王文本框里面没写数值
+        sort: '',
+        introduce: ''
       },
       rules: {
-        //现在只是简单的验证后面要改验证
+        // 现在只是简单的验证后面要改验证
         advertisingName: [
           {
             required: true,
-            message: "请输入名称",
-            trigger: "blur"
+            message: '请输入名称',
+            trigger: 'blur'
           }
         ],
         sort: [
           {
             required: true,
-            type: "number",
-            message: "请输入排序并且为数值类型",
-            trigger: "blur"
+            type: 'number',
+            message: '请输入排序并且为数值类型',
+            trigger: 'blur'
           }
         ]
       }
-    };
+    }
   },
   computed: {},
-  mounted() {
+  mounted () {
     // 实例化editor编辑器
-    this.editor = UE.getEditor("editor"); // console.log(this.editor.setContent("1223"))
+    this.editor = UE.getEditor('editor',{
+      BaseUrl: '',
+      UEDITOR_HOME_URL: 'static/Ueditor/',
+    }) // console.log(this.editor.setContent("1223"))
+    UE.getEditor('editor').render('editor')
   },
   methods: {
-    //图片内容显示到对应的框中
-    update(e) {
-      let file = e.target.files[0];
-      let param = new FormData(); //创建form对象
-      param.append("file", file, file.name); //通过append向form对象添加数据
-      param.append("chunk", "0"); //添加form表单中其他数据
+    ...mapActions([
+      'updateMsg',
+      'saveAdver'
+    ]),
+    // 图片内容显示到对应的框中
+    update (e) {
+      let file = e.target.files[0]
+      let param = new FormData() // 创建form对象
+      param.append('file', file, file.name) // 通过append向form对象添加数据
+      param.append('chunk', '0') // 添加form表单中其他数据
+      // console.log(e)
+      // let config = {
+      //   headers: { 'Content-Type': 'multipart/form-data'}
+      // } // 添加请求头
+      // this.axios
+      //   .post(
+      //     'http://qa.fortrun.cn:9201/adv/picture/upload',
+      //     param,
+      //     config
+      //   )
+      //   .then(response => {
+      //     console.log(response.data.data)
+      //     this.imgurl = response.data.data
+      //   })
+      this.updateMsg({
+        file:param,
+        onsuccess: body => {
+          console.log(body)
+          // if (body.data) {
+          //   console.log(body)
+          //  // this.imgurl = response.data
+          // } else {
+          // }
+        }
+      })
+    },
+    lianjie (e, num) {
+      this.introContent = false
+      this.chaolian = true
 
-      let config = {
-        headers: { "Content-Type": "multipart/form-data" }
-      }; //添加请求头
-      this.axios
-        .post(
-          "http://qa.fortrun.cn:9201/adv/picture/upload",
-          param,
-          config
-        )
-        .then(response => {
-          console.log(response.data.data);
-          this.imgurl = response.data.data;
-        });
+      this.contentType = num
+      console.log(this.contentType)
     },
-    lianjie(e, num) {
-      this.introContent = false;
-      this.chaolian = true;
-
-      this.contentType = num;
-      console.log(this.contentType);
+    tuIntroduce (e, num) {
+      this.introContent = true
+      this.chaolian = false
+      this.contentType = num
+      console.log(this.contentType)
     },
-    tuIntroduce(e, num) {
-      this.introContent = true;
-      this.chaolian = false;
-      this.contentType = num;
-      console.log(this.contentType);
-    },
-    //保存
-    SaveContentForm(formname) {
+    // 保存
+    SaveContentForm (formname) {
       if (
-        (this.editor.getContent().length == 0 &&
-          this.esAdvertisingForm.superURL.length != 0) ||
-        (this.editor.getContent().length != 0 &&
-          this.esAdvertisingForm.superURL.length == 0)
+        (this.editor.getContent().length === 0 &&
+          this.esAdvertisingForm.superURL.length !== 0) ||
+        (this.editor.getContent().length !== 0 &&
+          this.esAdvertisingForm.superURL.length === 0)
       ) {
         this.$refs[formname].validate(valide => {
           if (valide) {
-            this.axios
-              .post("http://qa.fortrun.cn:9201/adv/add", {
+            this.saveAdver({
+              body:{
                 type: this.officialId,
-                name: this.esAdvertisingForm.advertisingName,
-                picture: this.imgurl,
-                location: this.addressId,
-                contentType: this.contentType,
-                url: this.esAdvertisingForm.superURL,
-                contents: this.editor.getContent(),
-                sort: this.esAdvertisingForm.sort
-              })
-              .then(res => {
-                // console.log(res);
-                if (res.status === 200) {
-                  this.$message({
-                    type: "success",
-                    message: "创建广告成功!"
-                  });
-                  this.$router.push({ name: "advertising" });
-                }
-              });
+                    name: this.esAdvertisingForm.advertisingName,
+                    picture: '1.jpg',
+                    location: this.addressId,
+                    contentType: this.contentType,
+                    url: this.esAdvertisingForm.superURL,
+                    contents: this.editor.getContent(),
+                    sort: this.esAdvertisingForm.sort
+              },
+              onsuccess: body => {
+              console.log(body)
+              }
+            })
+            // this.axios
+            //   .post('http://qa.fortrun.cn:9201/adv/add', {
+            //     type: this.officialId,
+            //     name: this.esAdvertisingForm.advertisingName,
+            //     picture: this.imgurl,
+            //     location: this.addressId,
+            //     contentType: this.contentType,
+            //     url: this.esAdvertisingForm.superURL,
+            //     contents: this.editor.getContent(),
+            //     sort: this.esAdvertisingForm.sort
+            //   })
+            //   .then(res => {
+            //     // console.log(res);
+            //     if (res.status === 200) {
+            //       this.$message({
+            //         type: 'success',
+            //         message: '创建广告成功!'
+            //       })
+            //       this.$router.push({ name: 'advertising' })
+            //     }
+            //   })
           }
-        });
+        })
       } else {
         this.$message({
-          type: "error",
-          message: "内容类型必须填写只能选择一种"
-        });
+          type: 'error',
+          message: '内容类型必须填写只能选择一种'
+        })
       }
     },
-    //取消
-    CancelContentForm() {
-      this.$router.push({ name: "advertising" });
+    // 取消
+    CancelContentForm () {
+      this.$router.push({ name: 'advertising' })
     }
   },
-  destroyed() {
+  destroyed () {
     // 将editor进行销毁
-    this.editor.destroy();
+    // this.editor.destroy()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .el-upload-list--picture .el-upload-list__item {
