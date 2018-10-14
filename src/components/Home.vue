@@ -70,7 +70,7 @@
     methods:{
       handleClick(tab){
         if(tab.label=='B端用户管理'){
-          this.$router.push({name:'hotelOrg'})
+          this.$router.push({path:'/hotelOrg'})
 
         }else{
           this.$router.push({name:'classify'})
