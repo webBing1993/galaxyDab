@@ -71,73 +71,73 @@ export default {
       total: 0,
       pagesize: 5,
       pagenum: 1,
-      userlist: "",
+      userlist: '',
       loading: false,
-      searchName: "",
+      searchName: '',
       addClassifyDialog: false,
       editClassifyDialog: false,
-      editId: "",
+      editId: '',
       addClassifyForm: {
-        classifyName: "",
-        classifySort: ""
+        classifyName: '',
+        classifySort: ''
       },
       editClassifyForm: {
-        editclassifyName: "",
-        editclassifySort: ""
+        editclassifyName: '',
+        editclassifySort: ''
       },
       classifyList: [],
       rules: {
         classifyName: [
           {
             required: true,
-            message: "请输入用户名称",
-            trigger: "blur"
+            message: '请输入用户名称',
+            trigger: 'blur'
           }
         ],
         classifySort: [
           {
             required: true,
-            type: "number",
-            message: "请输入排序并且为数值类型",
-            trigger: "blur"
+            type: 'number',
+            message: '请输入排序并且为数值类型',
+            trigger: 'blur'
           }
         ],
         editclassifyName: [
           {
             required: true,
-            message: "请输入用户名称",
-            trigger: "blur"
+            message: '请输入用户名称',
+            trigger: 'blur'
           }
         ],
         editclassifySort: [
           {
             required: true,
-            type: "number",
-            message: "请输入排序并且为数值类型",
-            trigger: "blur"
+            type: 'number',
+            message: '请输入排序并且为数值类型',
+            trigger: 'blur'
           }
         ]
       }
-    };
+    }
   },
-  created() {
-    this.initlist();
+  created () {
+    this.initlist()
   },
   methods: {
-    //分页用到的方法
-    handleSizeChange(val) {
-      this.pagesize = val;
-      this.initlist();
-      console.log(`每页 ${val} 条`);
+    // 分页用到的方法
+    handleSizeChange (val) {
+      this.pagesize = val
+      this.initlist()
+      // console.log(`每页 ${val} 条`)
     },
-    handleCurrentChange(val) {
-      this.pagenum = val;
-      this.page = val;
-      console.log(`当前页: ${val}`);
-      this.initlist();
+    handleCurrentChange (val) {
+      this.pagenum = val
+      this.page = val
+      // console.log(`当前页: ${val}`)
+      this.initlist()
     },
-    //列表渲染
-    initlist() {
+    // 列表渲染
+    initlist () {
       this.axios
         .post(
           `http://qa.fortrun.cn:8121/discoveryCatalog/page/${
@@ -145,57 +145,57 @@ export default {
           }?pageSize=${this.pagesize}&name=${this.searchName}`
         )
         .then(res => {
-          if (res.status == 200) {
-            console.log(res);
-            console.log(1)
-            this.classifyList = res.data.data.items;
-            this.total = res.data.data.totalNum;
-            this.$store.commit("getAddclassifyData", res.data.data.items);
-            console.log(this.$store.state.addClaData);
+          if (res.status === 200) {
+            // console.log(res)
+            // console.log(1)
+            this.classifyList = res.data.data.items
+            this.total = res.data.data.totalNum
+            this.$store.commit('getAddclassifyData', res.data.data.items)
+            // console.log(this.$store.state.addClaData)
           }
-        });
+        })
     },
     // 添加分类方法
-    addClassify() {
+    addClassify () {
       this.addClassifyDialog = true;
     },
-    //删除分类方法
-    deleteClassify(row) {
-      this.initlist();
-      console.log(row);
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    // 删除分类方法
+    deleteClassify (row) {
+      this.initlist()
+      // console.log(row)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          console.log(row.id);
+          // console.log(row.id);
           this.axios
             .post(
               `http://qa.fortrun.cn:8121/discoveryCatalog/delete?id=${row.id}`
             )
             .then(res => {
-              console.log(res);
+              // console.log(res)
               if (res.status === 200) {
                 this.$message({
-                  type: "success",
-                  message: "删除成功!"
-                });
-                this.initlist();
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                this.initlist()
               }
-            });
+            })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
-    CancelAddClassifyDialog() {
-      this.addClassifyDialog = false;
+    CancelAddClassifyDialog () {
+      this.addClassifyDialog = false
     },
-    SureAddClassifyDialog(formname) {
+    SureAddClassifyDialog (formname) {
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.axios
@@ -207,33 +207,33 @@ export default {
             .then(res => {
               if (res.status === 200) {
                 this.$message({
-                  message: "添加成功",
-                  type: "success"
-                });
+                  message: '添加成功',
+                  type: 'success'
+                })
               } else {
                 this.$message({
-                  message: "添加失败",
-                  type: "error"
-                });
+                  message: '添加失败',
+                  type: 'error'
+                })
               }
-              this.addClassifyDialog = false;
-              this.initlist();
-            });
+              this.addClassifyDialog = false
+              this.initlist()
+            })
         }
-      });
+      })
     },
     // 编辑分类方法
-    editClassify(row) {
-      console.log(row);
-      this.editId = row.id;
-      this.editClassifyDialog = true;
-      this.editClassifyForm.editclassifyName = row.name;
-      this.editClassifyForm.editclassifySort = row.sort;
+    editClassify (row) {
+      // console.log(row)
+      this.editId = row.id
+      this.editClassifyDialog = true
+      this.editClassifyForm.editclassifyName = row.name
+      this.editClassifyForm.editclassifySort = row.sort
     },
-    CancelEditClassifyDialog() {
-      this.editClassifyDialog = false;
+    CancelEditClassifyDialog () {
+      this.editClassifyDialog = false
     },
-    SureEditClassifyDialog(formname) {
+    SureEditClassifyDialog (formname) {
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.axios
@@ -247,26 +247,26 @@ export default {
             .then(res => {
               if (res.status === 200) {
                 this.$message({
-                  message: "修改成功",
-                  type: "success"
-                });
+                  message: '修改成功',
+                  type: 'success'
+                })
               } else {
                 this.$message({
-                  message: "修改失败",
-                  type: "error"
-                });
+                  message: '修改失败',
+                  type: 'error'
+                })
               }
-              this.editClassifyDialog = false;
-              this.initlist();
-            });
+              this.editClassifyDialog = false
+              this.initlist()
+            })
         }
-      });
+      })
     },
-    typeIndex(index) {
-      return index + (this.pagenum - 1) * this.pagesize + 1;
+    typeIndex (index) {
+      return index + (this.pagenum - 1) * this.pagesize + 1
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .el-row {

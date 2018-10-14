@@ -73,7 +73,7 @@
           this.$router.push({path:'/hotelOrg'})
 
         }else{
-          this.$router.push({name:'classify'})
+          this.$router.push({path:'whome/classify'})
         }
 
       }
