@@ -116,9 +116,10 @@ export default {
     this.initlist();
   },
   mounted() {
-    console.log(1232434)
-    // 实例化editor编辑器
-    this.editor = UE.getEditor("editor"); // console.log(this.editor.setContent("1223"))
+    this.editor = UE.getEditor('editor',{
+      BaseUrl: '',
+      UEDITOR_HOME_URL: 'static/Ueditor/',
+    }) // console.log(this.editor.setContent("1223"))
     UE.getEditor('editor').render('editor')
     if (this.$store.state.editData.contentType == 1) {
       // this.lianjie();
