@@ -232,7 +232,7 @@ export default {
   },
   destroyed () {
     // 将editor进行销毁
-    // this.editor.destroy()
+    this.editor.destroy()
   }
 }
 </script>

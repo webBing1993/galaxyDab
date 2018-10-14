@@ -223,8 +223,10 @@ export default {
     }
   },
   mounted() {
-    // UE.delEditor("editor");
-    this.editor = UE.getEditor("editor");
+    this.editor = UE.getEditor('editor',{
+      BaseUrl: '',
+      UEDITOR_HOME_URL: 'static/Ueditor/',
+    }) // console.log(this.editor.setContent("1223"))
     UE.getEditor('editor').render('editor')
   }
 };

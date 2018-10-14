@@ -126,6 +126,11 @@ export default {
   },
   mounted() {
     this.initlist();
+    this.editor = UE.getEditor('editor',{
+      BaseUrl: '',
+      UEDITOR_HOME_URL: 'static/Ueditor/',
+    }) // console.log(this.editor.setContent("1223"))
+    UE.getEditor('editor').render('editor')
   },
   methods: {
     initlist() {
@@ -227,11 +232,6 @@ export default {
       console.log(this.imgarr);
     }
   },
-  mounted() {
-    // UE.delEditor("editor");
-    this.editor = UE.getEditor("editor");
-    UE.getEditor('editor').render('editor')
-  }
 };
 </script>
 <style lang="less" scoped>
