@@ -165,9 +165,9 @@
         }
       },
       disableEditType(){
-        if(this.currentAddNodeParentType.type=='LVYE')return '旅业'
-        if(this.currentAddNodeParentType.type=='BUILDER')return '施工单位'
-        if(this.currentAddNodeParentType.type=='DEPT')return '部⻔'
+        if(this.currentAddNodeParentType=='LVYE')return '旅业'
+        if(this.currentAddNodeParentType=='BUILDER')return '施工单位'
+        if(this.currentAddNodeParentType=='DEPT')return '部⻔'
 
       },
 
@@ -185,8 +185,9 @@
         this.currentAddNodeParentId = data.orgId
         this.showAddNew = true
         this.currendNode = data
-
-
+//        数据初始化
+        this.addNodeName=''
+        this.addNodeType=''
       },
 //      获取组织树
       getotherOrgTree() {
@@ -222,6 +223,19 @@
 
 //      修改树节点
       submitModify() {
+        if(this.addNodeType==null||this.addNodeType==""){
+          this.$message({
+            message:"请选择组织类型",
+            type: 'error'
+          });
+          return false
+        }else if(this.addNodeName==""){
+          this.$message({
+            message:"组织名称不可为空",
+            type: 'error'
+          });
+          return false
+        }
         this.modifyother({
           id: this.currendNode.orgId,
           name: this.currendNode.name,
@@ -255,6 +269,7 @@
           this.showNodeDetailForEdit = true
           this.currentAddNodeParentId = item.orgId
           this.currendNode = item
+          this.currentAddNodeParentType = item.type
         }
       },
 

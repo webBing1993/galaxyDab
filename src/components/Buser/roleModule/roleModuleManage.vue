@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 1rem">
-    <h2 class="roleModuleTitle">角色模板列表</h2>
+    <h4 class="roleModuleTitle">角色模板列表</h4>
     <div style="text-align: left;margin-bottom: 2rem">
       <el-button type="primary" @click="HandelAdd">新增角色模板</el-button>
     </div>
@@ -325,6 +325,9 @@
   }
 
   .roleModuleTitle {
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
     text-align: left;
     border-bottom: 1px solid #eeeeee;
     margin-bottom: 2rem;

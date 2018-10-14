@@ -396,10 +396,11 @@
               area: "",
               address: this.groupInfo.shopDetailAdress,
               logoUrl: '',
-//
               contactName:this.groupInfo.linkmanName,
               contactPhone:this.groupInfo.linkmanTel,
               contactPosition:this.groupInfo.linkmanJob,
+              memo:this.groupInfo.enterpriseShorterName||"",
+              website:this.groupInfo.enterpriseNet||"",
             }
           }
         }

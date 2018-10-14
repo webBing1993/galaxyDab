@@ -17,7 +17,8 @@
         </el-row>
       </div>
 
-      <el-table :data="employeeTableList" border stripe @selection-change="handleSelectionChange" style="margin-top: 20px">
+      <el-table :data="employeeTableList" border stripe @selection-change="handleSelectionChange"
+                style="margin-top: 20px">
         <el-table-column
           type="selection"
           width="55">
@@ -33,7 +34,7 @@
           </template>
         </el-table-column>
         <el-table-column property="roleNames" label="角色"></el-table-column>
-        <el-table-column label="操作"width="180" >
+        <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <span @click="handleDel(scope.row)" type="text" class="handel">删除</span>
             <span @click="handleView(scope.row)" type="text" class="handel">查看</span>
@@ -57,13 +58,13 @@
           <el-input v-model="addEmployeeInfo.account" :disabled="viewStatus" placeholder="输入账号"></el-input>
         </el-form-item>
         <el-form-item label="姓名">
-          <el-input v-model="addEmployeeInfo.name" :disabled="viewStatus"placeholder="输入姓名"></el-input>
+          <el-input v-model="addEmployeeInfo.name" :disabled="viewStatus" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="英文名">
-          <el-input v-model="addEmployeeInfo.EnglishName" :disabled="viewStatus"placeholder="输入英文名"></el-input>
+          <el-input v-model="addEmployeeInfo.EnglishName" :disabled="viewStatus" placeholder="输入英文名"></el-input>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="addEmployeeInfo.tel":disabled="viewStatus" placeholder="输入手机号"></el-input>
+          <el-input v-model="addEmployeeInfo.tel" :disabled="viewStatus" placeholder="输入手机号"></el-input>
         </el-form-item>
         <!--<el-form-item label="头像">-->
         <!--<el-input v-model="addEmployeeInfo.tel" placeholder="输入头像"></el-input>-->
@@ -179,7 +180,7 @@
           repwd: '',
         },
         alternativeRoleList: [],
-        editStatus:false
+        editStatus: false
       }
     },
     computed: {
@@ -206,10 +207,10 @@
         'readyRoleList',
         'searchUser',
       ]),
-      searchUserList(){
+      searchUserList() {
         this.searchUser({
           orgid: this.orgId,
-          name:this.searchVal,
+          name: this.searchVal,
           onsuccess: body => {
             this.employeeTableList = body.data
           }
@@ -240,9 +241,30 @@
       },
 
       submitAdd() {
-        if(this.editStatus){
+        if (!(/[a-zA-Z0-9]/.test(this.addEmployeeInfo.account))) {
+          this.$message({
+            message: "账号不符合规则",
+            type: 'error'
+          });
+          return false
+        } else if (this.addEmployeeInfo.name == "") {
+          this.$message({
+            message: "请填写用户姓名",
+            type: 'error'
+          });
+          return false
+        }
+        else if (!(/^1[345789]\d{9}$/.test(this.addEmployeeInfo.tel))) {
+          this.$message({
+            message: "手机号不合法",
+            type: 'error'
+          });
+          return false
+        }
+
+        if (this.editStatus) {
           let fields = {
-            userId:  this.addEmployeeInfo.userId,
+            userId: this.addEmployeeInfo.userId,
             orgId: this.orgId,
             name: this.addEmployeeInfo.name,
             account: this.addEmployeeInfo.account,
@@ -268,7 +290,7 @@
               this.showAddNew = false
             }
           })
-        }else {
+        } else {
           let fields = {
             orgId: this.orgId,
             name: this.addEmployeeInfo.name,
@@ -404,8 +426,9 @@
         this.addEmployeeInfo.name = ''
         this.addEmployeeInfo.EnglishName = ''
         this.addEmployeeInfo.tel = ''
+        this.addEmployeeInfo.picUrl = ''
 
-        this.editStatus=false
+        this.editStatus = false
 
       },
 
@@ -421,7 +444,7 @@
         this.addEmployeeInfo.tel = parm.mobile
         this.addEmployeeInfo.picUrl = parm.avatar
 
-        this.editStatus=false
+        this.editStatus = false
       },
 
       handleEdit(parm) {
@@ -437,7 +460,7 @@
         this.addEmployeeInfo.tel = parm.mobile
         this.addEmployeeInfo.picUrl = parm.avatar
 
-        this.editStatus=true
+        this.editStatus = true
 
       },
 
@@ -447,12 +470,12 @@
         this.resetPwdStatus = true
         this.resetInfo.id = parm.userId
         this.resetInfo.name = parm.name
-        this.editStatus=false
+        this.editStatus = false
 
       },
 
       handleDel(parm) {
-        this.editStatus=false
+        this.editStatus = false
 
         this.$confirm('是否确认删除', '提示', {
           confirmButtonText: '确定',
@@ -547,6 +570,7 @@
       margin-left: 30px;
     }
   }
+
   /deep/ .el-upload--picture-card {
     background-color: #ffffff;
     border: none;

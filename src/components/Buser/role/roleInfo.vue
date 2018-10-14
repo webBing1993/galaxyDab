@@ -317,6 +317,7 @@
             fields: fields,
             onsuccess: body => {
               this.showSetRole = false
+              this.getTableRoleList()
             },
             onfail: body => {
               this.showSetRole = false
@@ -327,6 +328,8 @@
             fields: fields,
             onsuccess: body => {
               this.showSetRole = false
+              this.getTableRoleList()
+
             },
             onfail: body => {
               this.showSetRole = false
