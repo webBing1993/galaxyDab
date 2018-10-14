@@ -35,7 +35,7 @@ import roleInfo from '@/components/Buser/role/roleInfo'
 import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
 
 //配置管理
-import Whome from '@/components/Whome'
+import Whome from '@/components/whome'
 import Classify from '@/components/collection/classify/Classify'
 import Content from '@/components/collection/content/Content'
 import Service from '@/components/collection/service/Service'
