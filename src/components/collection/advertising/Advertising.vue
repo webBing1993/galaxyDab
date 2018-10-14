@@ -106,7 +106,7 @@ export default {
     initlist () {
       this.loading = true
       var that = this
-      console.log(that.wrname)
+      // console.log(that.wrname)
       this.advertisinList({
         name: that.wrname,
         type: 1,
@@ -115,8 +115,9 @@ export default {
           'X-Page-Size': this.pagesize
         },
         onsuccess: body => {
-          if (body.data) {
-            console.log(body.data)
+          if (body) {
+            console.log(body)
+            this.AdvertisingTableData = body.data
             this.loading = false
           } else {
           }

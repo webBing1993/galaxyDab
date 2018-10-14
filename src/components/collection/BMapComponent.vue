@@ -10,9 +10,8 @@
 </template>
 <script>
   export default {
-    name: "",
     data() {
-      // return {};
+       return {}
     },
     mounted() {
       // 百度地图API功能
@@ -21,19 +20,19 @@
       map.centerAndZoom(point, 11);
       var that = this;
       that.sureLocation = function() {
-        var city = document.getElementById("cityName").value;
-        if (city != "") {
+        var city = document.getElementById('cityName').value;
+        if (city != '') {
           map.centerAndZoom(city, 11); // 用城市名设置地图中心点
         }
-      };
+      }
       map.enableScrollWheelZoom(true);
     },
     methods: {
       theLocation() {
-        this.sureLocation();
+        this.sureLocation()
       }
     }
-  };
+  }
 </script>
 <style scoped>
   body,
@@ -71,3 +70,5 @@
     line-height: 30px;
   }
 </style>
+
+

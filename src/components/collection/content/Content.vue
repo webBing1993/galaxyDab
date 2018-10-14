@@ -123,7 +123,7 @@ export default {
         )
         .then(res => {
           if (res.status == 200) {
-            console.log(res);
+            // console.log(res);
             this.loading = false;
             this.contentList = res.data.data.items;
             this.total = res.data.data.totalNum;
@@ -159,7 +159,7 @@ export default {
     },
     editContent(row) {
       this.$store.commit("getEditConData", row);
-      console.log(this.$store.state.editContentData);
+      // console.log(this.$store.state.editContentData);
       this.$router.push({
         name: "editContent"
       });

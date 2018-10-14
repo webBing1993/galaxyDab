@@ -60,6 +60,7 @@ const main = [
           {
             path: 'hotelOrg',
             component: hotelOrg,
+            name:'hotelOrg',
             children: [
               // treeInfo----4级路由
               {
@@ -143,7 +144,7 @@ const main = [
       },
       ///////--------------配置管理开始------------
       {
-        path: 'whome',
+        path: '/',
         name: 'Whome',
         component: Whome,
         redirect: {

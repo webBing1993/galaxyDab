@@ -114,45 +114,48 @@ export default {
   computed: {},
   mounted () {
     // 实例化editor编辑器
-    this.editor = UE.getEditor('editor') // console.log(this.editor.setContent("1223"))
+    this.editor = UE.getEditor('editor',{
+      BaseUrl: '',
+      UEDITOR_HOME_URL: 'static/Ueditor/',
+    }) // console.log(this.editor.setContent("1223"))
+    UE.getEditor('editor').render('editor')
   },
   methods: {
     ...mapActions([
-      'updateMsg'
+      'updateMsg',
+      'saveAdver'
     ]),
     // 图片内容显示到对应的框中
     update (e) {
-      // let file = e.target.files[0]
-      // let param = new FormData() // 创建form对象
-      // param.append('file', file, file.name) // 通过append向form对象添加数据
-      // param.append('chunk', '0') // 添加form表单中其他数据
+      let file = e.target.files[0]
+      let param = new FormData() // 创建form对象
+      param.append('file', file, file.name) // 通过append向form对象添加数据
+      param.append('chunk', '0') // 添加form表单中其他数据
       // console.log(e)
       // let config = {
-      //   headers: { 'Content-Type': 'multipart/form-data' }
+      //   headers: { 'Content-Type': 'multipart/form-data'}
       // } // 添加请求头
-      // // this.axios
-      // //   .post(
-      // //     'http://qa.fortrun.cn:9201/adv/picture/upload',
-      // //     param,
-      // //     config
-      // //   )
-      // //   .then(response => {
-      // //     console.log(response.data.data)
-      // //     this.imgurl = response.data.data
-      // //   })
-      // this.updateMsg(
-      //   {
+      // this.axios
+      //   .post(
+      //     'http://qa.fortrun.cn:9201/adv/picture/upload',
       //     param,
-      //     config,
-      //     onsuccess: body => {
-      //       console.log(body)
-      //       // if (body.data) {
-      //       //   console.log(body)
-      //       //  // this.imgurl = response.data
-      //       // } else {
-      //       // }
-      //     }
+      //     config
+      //   )
+      //   .then(response => {
+      //     console.log(response.data.data)
+      //     this.imgurl = response.data.data
       //   })
+      this.updateMsg({
+        file:param,
+        onsuccess: body => {
+          console.log(body)
+          // if (body.data) {
+          //   console.log(body)
+          //  // this.imgurl = response.data
+          // } else {
+          // }
+        }
+      })
     },
     lianjie (e, num) {
       this.introContent = false
@@ -177,27 +180,42 @@ export default {
       ) {
         this.$refs[formname].validate(valide => {
           if (valide) {
-            this.axios
-              .post('http://qa.fortrun.cn:9201/adv/add', {
+            this.saveAdver({
+              body:{
                 type: this.officialId,
-                name: this.esAdvertisingForm.advertisingName,
-                picture: this.imgurl,
-                location: this.addressId,
-                contentType: this.contentType,
-                url: this.esAdvertisingForm.superURL,
-                contents: this.editor.getContent(),
-                sort: this.esAdvertisingForm.sort
-              })
-              .then(res => {
-                // console.log(res);
-                if (res.status === 200) {
-                  this.$message({
-                    type: 'success',
-                    message: '创建广告成功!'
-                  })
-                  this.$router.push({ name: 'advertising' })
-                }
-              })
+                    name: this.esAdvertisingForm.advertisingName,
+                    picture: '1.jpg',
+                    location: this.addressId,
+                    contentType: this.contentType,
+                    url: this.esAdvertisingForm.superURL,
+                    contents: this.editor.getContent(),
+                    sort: this.esAdvertisingForm.sort
+              },
+              onsuccess: body => {
+              console.log(body)
+              }
+            })
+            // this.axios
+            //   .post('http://qa.fortrun.cn:9201/adv/add', {
+            //     type: this.officialId,
+            //     name: this.esAdvertisingForm.advertisingName,
+            //     picture: this.imgurl,
+            //     location: this.addressId,
+            //     contentType: this.contentType,
+            //     url: this.esAdvertisingForm.superURL,
+            //     contents: this.editor.getContent(),
+            //     sort: this.esAdvertisingForm.sort
+            //   })
+            //   .then(res => {
+            //     // console.log(res);
+            //     if (res.status === 200) {
+            //       this.$message({
+            //         type: 'success',
+            //         message: '创建广告成功!'
+            //       })
+            //       this.$router.push({ name: 'advertising' })
+            //     }
+            //   })
           }
         })
       } else {
@@ -214,7 +232,7 @@ export default {
   },
   destroyed () {
     // 将editor进行销毁
-    this.editor.destroy()
+    // this.editor.destroy()
   }
 }
 </script>
