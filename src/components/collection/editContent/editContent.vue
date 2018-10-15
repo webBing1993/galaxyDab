@@ -55,6 +55,7 @@
 import { regionDataPlus } from "element-china-area-data";
 import BMapComponent from "@/components/collection/BMapComponent";
 import qs from "qs";
+import {mapActions} from 'vuex'
 export default {
   components: {
     BMapComponent
@@ -127,6 +128,9 @@ export default {
     this.initlist();
   },
   methods: {
+    ...mapActions([
+      'editCon'
+    ]),
     initlist() {
       console.log(this.$store.state.editContentData);
       // this.contentForm = this.$store.state.editContentData;
@@ -159,41 +163,62 @@ export default {
           }
         });
     },
+
     SaveContentForm(formname) {
-      let pictures = this.imgarr;
-      let postData = qs.stringify(
-        {
-          id: this.$store.state.editContentData.id,
-          catalogId: this.selectClassify,
-          name: this.contentForm.contentName,
-          pictures: JSON.stringify(pictures),
-          phone: this.contentForm.phone,
-          address: this.contentForm.address,
-          description: this.editor.getContent(),
-          sort: this.contentForm.contentSort,
-          cityCode: this.cityCode,
-          longitude: this.longitude,
-          latitude: this.latitude
-        },
-        { indices: false }
-      );
-      this.axios({
-        url: "http://qa.fortrun.cn:8121/discoveryContent/update",
-        method: "post",
-        data: postData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      }).then(res => {
-        console.log(res);
-        if (res.status == 200) {
-          this.$message({
-            type: "success",
-            message: "修改成功!"
-          });
-          this.$router.push({ name: "content" });
-        }
-      });
+      let pictures = this.imgarr
+      this.editCon({
+            id: this.$store.state.editContentData.id,
+            catalogId: 1,
+            name: this.contentForm.contentName,
+            picture: JSON.stringify(pictures),
+            phone: this.contentForm.phone,
+            address: this.contentForm.address,
+            description: 'dfksjdfl',
+            sort: this.contentForm.contentSort,
+            cityCode: this.cityCode,
+            longitude: this.longitude,
+            latitude: this.latitude,
+         onsuccess: body => {
+            if (body) {
+            console.log(body)
+
+            }
+         }
+        })
+      // let pictures = this.imgarr;
+      // let postData = qs.stringify(
+      //   {
+      //     id: this.$store.state.editContentData.id,
+      //     catalogId: this.selectClassify,
+      //     name: this.contentForm.contentName,
+      //     pictures: JSON.stringify(pictures),
+      //     phone: this.contentForm.phone,
+      //     address: this.contentForm.address,
+      //     description: this.editor.getContent(),
+      //     sort: this.contentForm.contentSort,
+      //     cityCode: this.cityCode,
+      //     longitude: this.longitude,
+      //     latitude: this.latitude
+      //   },
+      //   { indices: false }
+      // );
+      // this.axios({
+      //   url: "http://qa.fortrun.cn:8121/discoveryContent/update",
+      //   method: "post",
+      //   data: postData,
+      //   headers: {
+      //     "Content-Type": "application/x-www-form-urlencoded"
+      //   }
+      // }).then(res => {
+      //   console.log(res);
+      //   if (res.status == 200) {
+      //     this.$message({
+      //       type: "success",
+      //       message: "修改成功!"
+      //     });
+      //     this.$router.push({ name: "content" });
+      //   }
+      // });
     },
     destroyed() {
       // 将editor进行销毁
