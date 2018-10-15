@@ -373,15 +373,10 @@
 
       openCertificate() {
         this.$confirm('是否生成企业微信凭证?', '提示', {
-          confirmButtonText: '取消',
-          cancelButtonText: '确定',
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });
-        }).catch(() => {
           this.qyWeath({
             userIds: this.selectitem_id_list,
             onsuccess: body => {
@@ -392,6 +387,11 @@
               this.getEmployeeList()
             },
           })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
         });
       },
 
