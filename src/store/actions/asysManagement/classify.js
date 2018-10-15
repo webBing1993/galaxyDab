@@ -1,18 +1,18 @@
-
-
 module.exports = {
   // 获取分类列表
-  claList (ctx, params) {
+  claList(ctx, params) {
     ctx.dispatch('request', {
       url: `/discoveryCatalog/page/${params.page}`,
-      body:{
-        pageSize:params.pageSize,
-        name:params.name
+      body: {
+        pageSize: params.pageSize,
+        name: params.name
       },
       method: 'post',
-      headers: { enctype: "multipart/form-data",},
-      onSuccess: (body,headers) => {
-        params.onsuccess ? params.onsuccess(body,headers):null
+      headers: {
+        'Content-Type':'multipart/form-data'
+      },
+      onSuccess: (body, headers) => {
+        params.onsuccess ? params.onsuccess(body, headers) : null
       },
       onFail: body => {
         params.onfail && params.onfail(body)
