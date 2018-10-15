@@ -33,7 +33,11 @@
             {{scope.row.hasWechatWorkCredential ? '有' : '无'}}
           </template>
         </el-table-column>
-        <el-table-column property="roleNames" label="角色"></el-table-column>
+        <el-table-column property="roleNames" label="角色">
+          <template slot-scope="scope">
+            {{scope.row.roleNames ? scope.row.roleNames.join(' , ') : ''}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <span @click="handleDel(scope.row)" type="text" class="handel">删除</span>
@@ -411,6 +415,7 @@
       },
 
       handelSetRole() {
+        this.checkedRoles=[]
         this.showSetRole = true;
         this.getRoleList();
       },
