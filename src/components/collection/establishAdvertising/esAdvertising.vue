@@ -11,11 +11,21 @@
       <el-form-item label="名称" prop="advertisingName">
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片" class="tpicture">
-        <div class="picture">
-        <img :src="imgurl">
-        </div>
-        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update($event)"/>
+      <el-form-item label="相册图片">
+        <img :src="addEmployeeInfo.picUrl" alt="" width="200px" height="100px">
+      </el-form-item>
+      <el-form-item label="">
+        <el-upload
+          class="upload-demo el-right"
+          :action="scriptUpload"
+          :show-file-list=false
+          :headers="setHeader"
+          name="file"
+          :on-success="filterScriptSuccess"
+          list-type="picture-card">
+          <el-button size="small" type="primary">
+            图片上传</el-button>
+        </el-upload>
       </el-form-item>
       <el-form-item label="位置">
         <el-select v-model="addressId" placeholder="首页">
@@ -65,6 +75,9 @@ export default {
       editor: null,
       editorContent: '',
       contentType: 1,
+      addEmployeeInfo: {
+        picUrl: ''
+      },
       roleList: [
         {
           id: 1,
@@ -111,7 +124,17 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    scriptUpload() {
+      return "/galaxy-front/adv/picture/upload";
+    },
+    setHeader() {
+      return {
+        Session: sessionStorage.getItem('session_id'),
+        enctype: "multipart/form-data"
+      }
+    }
+  },
   mounted () {
     // 实例化editor编辑器
     this.editor = UE.getEditor('editor',{
@@ -125,38 +148,12 @@ export default {
       'updateMsg',
       'saveAdver'
     ]),
-    // 图片内容显示到对应的框中
-    update (e) {
-      let file = e.target.files[0]
-      let param = new FormData() // 创建form对象
-      param.append('file', file, file.name) // 通过append向form对象添加数据
-      param.append('chunk', '0') // 添加form表单中其他数据
-      // console.log(e)
-      // let config = {
-      //   headers: { 'Content-Type': 'multipart/form-data'}
-      // } // 添加请求头
-      // this.axios
-      //   .post(
-      //     'http://qa.fortrun.cn:9201/adv/picture/upload',
-      //     param,
-      //     config
-      //   )
-      //   .then(response => {
-      //     console.log(response.data.data)
-      //     this.imgurl = response.data.data
-      //   })
-      this.updateMsg({
-        file:param,
-        onsuccess: body => {
-          console.log(body)
-          // if (body.data) {
-          //   console.log(body)
-          //  // this.imgurl = response.data
-          // } else {
-          // }
-        }
-      })
+    filterScriptSuccess(res, file, list) {
+      if (res.data) {
+        this.addEmployeeInfo.picUrl = res.data;
+      }
     },
+    // 图片内容显示到对应的框中
     lianjie (e, num) {
       this.introContent = false
       this.chaolian = true
@@ -171,30 +168,47 @@ export default {
       console.log(this.contentType)
     },
     // 保存
-    SaveContentForm (formname) {
-      if (
-        (this.editor.getContent().length === 0 &&
-          this.esAdvertisingForm.superURL.length !== 0) ||
-        (this.editor.getContent().length !== 0 &&
-          this.esAdvertisingForm.superURL.length === 0)
-      ) {
-        this.$refs[formname].validate(valide => {
-          if (valide) {
-            this.saveAdver({
-              body:{
-                type: this.officialId,
-                    name: this.esAdvertisingForm.advertisingName,
-                    picture: '1.jpg',
-                    location: this.addressId,
-                    contentType: this.contentType,
-                    url: this.esAdvertisingForm.superURL,
-                    contents: this.editor.getContent(),
-                    sort: this.esAdvertisingForm.sort
-              },
-              onsuccess: body => {
-              console.log(body)
-              }
-            })
+    SaveContentForm(){
+              var that = this;
+              this.saveAdver({
+                      type: this.officialId,
+                      name: this.esAdvertisingForm.advertisingName,
+                      picture: this.addEmployeeInfo.picUrl,
+                      location: this.addressId,
+                      contentType: this.contentType,
+                      url: this.esAdvertisingForm.superURL,
+                      contents: this.editor.getContent(),
+                      sort: this.esAdvertisingForm.sort,
+                onsuccess: body => {
+                console.log(body)
+                  if(body){
+                     that.$router.push({name:'advertising'})
+                  }
+                }
+              })
+    },
+    // SaveContentForm (formname) {
+    //   if (
+    //     (this.editor.getContent().length === 0 &&
+    //       this.esAdvertisingForm.superURL.length !== 0) ||
+    //     (this.editor.getContent().length !== 0 &&
+    //       this.esAdvertisingForm.superURL.length === 0)
+    //   ) {
+    //     this.$refs[formname].validate(valide => {
+    //       if (valide) {
+    //         this.saveAdver({
+    //                 type: this.officialId,
+    //                 name: this.esAdvertisingForm.advertisingName,
+    //                 picture: this.addEmployeeInfo.picUrl,
+    //                 location: this.addressId,
+    //                 contentType: this.contentType,
+    //                 url: this.esAdvertisingForm.superURL,
+    //                 contents: this.editor.getContent(),
+    //                 sort: this.esAdvertisingForm.sort,
+    //           onsuccess: body => {
+    //           console.log(body)
+    //           }
+    //         })
             // this.axios
             //   .post('http://qa.fortrun.cn:9201/adv/add', {
             //     type: this.officialId,
@@ -216,15 +230,15 @@ export default {
             //       this.$router.push({ name: 'advertising' })
             //     }
             //   })
-          }
-        })
-      } else {
-        this.$message({
-          type: 'error',
-          message: '内容类型必须填写只能选择一种'
-        })
-      }
-    },
+    //       }
+    //     })
+    //   } else {
+    //     this.$message({
+    //       type: 'error',
+    //       message: '内容类型必须填写只能选择一种'
+    //     })
+    //   }
+    // },
     // 取消
     CancelContentForm () {
       this.$router.push({ name: 'advertising' })

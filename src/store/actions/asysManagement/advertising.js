@@ -3,10 +3,14 @@ module.exports = {
   // 获取广告
   advertisinList (ctx, params) {
     ctx.dispatch('request', {
-      url: `adv/queryAll/?name=${params.name}&type=${params.type}`,
+      url: `adv/queryAll`,
       method: 'get',
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
+      headers:{
+        'X-Current-Page': params.pageNum,
+        'X-Page-Size':params.pageSize
+      },
+      onSuccess: (body,headers) => {
+        params.onsuccess ? params.onsuccess(body,headers):null
       },
       onFail: body => {
         params.onfail && params.onfail(body)
@@ -29,11 +33,33 @@ module.exports = {
   updateMsg (ctx, params) {
     ctx.dispatch('request', {
       url: '/adv/picture/upload',
-      body:{
-        file:params.file
-      },
+      file:params,
       method: 'post',
       headers: {'Content-Type': 'multipart/form-data'},
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+  //编辑广告
+  editAdver(ctx,params){
+    ctx.dispatch('request', {
+      url: '/adv/update',
+      method: 'post',
+      body:{
+        id:params.id,
+        type:params.type,
+        name:params.name,
+        picture:params.picture,
+        location:params.location,
+        contentType:params.contentType,
+        url:params.url,
+        contents:params.contents,
+        sort:params.sort
+      },
       onSuccess: (body) => {
         params.onsuccess && params.onsuccess(body)
       },
@@ -57,7 +83,6 @@ module.exports = {
         contents:params.contents,
         sort:params.sort
       },
-      headers: {'Content-Type': 'multipart/form-data'},
       onSuccess: (body) => {
       params.onsuccess && params.onsuccess(body)
   },
