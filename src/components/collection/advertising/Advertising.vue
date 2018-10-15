@@ -106,18 +106,14 @@ export default {
     initlist () {
       this.loading = true
       var that = this
-      // console.log(that.wrname)
       this.advertisinList({
-        name: that.wrname,
-        type: 1,
-        headers: {
-          'X-Current-Page': this.pagenum,
-          'X-Page-Size': this.pagesize
-        },
-        onsuccess: body => {
+        pageSize:this.pagesize,
+        pageNum:this.pagenum,
+        onsuccess: (body,headers) => {
           if (body) {
-            console.log(body)
+             // console.log(headers["x-total"])
             this.AdvertisingTableData = body.data
+            this.total = Number(headers['x-total'])
             this.loading = false
           } else {
           }
@@ -147,7 +143,9 @@ export default {
           this.deleteAdver({
             id: row.id,
             onsuccess: body => {
-              if (body.data) {
+              console.log(body)
+              if (body) {
+                this.initlist();
                 this.$message({
                   type: 'success',
                   message: '删除成功!'
