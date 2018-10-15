@@ -109,7 +109,7 @@
                   v-for="item in BrandList"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.code">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -144,9 +144,9 @@
             <el-form-item label="地址编码">
               <el-input v-model="hotelInfo.adressCode" placeholder="请输入内容"></el-input>
             </el-form-item>
-            <el-form-item label="前台电话">
-              <el-input v-model="hotelInfo.stageTel" placeholder="请输入内容"></el-input>
-            </el-form-item>
+            <!--<el-form-item label="前台电话">-->
+              <!--<el-input v-model="hotelInfo.stageTel" placeholder="请输入内容"></el-input>-->
+            <!--</el-form-item>-->
             <el-form-item label="联系人姓名">
               <el-input v-model="hotelInfo.linkmanName" placeholder="请输入内容"></el-input>
             </el-form-item>

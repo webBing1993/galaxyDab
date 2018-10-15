@@ -89,14 +89,15 @@
         <el-form-item label="地址编码：">
           <el-input v-model="currentNodeDetail.info.addressCode" placeholder="请输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="前台电话：">
-          <el-input v-model="currentNodeDetail.info.tel" placeholder="请输入内容"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="前台电话：">-->
+          <!--v-model="currentNodeDetail.info.tel"-->
+          <!--<el-input  placeholder="请输入内容"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="联系人姓名：">
           <el-input v-model="currentNodeDetail.info.contactName" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人职务：">
-          <el-input v-model="currentNodeDetail.info.type" placeholder="请输入内容"></el-input>
+          <el-input v-model="currentNodeDetail.info.contactPosition" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：">
           <el-input v-model="currentNodeDetail.info.contactPhone" placeholder="请输入内容"></el-input>

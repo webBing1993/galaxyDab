@@ -12,7 +12,7 @@
       </h4>
       <el-table :data="brandList" border stripe>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column property="pmsCode" label="品牌代码"></el-table-column>
+        <el-table-column property="code" label="品牌代码"></el-table-column>
         <el-table-column property="name" label="品牌名称"></el-table-column>
         <el-table-column property="logoUrl" label="品牌logo">
           <template slot-scope="scope">
