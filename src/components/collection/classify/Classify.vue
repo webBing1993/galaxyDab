@@ -64,6 +64,7 @@
   </div>
 </template>
 <script>
+  import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -124,6 +125,9 @@ export default {
     this.initlist()
   },
   methods: {
+    ...mapActions([
+     'claList'
+    ]),
     // 分页用到的方法
     handleSizeChange (val) {
       this.pagesize = val
@@ -138,22 +142,34 @@ export default {
     },
     // 列表渲染
     initlist () {
-      this.axios
-        .post(
-          `http://qa.fortrun.cn:8121/discoveryCatalog/page/${
-            this.pagenum
-          }?pageSize=${this.pagesize}&name=${this.searchName}`
-        )
-        .then(res => {
-          if (res.status === 200) {
-            // console.log(res)
-            // console.log(1)
-            this.classifyList = res.data.data.items
-            this.total = res.data.data.totalNum
-            this.$store.commit('getAddclassifyData', res.data.data.items)
-            // console.log(this.$store.state.addClaData)
+        this.claList({
+          page:this.pagenum,
+          pageSize:this.pagesize,
+          name:this.searchName,
+          onsuccess: body => {
+            console.log(body)
+            if (body) {
+
+            } else {
+            }
           }
         })
+      // this.axios
+      //   .post(
+      //     `http://qa.fortrun.cn:8121/discoveryCatalog/page/${
+      //       this.pagenum
+      //     }?pageSize=${this.pagesize}&name=${this.searchName}`
+      //   )
+      //   .then(res => {
+      //     if (res.status === 200) {
+      //       // console.log(res)
+      //       // console.log(1)
+      //       this.classifyList = res.data.data.items
+      //       this.total = res.data.data.totalNum
+      //       this.$store.commit('getAddclassifyData', res.data.data.items)
+      //       // console.log(this.$store.state.addClaData)
+      //     }
+      //   })
     },
     // 添加分类方法
     addClassify () {
