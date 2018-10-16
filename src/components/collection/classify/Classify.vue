@@ -126,7 +126,11 @@ export default {
   },
   methods: {
     ...mapActions([
-     'claList'
+      'claList',
+      'deleteCla',
+      'addCla',
+      'editCla'
+
     ]),
     // 分页用到的方法
     handleSizeChange (val) {
@@ -148,28 +152,13 @@ export default {
           name:this.searchName,
           onsuccess: body => {
             console.log(body)
-            if (body) {
-
+            if (body.errcode==='0') {
+              this.classifyList = body.data.items
+              this.total = body.data.totalNum
             } else {
             }
           }
         })
-      // this.axios
-      //   .post(
-      //     `http://qa.fortrun.cn:8121/discoveryCatalog/page/${
-      //       this.pagenum
-      //     }?pageSize=${this.pagesize}&name=${this.searchName}`
-      //   )
-      //   .then(res => {
-      //     if (res.status === 200) {
-      //       // console.log(res)
-      //       // console.log(1)
-      //       this.classifyList = res.data.data.items
-      //       this.total = res.data.data.totalNum
-      //       this.$store.commit('getAddclassifyData', res.data.data.items)
-      //       // console.log(this.$store.state.addClaData)
-      //     }
-      //   })
     },
     // 添加分类方法
     addClassify () {
@@ -185,21 +174,18 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // console.log(row.id);
-          this.axios
-            .post(
-              `http://qa.fortrun.cn:8121/discoveryCatalog/delete?id=${row.id}`
-            )
-            .then(res => {
-              // console.log(res)
-              if (res.status === 200) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
+          this.deleteCla({
+            id:row.id,
+            onsuccess: body => {
+              if (body.errcode==='0') {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  })
                 this.initlist()
               }
-            })
+            }
+          })
         })
         .catch(() => {
           this.$message({
@@ -214,27 +200,21 @@ export default {
     SureAddClassifyDialog (formname) {
       this.$refs[formname].validate(valide => {
         if (valide) {
-          this.axios
-            .post(
-              `http://qa.fortrun.cn:8121/discoveryCatalog/save?name=${
-                this.addClassifyForm.classifyName
-              }&sort=${this.addClassifyForm.classifySort}`
-            )
-            .then(res => {
-              if (res.status === 200) {
-                this.$message({
-                  message: '添加成功',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '添加失败',
-                  type: 'error'
-                })
+          this.addCla({
+            name:this.addClassifyForm.classifyName,
+            sort:this.addClassifyForm.classifySort,
+            onsuccess: body => {
+              console.log(body)
+              if (body.errcode==='0') {
+                    this.$message({
+                      message: '添加成功',
+                      type: 'success'
+                    })
               }
               this.addClassifyDialog = false
               this.initlist()
-            })
+            }
+          })
         }
       })
     },
@@ -252,29 +232,45 @@ export default {
     SureEditClassifyDialog (formname) {
       this.$refs[formname].validate(valide => {
         if (valide) {
-          this.axios
-            .post(
-              `http://qa.fortrun.cn:8121/discoveryCatalog/update?id=${
-                this.editId
-              }&name=${this.editClassifyForm.editclassifyName}&sort=${
-                this.editClassifyForm.editclassifySort
-              }`
-            )
-            .then(res => {
-              if (res.status === 200) {
-                this.$message({
-                  message: '修改成功',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '修改失败',
-                  type: 'error'
-                })
+          // this.axios
+            // .post(
+            //   `http://qa.fortrun.cn:8121/discoveryCatalog/update?id=${
+            //     this.editId
+            //   }&name=${this.editClassifyForm.editclassifyName}&sort=${
+            //     this.editClassifyForm.editclassifySort
+            //   }`
+            // )
+            // .then(res => {
+            //   if (res.status === 200) {
+            //     this.$message({
+            //       message: '修改成功',
+            //       type: 'success'
+            //     })
+            //   } else {
+            //     this.$message({
+            //       message: '修改失败',
+            //       type: 'error'
+            //     })
+            //   }
+            //   this.editClassifyDialog = false
+            //   this.initlist()
+            // })
+          this.editCla({
+            id: this.editId,
+            name:this.editClassifyForm.editclassifyName,
+            sort:this.editClassifyForm.editclassifySort,
+            onsuccess: body => {
+              console.log(body)
+              if (body.errcode==='0') {
+                    this.$message({
+                      message: '修改成功',
+                      type: 'success'
+                    })
+                  this.editClassifyDialog = false
+                  this.initlist()
               }
-              this.editClassifyDialog = false
-              this.initlist()
-            })
+            }
+          })
         }
       })
     },

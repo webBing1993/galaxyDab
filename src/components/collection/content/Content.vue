@@ -23,6 +23,7 @@
         <template slot-scope="scope">
           <img :src="scope.row.pictures[picIndex].url" alt="" class="imgsize">
         </template>
+
       </el-table-column>
       <el-table-column prop="phone" label="电话" width="120">
       </el-table-column>
@@ -53,10 +54,11 @@
   </div>
 </template>
 <script>
+  import {mapActions} from 'vuex'
 export default {
   data() {
     return {
-      selectClassify: "",
+      selectClassify: 1,
       total: 0,
       page: 1,
       picIndex: 0,
@@ -99,6 +101,10 @@ export default {
     this.getallclassify();
   },
   methods: {
+    ...mapActions([
+      'getContent'
+
+    ]),
     //总分类列表
     getallclassify() {
       this.axios
@@ -113,31 +119,57 @@ export default {
     // 内容列表
     initList() {
       this.loading = true;
-      this.axios
-        .post(
-          `http://qa.fortrun.cn:8121/discoveryContent/page/${
-            this.pagenum
-          }?pageSize=${this.pagesize}&catalogId=${this.selectClassify}&name=${
-            this.writeName
-          }`
-        )
-        .then(res => {
-          if (res.status == 200) {
-            // console.log(res);
+      this.getContent({
+        page: this.pagenum,
+        pageSize: this.pagesize,
+        name: this.writeName,
+        catalogId: this.selectClassify,
+        onsuccess: body => {
+          console.log(body)
+          if (body) {
             this.loading = false;
-            this.contentList = res.data.data.items;
-            this.total = res.data.data.totalNum;
-            this.showitems = res.data.data.items;
+            this.contentList = body.data.items;
+            this.total =  body.data.totalNum;
+            this.showitems = body.data.items;
+            console.log(this.showitems)
             this.showitems.forEach(items => {
               this.showpictures = items.pictures;
             });
             this.showpictures.forEach((res, index) => {
+              console.log(res)
               if (res.isCover === "y") {
                 this.picIndex = Number(index);
               }
             });
           }
-        });
+        }
+      })
+      // this.loading = true;
+      // this.axios
+      //   .post(
+      //     `http://qa.fortrun.cn:8121/discoveryContent/page/${
+      //       this.pagenum
+      //     }?pageSize=${this.pagesize}&catalogId=${this.selectClassify}&name=${
+      //       this.writeName
+      //     }`
+      //   )
+      //   .then(res => {
+      //     if (res.status == 200) {
+      //       // console.log(res);
+      //       this.loading = false;
+      //       this.contentList = res.data.data.items;
+      //       this.total = res.data.data.totalNum;
+      //       this.showitems = res.data.data.items;
+      //       this.showitems.forEach(items => {
+      //         this.showpictures = items.pictures;
+      //       });
+      //       this.showpictures.forEach((res, index) => {
+      //         if (res.isCover === "y") {
+      //           this.picIndex = Number(index);
+      //         }
+      //       });
+      //     }
+      //   });
     },
     //分页开始方法
     handleSizeChange(val) {
