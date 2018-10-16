@@ -11,12 +11,24 @@
       <el-form-item label="名称" prop="contentName">
         <el-input v-model="contentForm.contentName"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片" class="tpicture">
-        <div class="picture" v-for="(item,index) in imgarr" :key="index">
-        <img :src="item.url">
+      <el-form-item label="相册图片">
+        <div v-for="(item,index) in imgarr" :key="index" class="tupian">
+        <img :src="item.url" alt="" width="200px" height="100px">
         <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>
         </div>
-        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update($event)"/>
+      </el-form-item>
+      <el-form-item label="">
+        <el-upload
+          class="upload-demo el-right"
+          :action="scriptUpload"
+          :show-file-list=false
+          :headers="setHeader"
+          name="file"
+          :on-success="filterScriptSuccess"
+          list-type="picture-card">
+          <el-button size="small" type="primary">
+            图片上传</el-button>
+        </el-upload>
       </el-form-item>
       <el-form-item label="电话" prop="phone" style="margin-top:70px">
         <el-input v-model="contentForm.phone"></el-input>
@@ -68,7 +80,6 @@ export default {
       picturesort: 1,
       options: regionDataPlus,
       selectedOptions: [],
-      imgurl: "",
       imgarr: [],
       isCover: "n",
       cover: "y",
@@ -76,6 +87,9 @@ export default {
       cityCode: "",
       longitude: "31.2304324029",
       latitude: "121.4737919321",
+      addEmployeeInfo: {
+        picUrl: ''
+      },
       contentForm: {
         viewContent: "",
         contentName: "",
@@ -127,13 +141,32 @@ export default {
   created: function() {
     this.initlist();
   },
+  computed: {
+    scriptUpload() {
+      return "/galaxy-front/adv/picture/upload";
+    },
+    setHeader() {
+      return {
+        Session: sessionStorage.getItem('session_id'),
+        enctype: "multipart/form-data"
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'editCon'
     ]),
+    filterScriptSuccess(res, file, list) {
+      if (res.data) {
+        this.addEmployeeInfo.picUrl = res.data;
+        this.imgarr.push({
+          url: this.addEmployeeInfo.picUrl,
+          sort:String(Math.floor(Math.random() * 5 + 1)),
+          isCover: "n"
+        });
+      }
+    },
     initlist() {
-      console.log(this.$store.state.editContentData);
-      // this.contentForm = this.$store.state.editContentData;
       this.contentForm.contentName = this.$store.state.editContentData.name;
       this.contentForm.phone = this.$store.state.editContentData.phone;
       this.contentForm.address = this.$store.state.editContentData.address;
@@ -141,84 +174,26 @@ export default {
       this.selectClassify = this.$store.state.editContentData.categoryName;
       this.imgarr = this.$store.state.editContentData.pictures;
     },
-    update(e) {
-      let file = e.target.files[0];
-      let param = new FormData(); //创建form对象
-      param.append("file", file, file.name); //通过append向form对象添加数据
-      param.append("chunk", "0"); //添加form表单中其他数据
-
-      let config = {
-        headers: { "Content-Type": "multipart/form-data" }
-      }; //添加请求头
-      this.axios
-        .post("http://qa.fortrun.cn:8121/upload/image", param, config)
-        .then(res => {
-          if (res.status == 200) {
-            this.imgarr.push({
-              // imgAdress: res.data.data,
-              url: res.data.data,
-              sort: Math.floor(Math.random() * 5 + 1),
-              isCover: "n"
-            });
-          }
-        });
-    },
-
     SaveContentForm(formname) {
       let pictures = this.imgarr
       this.editCon({
             id: this.$store.state.editContentData.id,
-            catalogId: 1,
+            catalogId: this.selectClassify,
             name: this.contentForm.contentName,
             picture: JSON.stringify(pictures),
             phone: this.contentForm.phone,
             address: this.contentForm.address,
-            description: 'dfksjdfl',
+            description: this.editor.getContent(),
             sort: this.contentForm.contentSort,
             cityCode: this.cityCode,
             longitude: this.longitude,
             latitude: this.latitude,
          onsuccess: body => {
-            if (body) {
-            console.log(body)
-
+            if (body.errcode==='0') {
+              this.$router.push({ name: "content" });
             }
          }
         })
-      // let pictures = this.imgarr;
-      // let postData = qs.stringify(
-      //   {
-      //     id: this.$store.state.editContentData.id,
-      //     catalogId: this.selectClassify,
-      //     name: this.contentForm.contentName,
-      //     pictures: JSON.stringify(pictures),
-      //     phone: this.contentForm.phone,
-      //     address: this.contentForm.address,
-      //     description: this.editor.getContent(),
-      //     sort: this.contentForm.contentSort,
-      //     cityCode: this.cityCode,
-      //     longitude: this.longitude,
-      //     latitude: this.latitude
-      //   },
-      //   { indices: false }
-      // );
-      // this.axios({
-      //   url: "http://qa.fortrun.cn:8121/discoveryContent/update",
-      //   method: "post",
-      //   data: postData,
-      //   headers: {
-      //     "Content-Type": "application/x-www-form-urlencoded"
-      //   }
-      // }).then(res => {
-      //   console.log(res);
-      //   if (res.status == 200) {
-      //     this.$message({
-      //       type: "success",
-      //       message: "修改成功!"
-      //     });
-      //     this.$router.push({ name: "content" });
-      //   }
-      // });
     },
     destroyed() {
       // 将editor进行销毁
@@ -291,5 +266,8 @@ export default {
   width: 150px;
   text-align: center;
   cursor: pointer;
+}
+.tupian{
+  float:left
 }
 </style>
