@@ -123,9 +123,9 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="门店名称">
-              <el-input v-model="hotelInfo.shopName" placeholder="请输入内容"></el-input>
-            </el-form-item>
+            <!--<el-form-item label="门店名称">-->
+              <!--<el-input v-model="hotelInfo.shopName" placeholder="请输入内容"></el-input>-->
+            <!--</el-form-item>-->
             <el-form-item label="门店编码">
               <el-input v-model="hotelInfo.shopCode" placeholder="请输入内容"></el-input>
             </el-form-item>

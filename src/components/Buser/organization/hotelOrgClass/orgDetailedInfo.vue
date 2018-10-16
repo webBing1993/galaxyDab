@@ -68,9 +68,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="门店名称：">
-          <el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="门店名称：">-->
+          <!--<el-input v-model="currentNodeDetail.name" placeholder="请输入内容"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="门店编码：">
           <el-input v-model="currentNodeDetail.info.code" placeholder="请输入内容"></el-input>
         </el-form-item>
