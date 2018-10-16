@@ -155,6 +155,8 @@ export default {
             if (body.errcode==='0') {
               this.classifyList = body.data.items
               this.total = body.data.totalNum
+              this.$store.commit("getAddclassifyData", body.data.items)
+              console.log(this.$store.state.addClaData)
             } else {
             }
           }

@@ -100,7 +100,7 @@ module.exports = {
         name:params.name,
         pictures:params.picture,
         phone:params.phone,
-        address:params.phone,
+        address:params.address,
         description:params.description,
         sort:params.sort,
         cityCode:params.cityCode,
@@ -115,6 +115,32 @@ module.exports = {
         params.onfail && params.onfail(body)
       }
     })
-  }
+  },
+  //创建内容列表
+  estabContent(ctx, params) {
+    ctx.dispatch('request', {
+      url: `/discoveryContent/save`,
+      body: {
+        categoryId:params.catalogId,
+        name:params.name,
+        pictures:params.pictures,
+        phone:params.phone,
+        address:params.address,
+        description:params.description,
+        sort:params.sort,
+        cityCode:params.cityCode,
+        longitude:params.longitude,
+        latitude:params.latitude
+      },
+      method: 'post',
+      onSuccess: (body, headers) => {
+        params.onsuccess ? params.onsuccess(body, headers) : null
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
 
 }

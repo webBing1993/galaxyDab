@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column prop="pictures" label="封面图片"  width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.pictures[picIndex].url" alt="" class="imgsize">
+          <img :src="scope.row.pictures[picIndex]['url']" alt="" class="imgsize">
         </template>
 
       </el-table-column>
@@ -131,45 +131,20 @@ export default {
             this.contentList = body.data.items;
             this.total =  body.data.totalNum;
             this.showitems = body.data.items;
-            console.log(this.showitems)
+            // console.log(this.showitems)
             this.showitems.forEach(items => {
               this.showpictures = items.pictures;
             });
             this.showpictures.forEach((res, index) => {
-              console.log(res)
               if (res.isCover === "y") {
                 this.picIndex = Number(index);
               }
             });
+            console.log(this.showpictures)
+
           }
         }
       })
-      // this.loading = true;
-      // this.axios
-      //   .post(
-      //     `http://qa.fortrun.cn:8121/discoveryContent/page/${
-      //       this.pagenum
-      //     }?pageSize=${this.pagesize}&catalogId=${this.selectClassify}&name=${
-      //       this.writeName
-      //     }`
-      //   )
-      //   .then(res => {
-      //     if (res.status == 200) {
-      //       // console.log(res);
-      //       this.loading = false;
-      //       this.contentList = res.data.data.items;
-      //       this.total = res.data.data.totalNum;
-      //       this.showitems = res.data.data.items;
-      //       this.showitems.forEach(items => {
-      //         this.showpictures = items.pictures;
-      //       });
-      //       this.showpictures.forEach((res, index) => {
-      //         if (res.isCover === "y") {
-      //           this.picIndex = Number(index);
-      //         }
-      //       });
-      //     }
-      //   });
     },
     //分页开始方法
     handleSizeChange(val) {
