@@ -157,7 +157,6 @@ export default {
     lianjie (e, num) {
       this.introContent = false
       this.chaolian = true
-
       this.contentType = num
       console.log(this.contentType)
     },

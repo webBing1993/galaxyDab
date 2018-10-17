@@ -3,7 +3,7 @@ module.exports = {
   // 获取广告
   advertisinList (ctx, params) {
     ctx.dispatch('request', {
-      url: `adv/queryAll`,
+      url: `adv/queryAll?name=${params.name}&type=1`,
       method: 'get',
       headers:{
         'X-Current-Page': params.pageNum,

@@ -69,8 +69,12 @@ export default {
       value: '',
       options: [
         {
+          value: '',
+          label: ''
+        },
+        {
           value: '1',
-          label: '1'
+          label: '官方广告'
         }
       ],
       AdvertisingTableData: []
@@ -107,6 +111,7 @@ export default {
       this.loading = true
       var that = this
       this.advertisinList({
+        name:this.wrname,
         pageSize:this.pagesize,
         pageNum:this.pagenum,
         onsuccess: (body,headers) => {
