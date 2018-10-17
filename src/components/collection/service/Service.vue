@@ -147,33 +147,23 @@ export default {
       })
     },
     changestatus: function($event, num, id, key) {
-      // console.log($event);
-      // console.log(num);
-      // console.log(id);
-      // console.log(key);
+      console.log($event)
       this.changeSta({
           id:id,
           key:key,
-          open:open,
+          open:$event,
         onsuccess: body => {
+            console.log(body)
         if (body) {
           this.$message({
             message: '修改状态成功',
             type: 'success'
           });
+          this.initlist()
          }
        }
 
       })
-      // this.axios
-      //   .post("http://qa.fortrun.cn:9201/galaxy-front/config/update", {
-      //     id: id,
-      //     key: key,
-      //     open: $event
-      //   })
-      //   .then(res => {
-      //     console.log(res)
-      //   })
     }
   }
 }
