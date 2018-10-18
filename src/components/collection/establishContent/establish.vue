@@ -217,6 +217,9 @@
           }
         });
         console.log(this.imgarr);
+      },
+      CancelContentForm(){
+        this.$router.push({name:'content'})
       }
     },
     mounted() {

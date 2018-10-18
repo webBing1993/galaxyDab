@@ -58,7 +58,7 @@
 export default {
   data() {
     return {
-      selectClassify: 1,
+      selectClassify: '',
       total: 0,
       page: 1,
       picIndex: 0,

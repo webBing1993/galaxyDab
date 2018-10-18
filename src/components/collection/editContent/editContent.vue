@@ -4,7 +4,7 @@
     <el-form :model="contentForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别" prop="viewContent">
       <el-select v-model="selectClassify" placeholder="请选择分类">
-          <el-option v-for="(item, index) in (this.$store.state.addClaData)" :key="index" :label="item.name" :value="item.id">
+          <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -48,8 +48,7 @@
       <el-form-item label="介绍" prop="introduce">
         <div>　
           <!--editor的div为富文本的承载容器-->
-          　　<div id="editor"></div>
-          <!-- 　　<button type="" @click="gettext">点击</button> -->
+          <div id="editor" style="width:700px;height:300px;"></div>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -77,9 +76,11 @@ export default {
       lianxi: "",
       selectClassify: "",
       editor: null,
+      editorContent: "",
       picturesort: 1,
       options: regionDataPlus,
       selectedOptions: [],
+      classifyList:[],
       imgarr: [],
       isCover: "n",
       cover: "y",
@@ -154,7 +155,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'editCon'
+      'editCon',
+      'findAllClassify'
     ]),
     filterScriptSuccess(res, file, list) {
       if (res.data) {
@@ -171,8 +173,32 @@ export default {
       this.contentForm.phone = this.$store.state.editContentData.phone;
       this.contentForm.address = this.$store.state.editContentData.address;
       this.contentForm.contentSort = this.$store.state.editContentData.sort;
-      this.selectClassify = this.$store.state.editContentData.categoryName;
+      // this.selectClassify = this.$store.state.editContentData.id;
       this.imgarr = this.$store.state.editContentData.pictures;
+      this.findAllClassify({
+        onsuccess:(body)=>{
+            console.log(body.data)
+          this.classifyList = body.data;
+        }
+      })
+    },
+    initUeditor(){
+      UE.delEditor('editor');
+      this.editor = UE.getEditor('editor', {
+        BaseUrl: '',
+        UEDITOR_HOME_URL: 'static/Ueditor/',
+        serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
+      }); // 初始化UE
+      this.editor.addListener("ready", () => {
+        this.editor.execCommand('insertHtml', this.editorContent);
+        this.editor.focus() // 确保UE加载完成后，放入内容。
+      })
+    },
+    getContent() { // 获取内容方法
+      return this.editor.getContent()
+    },
+    clearContent() { // 清空编辑器内容
+      return this.editor.execCommand('cleardoc');
     },
     CancelContentForm(){
        this.$router.push({name:'content'})
@@ -193,16 +219,22 @@ export default {
             longitude: this.longitude,
             latitude: this.latitude,
          onsuccess: body => {
+              console.log(body)
             if (body.errcode==='0') {
               this.$router.push({ name: "content" });
             }
          }
         })
     },
-    destroyed() {
+    destroyed () {
       // 将editor进行销毁
-
       this.editor.destroy();
+    },
+    beforeDestroy() {
+      // 组件销毁的时候，要销毁 UEditor 实例
+      if (this.editor !== null && this.editor.destroy) {
+        this.editor.destroy();
+      }
     },
     handleChange(value) {
       this.cityCode = value[2];
@@ -227,11 +259,7 @@ export default {
     }
   },
   mounted() {
-    this.editor = UE.getEditor('editor',{
-      BaseUrl: '',
-      UEDITOR_HOME_URL: 'static/Ueditor/',
-    }) // console.log(this.editor.setContent("1223"))
-    UE.getEditor('editor').render('editor')
+    this.initUeditor();
   }
 };
 </script>

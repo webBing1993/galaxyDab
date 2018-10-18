@@ -141,6 +141,20 @@ module.exports = {
       }
     })
   },
+  //查看所有分类
+  findAllClassify(ctx,params){
+    ctx.dispatch('request', {
+      url: `/discoveryCatalog/all`,
+      method: 'get',
+      onSuccess: (body, headers) => {
+        params.onsuccess ? params.onsuccess(body, headers) : null
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  }
+
 
 
 }
