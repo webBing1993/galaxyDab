@@ -48,7 +48,7 @@
       <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
         <div>　
           <!--editor的div为富文本的承载容器-->
-          <div id="editor" style="width:600px;height:500px;"></div>
+          <div id="editor" style="width:700px;height:300px;"></div>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">

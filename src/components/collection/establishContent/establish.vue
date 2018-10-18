@@ -48,7 +48,7 @@
       <el-form-item label="介绍" prop="introduce">
         <div>　
           <!--editor的div为富文本的承载容器-->
-          　　<div id="editor"></div>
+          　　 <div id="editor" style="width:700px;height:300px;"></div>
           <!-- 　　<button type="" @click="gettext">点击</button> -->
         </div>
       </el-form-item>
@@ -77,6 +77,7 @@
         lianxi: "",
         selectClassify: "",
         editor: null,
+        editorContent: "",
         picturesort: 1,
         options: regionDataPlus,
         selectedOptions: [],
@@ -192,11 +193,6 @@
           }
         })
       },
-      destroyed() {
-        // 将editor进行销毁
-
-        this.editor.destroy();
-      },
       handleChange(value) {
         this.cityCode = value[2];
         console.log(this.cityCode);
@@ -223,11 +219,6 @@
       }
     },
     mounted() {
-      this.editor = UE.getEditor('editor',{
-        BaseUrl: '',
-        UEDITOR_HOME_URL: 'static/Ueditor/',
-      }) // console.log(this.editor.setContent("1223"))
-      UE.getEditor('editor').render('editor')
     }
   };
 </script>

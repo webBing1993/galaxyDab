@@ -45,7 +45,7 @@
       <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
         <div>
           <!--editor的div为富文本的承载容器-->
-          <div id="editor"></div>
+          <div id="editor" style="width:700px;height:300px;"></div>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
@@ -59,225 +59,198 @@
   </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
-export default {
-  data () {
-    return {
-      isDisabled: false,
-      officialId: '',
-      isDis: true,
-      radio: '1',
-      chaolian: true,
-      addressId: '',
-      imgurl: '',
-      classifyId: '',
-      introContent: false,
-      editor: null,
-      editorContent: '',
-      contentType: 1,
-      addEmployeeInfo: {
-        picUrl: ''
-      },
-      roleList: [
-        {
-          id: 1,
-          roleName: '首页'
+  import {mapActions} from 'vuex'
+  export default {
+    data () {
+      var checksort = (rule, value, cllback) => {
+          if (!value) {
+            return cllback(new Error('排序不能为空'))
+          }
+          if (value > 5) {
+            return cllback(new Error('排序不能大于5'))
+          }
+        }
+      return {
+        isDisabled: false,
+        officialId: '',
+        isDis: true,
+        radio: '1',
+        chaolian: true,
+        addressId: '',
+        imgurl: '',
+        classifyId: '',
+        introContent: false,
+        editor: null,
+        editorContent: '',
+        contentType: 1,
+        addEmployeeInfo: {
+          picUrl: ''
         },
-        {
-          id: 2,
-          roleName: '正文'
-        }
-      ],
-      classifyList: [
-        {
-          id: 1,
-          classifyName: '官方广告'
-        }
-      ],
-      establist: [],
-      esAdvertisingForm: {
-        viewAdvertising: '',
-        advertisingName: '',
-        adverAdress: '',
-        superURL: '',
-        // 还没有获取里面的内容注意王文本框里面没写数值
-        sort: '',
-        introduce: ''
-      },
-      rules: {
-        // 现在只是简单的验证后面要改验证
-        advertisingName: [
+        roleList: [
           {
-            required: true,
-            message: '请输入名称',
-            trigger: 'blur'
+            id: 1,
+            roleName: '首页'
+          },
+          {
+            id: 2,
+            roleName: '正文'
           }
         ],
-        sort: [
+        classifyList: [
           {
-            required: true,
-            type: 'number',
-            message: '请输入排序并且为数值类型',
-            trigger: 'blur'
+            id: 1,
+            classifyName: '官方广告'
           }
-        ]
-      }
-    }
-  },
-  computed: {
-    scriptUpload() {
-      return "/galaxy-front/adv/picture/upload";
-    },
-    setHeader() {
-      return {
-        Session: sessionStorage.getItem('session_id'),
-        enctype: "multipart/form-data"
-      }
-    }
-  },
-  mounted () {
-    // 实例化editor编辑器
-    this.editor = UE.getEditor('editor',{
-      BaseUrl: '',
-      UEDITOR_HOME_URL: 'static/Ueditor/',
-    }) // console.log(this.editor.setContent("1223"))
-    UE.getEditor('editor').render('editor')
-  },
-  methods: {
-    ...mapActions([
-      'updateMsg',
-      'saveAdver'
-    ]),
-    filterScriptSuccess(res, file, list) {
-      if (res.data) {
-        this.addEmployeeInfo.picUrl = res.data;
+        ],
+        establist: [],
+        esAdvertisingForm: {
+          viewAdvertising: '',
+          advertisingName: '',
+          adverAdress: '',
+          superURL: '',
+          // 还没有获取里面的内容注意王文本框里面没写数值
+          sort: '',
+          introduce: ''
+        },
+        rules: {
+          // 现在只是简单的验证后面要改验证
+          advertisingName: [
+            {
+              required: true,
+              message: '请输入名称',
+              trigger: 'blur'
+            }
+          ],
+          sort: [
+            {
+              required: true,
+              validator: checksort,
+              trigger: 'blur'
+            }
+          ]
+        }
       }
     },
-    // 图片内容显示到对应的框中
-    lianjie (e, num) {
-      this.introContent = false
-      this.chaolian = true
-      this.contentType = num
-      console.log(this.contentType)
+    computed: {
+      scriptUpload() {
+        return "/galaxy-front/adv/picture/upload";
+      },
+      setHeader() {
+        return {
+          Session: sessionStorage.getItem('session_id'),
+          enctype: "multipart/form-data"
+        }
+      }
     },
-    tuIntroduce (e, num) {
-      this.introContent = true
-      this.chaolian = false
-      this.contentType = num
-      console.log(this.contentType)
+    mounted () {
     },
-    // 保存
-    SaveContentForm(){
-              var that = this;
-              this.saveAdver({
-                      type: this.officialId,
-                      name: this.esAdvertisingForm.advertisingName,
-                      picture: this.addEmployeeInfo.picUrl,
-                      location: this.addressId,
-                      contentType: this.contentType,
-                      url: this.esAdvertisingForm.superURL,
-                      contents: this.editor.getContent(),
-                      sort: this.esAdvertisingForm.sort,
-                onsuccess: body => {
-                console.log(body)
-                  if(body){
-                     that.$router.push({name:'advertising'})
-                  }
-                }
-              })
+    methods: {
+      ...mapActions([
+        'updateMsg',
+        'saveAdver'
+      ]),
+      filterScriptSuccess(res, file, list) {
+        if (res.data) {
+          this.addEmployeeInfo.picUrl = res.data;
+        }
+      },
+      // 取消
+      CancelContentForm () {
+        this.$router.push({ name: 'advertising' })
+      },
+      initUeditor(){
+        UE.delEditor('editor');
+        this.editor = UE.getEditor('editor', {
+          BaseUrl: '',
+          UEDITOR_HOME_URL: 'static/Ueditor/',
+          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
+        }); // 初始化UE
+        this.editor.addListener("ready", () => {
+          this.editor.execCommand('insertHtml', this.editorContent);
+          this.editor.focus() // 确保UE加载完成后，放入内容。
+        })
+      },
+      lianjie (e, num) {
+        this.introContent = false
+        this.chaolian = true
+        this.contentType = num
+      },
+      tuIntroduce (e, num) {
+        this.introContent = true
+        this.chaolian = false
+        this.contentType = num
+        this.initUeditor();
+      },
+      getContent() { // 获取内容方法
+        return this.editor.getContent()
+      },
+      clearContent() { // 清空编辑器内容
+        return this.editor.execCommand('cleardoc');
+      },
+      // 保存
+      SaveContentForm(){
+        var that = this;
+        this.saveAdver({
+          type: this.officialId,
+          name: this.esAdvertisingForm.advertisingName,
+          picture: this.addEmployeeInfo.picUrl,
+          location: this.addressId,
+          contentType: this.contentType,
+          url: this.esAdvertisingForm.superURL,
+          contents: this.editor.getContent(),
+          sort: this.esAdvertisingForm.sort,
+          onsuccess: body => {
+            console.log(body)
+            if(body){
+              that.$router.push({name:'advertising'})
+            }
+          }
+        })
+      },
+
     },
-    // SaveContentForm (formname) {
-    //   if (
-    //     (this.editor.getContent().length === 0 &&
-    //       this.esAdvertisingForm.superURL.length !== 0) ||
-    //     (this.editor.getContent().length !== 0 &&
-    //       this.esAdvertisingForm.superURL.length === 0)
-    //   ) {
-    //     this.$refs[formname].validate(valide => {
-    //       if (valide) {
-    //         this.saveAdver({
-    //                 type: this.officialId,
-    //                 name: this.esAdvertisingForm.advertisingName,
-    //                 picture: this.addEmployeeInfo.picUrl,
-    //                 location: this.addressId,
-    //                 contentType: this.contentType,
-    //                 url: this.esAdvertisingForm.superURL,
-    //                 contents: this.editor.getContent(),
-    //                 sort: this.esAdvertisingForm.sort,
-    //           onsuccess: body => {
-    //           console.log(body)
-    //           }
-    //         })
-            // this.axios
-            //   .post('http://qa.fortrun.cn:9201/adv/add', {
-            //     type: this.officialId,
-            //     name: this.esAdvertisingForm.advertisingName,
-            //     picture: this.imgurl,
-            //     location: this.addressId,
-            //     contentType: this.contentType,
-            //     url: this.esAdvertisingForm.superURL,
-            //     contents: this.editor.getContent(),
-            //     sort: this.esAdvertisingForm.sort
-            //   })
-            //   .then(res => {
-            //     // console.log(res);
-            //     if (res.status === 200) {
-            //       this.$message({
-            //         type: 'success',
-            //         message: '创建广告成功!'
-            //       })
-            //       this.$router.push({ name: 'advertising' })
-            //     }
-            //   })
-    //       }
-    //     })
-    //   } else {
-    //     this.$message({
-    //       type: 'error',
-    //       message: '内容类型必须填写只能选择一种'
-    //     })
-    //   }
-    // },
-    // 取消
-    CancelContentForm () {
-      this.$router.push({ name: 'advertising' })
+    destroyed () {
+      // 将editor进行销毁
+      // this.editor.destroy();
+      UE.delEditor('editor')
+    },
+    beforeDestroy() {
+      // 组件销毁的时候，要销毁 UEditor 实例
+      if (this.editor !== null && this.editor.destroy) {
+        this.editor.destroy();
+      }
     }
-  },
-  destroyed () {
-    // 将editor进行销毁
-    this.editor.destroy()
   }
-}
 </script>
 <style lang="less" scoped>
-.el-upload-list--picture .el-upload-list__item {
-  width: 100px !important;
-}
-.el-input {
-  width: 400px;
-}
+  .el-upload-list--picture .el-upload-list__item {
+    width: 100px !important;
+  }
+  .el-input {
+    width: 400px;
+  }
 
-#editor {
-  width: 700px;
-}
-.file {
-  float: left;
-  line-height: 25px;
-  margin-top: 60.5px;
-  margin-left: 50px;
-}
-.tpicture {
-  line-height: 150px;
-  .picture {
-    width: 150px;
-    height: 150px;
+  #editor {
+    width: 700px;
+  }
+  .file {
     float: left;
+    line-height: 25px;
+    margin-top: 60.5px;
+    margin-left: 50px;
+  }
+  .tpicture {
+    line-height: 150px;
+    .picture {
+      width: 150px;
+      height: 150px;
+      float: left;
 
-    background: #f7f7f7;
-    img {
-      width: 100%;
-      height: 100%;
+      background: #f7f7f7;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
-}
 </style>
