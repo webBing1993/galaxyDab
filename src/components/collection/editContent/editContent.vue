@@ -174,6 +174,10 @@ export default {
       this.selectClassify = this.$store.state.editContentData.categoryName;
       this.imgarr = this.$store.state.editContentData.pictures;
     },
+    CancelContentForm(){
+       this.$router.push({name:'content'})
+
+    },
     SaveContentForm(formname) {
       let pictures = this.imgarr
       this.editCon({
