@@ -81,7 +81,7 @@
         classifyId: '',
         introContent: false,
         editor: null,
-        editorContent: '',
+        editorContent: '测试内容',
         contentType: 1,
         addEmployeeInfo: {
           picUrl: ''
@@ -181,9 +181,10 @@
         this.contentType = num
         this.initUeditor();
       },
-      getContent() { // 获取内容方法
-        return this.editor.getContent()
-      },
+      // getContent() { // 获取内容方法
+      //   // return this.editor.getContent() || '测试'
+      //   return this.editor.getContent()
+      // },
       clearContent() { // 清空编辑器内容
         return this.editor.execCommand('cleardoc');
       },
@@ -197,7 +198,7 @@
           location: this.addressId,
           contentType: this.contentType,
           url: this.esAdvertisingForm.superURL,
-          contents: this.editor.getContent(),
+          contents: '你好',
           sort: this.esAdvertisingForm.sort,
           onsuccess: body => {
             console.log(body)

@@ -152,6 +152,9 @@
         }
       }
     },
+    mounted() {
+      this.initUeditor();
+    },
     methods: {
       ...mapActions([
         'estabContent'
@@ -166,9 +169,26 @@
           });
         }
       },
+      initUeditor(){
+        UE.delEditor('editor');
+        this.editor = UE.getEditor('editor', {
+          BaseUrl: '',
+          UEDITOR_HOME_URL: 'static/Ueditor/',
+          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
+        }); // 初始化UE
+        this.editor.addListener("ready", () => {
+          this.editor.execCommand('insertHtml', this.editorContent);
+          this.editor.focus() // 确保UE加载完成后，放入内容。
+        })
+      },
+      getContent() { // 获取内容方法
+        return this.editor.getContent()
+      },
+      clearContent() { // 清空编辑器内容
+        return this.editor.execCommand('cleardoc');
+      },
       SaveContentForm(formname) {
         let pictures = this.imgarr
-
         console.log(JSON.stringify(pictures))
         this.estabContent({
           catalogId: this.selectClassify,
@@ -218,7 +238,15 @@
         this.$router.push({name:'content'})
       }
     },
-    mounted() {
+    destroyed () {
+      // 将editor进行销毁
+      // this.editor.destroy();
+    },
+    beforeDestroy() {
+      // 组件销毁的时候，要销毁 UEditor 实例
+      if (this.editor !== null && this.editor.destroy) {
+        this.editor.destroy();
+      }
     }
   };
 </script>

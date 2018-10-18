@@ -21,9 +21,8 @@
       </el-table-column>
       <el-table-column prop="pictures" label="封面图片"  width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.pictures[picIndex]['url']" alt="" class="imgsize">
+          <img :src="scope.row.pictures[0]['url']" alt="" class="imgsize">
         </template>
-
       </el-table-column>
       <el-table-column prop="phone" label="电话" width="120">
       </el-table-column>
@@ -61,7 +60,7 @@ export default {
       selectClassify: '',
       total: 0,
       page: 1,
-      picIndex: 0,
+      picIndex:'',
       pagesize: 5,
       showitems: [],
       loading: false,
@@ -99,6 +98,15 @@ export default {
   mounted() {
     this.initList();
     this.getallclassify();
+    this.showitems.forEach(items => {
+      this.showpictures = items.pictures;
+      console.log(this.showpictures)
+    });
+    this.showpictures.forEach((res, index) => {
+      if (res.isCover === "y") {
+        this.picIndex = Number(index);
+      }
+    });
   },
   methods: {
     ...mapActions([
@@ -132,14 +140,6 @@ export default {
             this.total =  body.data.totalNum;
             this.showitems = body.data.items;
             // console.log(this.showitems)
-            this.showitems.forEach(items => {
-              this.showpictures = items.pictures;
-            });
-            this.showpictures.forEach((res, index) => {
-              if (res.isCover === "y") {
-                this.picIndex = Number(index);
-              }
-            });
             console.log(this.showpictures)
 
           }

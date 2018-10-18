@@ -153,6 +153,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.initUeditor();
+  },
   methods: {
     ...mapActions([
       'editCon',
@@ -226,16 +229,6 @@ export default {
          }
         })
     },
-    destroyed () {
-      // 将editor进行销毁
-      this.editor.destroy();
-    },
-    beforeDestroy() {
-      // 组件销毁的时候，要销毁 UEditor 实例
-      if (this.editor !== null && this.editor.destroy) {
-        this.editor.destroy();
-      }
-    },
     handleChange(value) {
       this.cityCode = value[2];
       console.log(this.cityCode);
@@ -258,8 +251,15 @@ export default {
       console.log(this.imgarr);
     }
   },
-  mounted() {
-    this.initUeditor();
+  destroyed () {
+    // 将editor进行销毁
+    // this.editor.destroy();
+  },
+  beforeDestroy() {
+    // 组件销毁的时候，要销毁 UEditor 实例
+    if (this.editor !== null && this.editor.destroy) {
+      this.editor.destroy();
+    }
   }
 };
 </script>

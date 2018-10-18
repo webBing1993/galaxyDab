@@ -205,7 +205,7 @@
       },
       //保存
       editContentForm (formname) {
-        console.log(this.editor.getContent().length);
+        // console.log(this.editor.getContent().length);
         var that = this;
         this.editAdver({
           id: that.$store.state.editData.id,
@@ -215,7 +215,7 @@
           location: that.addressId,
           contentType: that.$store.state.editData.contentType,
           url: that.esAdvertisingForm.superUR,
-          contents: that.editor.getContent(),
+          contents: '你好',
           sort: that.esAdvertisingForm.sort,
           onsuccess: (body) => {
             console.log(body)
