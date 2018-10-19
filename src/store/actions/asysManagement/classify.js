@@ -74,7 +74,7 @@ module.exports = {
       url: `/discoveryContent/page`,
       body: {
         name: params.name,
-        catalogId:params.catalogId
+        categoryId:params.catalogId
       },
       method: 'post',
       headers: {
