@@ -165,6 +165,11 @@ export default {
     // 添加分类方法
     addClassify () {
       this.addClassifyDialog = true;
+      this.addClassifyForm.classifyName=''
+      this.addClassifyForm.classifySort=''
+
+
+
     },
     // 删除分类方法
     deleteClassify (row) {
