@@ -131,8 +131,7 @@ export default {
         editclassifySort: [
           {
             required: true,
-            type: 'number',
-            message: '请输入排序并且为数值类型',
+            validator: checksort,
             trigger: 'blur'
           }
         ]
