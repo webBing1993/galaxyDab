@@ -69,10 +69,6 @@ export default {
       value: '',
       options: [
         {
-          value: '',
-          label: ''
-        },
-        {
           value: '1',
           label: '官方广告'
         }
@@ -159,21 +155,6 @@ export default {
               }
             }
           })
-          // console.log(row.id);
-          // this.axios
-          //   .delete(
-          //     `http://qa.fortrun.cn:9201/adv/delete/${row.id}`
-          //   )
-          //   .then(res => {
-          //     // console.log(res);
-          //     if (res.status === 200) {
-          //       this.$message({
-          //         type: 'success',
-          //         message: '删除成功!'
-          //       })
-          //       this.initlist()
-          //     }
-          //   })
         })
         .catch(() => {
           this.$message({

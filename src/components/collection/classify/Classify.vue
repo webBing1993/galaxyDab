@@ -58,7 +58,7 @@
     </el-dialog>
     <div class="page">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
-        :page-sizes="[5, 10, 20, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -67,6 +67,23 @@
   import {mapActions} from 'vuex'
 export default {
   data() {
+    var checksort = (rule, value, callback) => {
+      // var reg =/\D/g/
+      var re = new RegExp(/^[0-9]+$/)
+      if(value===''){
+          callback(new Error('请输入排序'))
+      }
+      else if(value>=6){
+        callback(new Error('序号不能大于5'))
+      }
+      else if(!re.test(value)){
+        callback(new Error('输入的必须是数字'))
+      }
+      else{
+        callback();
+      }
+
+    }
     return {
       page: 1,
       total: 0,
@@ -78,6 +95,8 @@ export default {
       addClassifyDialog: false,
       editClassifyDialog: false,
       editId: '',
+      allList:[],
+      allListName:[],
       addClassifyForm: {
         classifyName: '',
         classifySort: ''
@@ -98,8 +117,7 @@ export default {
         classifySort: [
           {
             required: true,
-            type: 'number',
-            message: '请输入排序并且为数值类型',
+            validator: checksort,
             trigger: 'blur'
           }
         ],
@@ -124,13 +142,16 @@ export default {
   created () {
     this.initlist()
   },
+  mounted(){
+    this.allClassifylist()
+  },
   methods: {
     ...mapActions([
       'claList',
       'deleteCla',
       'addCla',
-      'editCla'
-
+      'editCla',
+      'findAllClassify',
     ]),
     // 分页用到的方法
     handleSizeChange (val) {
@@ -154,6 +175,7 @@ export default {
             console.log(body)
             if (body.errcode==='0') {
               this.classifyList = body.data.items
+              // console.log(this.classifyList[0].name)
               this.total = body.data.totalNum
               this.$store.commit("getAddclassifyData", body.data.items)
               console.log(this.$store.state.addClaData)
@@ -162,14 +184,24 @@ export default {
           }
         })
     },
+    //查看所有的列表
+    allClassifylist(){
+      this.findAllClassify({
+        onsuccess: body => {
+          console.log(body)
+          this.allList=body.data
+          this.allList.forEach(item=>{
+            this.allListName.push(item.name)
+          })
+        }
+      })
+    },
+
     // 添加分类方法
     addClassify () {
       this.addClassifyDialog = true;
       this.addClassifyForm.classifyName=''
       this.addClassifyForm.classifySort=''
-
-
-
     },
     // 删除分类方法
     deleteClassify (row) {
@@ -205,6 +237,7 @@ export default {
       this.addClassifyDialog = false
     },
     SureAddClassifyDialog (formname) {
+      console.log(this.allListName)
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.addCla({
@@ -213,10 +246,10 @@ export default {
             onsuccess: body => {
               console.log(body)
               if (body.errcode==='0') {
-                    this.$message({
-                      message: '添加成功',
-                      type: 'success'
-                    })
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
               }
               this.addClassifyDialog = false
               this.initlist()

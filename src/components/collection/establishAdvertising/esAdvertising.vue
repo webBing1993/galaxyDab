@@ -93,7 +93,7 @@
           },
           {
             id: 2,
-            roleName: '正文'
+            roleName: '全部'
           }
         ],
         classifyList: [
@@ -143,6 +143,7 @@
       }
     },
     mounted () {
+      this.officialId= this.classifyList[0].id
     },
     methods: {
       ...mapActions([

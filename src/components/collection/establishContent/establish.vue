@@ -4,7 +4,7 @@
     <el-form :model="contentForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别" prop="viewContent">
         <el-select v-model="selectClassify" placeholder="请选择分类">
-          <el-option v-for="(item, index) in (this.$store.state.addClaData)" :key="index" :label="item.name" :value="item.id">
+          <el-option v-for="(item, index) in esclassifyList" :key="index" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -76,6 +76,7 @@
       return {
         lianxi: "",
         selectClassify: "",
+        esclassifyList:[],
         editor: null,
         editorContent: "",
         picturesort: 1,
@@ -103,7 +104,6 @@
           //现在只是简单的验证后面要改验证
           contentName: [
             {
-              required: true,
               message: "请输入用户名称",
               trigger: "blur"
             }
@@ -154,11 +154,21 @@
     },
     mounted() {
       this.initUeditor();
+      this.initlist()
     },
     methods: {
       ...mapActions([
-        'estabContent'
+        'estabContent',
+        'findAllClassify'
       ]),
+      initlist(){
+        this.findAllClassify({
+          onsuccess:(body)=>{
+            console.log(body.data)
+            this.esclassifyList = body.data;
+          }
+        })
+      },
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
