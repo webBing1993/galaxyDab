@@ -224,8 +224,12 @@
         })
       },
       handleChange(value) {
-        this.cityCode = value[2];
-        console.log(this.cityCode);
+        this.cityCode = value[value.length-1]
+        value.forEach((item,index)=>{
+          if(value[index] == ''){
+            this.cityCode = value[index-1]
+          }
+        })
       },
       setCover(e, img, sort, cover) {
         console.log(img);

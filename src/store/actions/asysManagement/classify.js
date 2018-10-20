@@ -141,6 +141,19 @@ module.exports = {
       }
     })
   },
+  //删除内容列表
+    deleteClassify(ctx,params){
+      ctx.dispatch('request', {
+        url: `/discoveryContent/delete?id=${params.id}`,
+        method: 'post',
+        onSuccess: (body, headers) => {
+          params.onsuccess ? params.onsuccess(body, headers) : null
+        },
+        onFail: body => {
+          params.onfail && params.onfail(body)
+        }
+      })
+    },
   //查看所有分类
   findAllClassify(ctx,params){
     ctx.dispatch('request', {
@@ -154,7 +167,4 @@ module.exports = {
       }
     })
   }
-
-
-
 }

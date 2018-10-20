@@ -171,13 +171,13 @@ export default {
           pageSize:this.pagesize,
           name:this.searchName,
           onsuccess: body => {
-            console.log(body)
+            // console.log(body)
             if (body.errcode==='0') {
               this.classifyList = body.data.items
               // console.log(this.classifyList[0].name)
               this.total = body.data.totalNum
               this.$store.commit("getAddclassifyData", body.data.items)
-              console.log(this.$store.state.addClaData)
+              // console.log(this.$store.state.addClaData)
             } else {
             }
           }
@@ -187,7 +187,7 @@ export default {
     allClassifylist(){
       this.findAllClassify({
         onsuccess: body => {
-          console.log(body)
+          // console.log(body)
           this.allList=body.data
           this.allList.forEach(item=>{
             this.allListName.push(item.name)
@@ -236,14 +236,14 @@ export default {
       this.addClassifyDialog = false
     },
     SureAddClassifyDialog (formname) {
-      console.log(this.allListName)
+      // console.log(this.allListName)
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.addCla({
             name:this.addClassifyForm.classifyName,
             sort:this.addClassifyForm.classifySort,
             onsuccess: body => {
-              console.log(body)
+              // console.log(body)
               if (body.errcode==='0') {
                 this.$message({
                   message: '添加成功',
@@ -299,7 +299,7 @@ export default {
             name:this.editClassifyForm.editclassifyName,
             sort:this.editClassifyForm.editclassifySort,
             onsuccess: body => {
-              console.log(body)
+              // console.log(body)
               if (body.errcode==='0') {
                     this.$message({
                       message: '修改成功',

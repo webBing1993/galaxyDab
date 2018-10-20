@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column prop="pictures" label="封面图片"  width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.pictures[0]['url']" alt="" class="imgsize">
+          <img :src="getCoverImg(scope.row.pictures) || '' " alt="" class="imgsize">
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="电话" width="120">
@@ -53,6 +53,7 @@
   </div>
 </template>
 <script>
+  import { CodeToText } from "element-china-area-data";
   import {mapActions} from 'vuex'
 export default {
   data() {
@@ -98,19 +99,11 @@ export default {
   mounted() {
     this.initList();
     this.getallclassify();
-    this.showitems.forEach(items => {
-      this.showpictures = items.pictures;
-      console.log(this.showpictures)
-    });
-    this.showpictures.forEach((res, index) => {
-      if (res.isCover === "y") {
-        this.picIndex = Number(index);
-      }
-    });
   },
   methods: {
     ...mapActions([
-      'getContent'
+      'getContent',
+      'deleteClassify'
 
     ]),
     //总分类列表
@@ -126,6 +119,7 @@ export default {
     },
     // 内容列表
     initList() {
+      console.log(CodeToText['310101'])
       this.loading = true;
       this.getContent({
         page: this.pagenum,
@@ -133,18 +127,26 @@ export default {
         name: this.writeName,
         catalogId: this.selectClassify,
         onsuccess: body => {
-          console.log(body)
+          // console.log(body)
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
+            this.contentList.forEach(item=>{
+              item.address = CodeToText[item.cityCode]+item.address
+            })
             this.total =  body.data.totalNum;
-            this.showitems = body.data.items;
-            // console.log(this.showitems)
-            console.log(this.showpictures)
-
           }
         }
       })
+    },
+    getCoverImg(pictures) {
+      let coverImg = '';
+      pictures.forEach((picture) => {
+        if (picture.isCover === 'y') {
+          coverImg = picture.url;
+        }
+      });
+      return coverImg;
     },
     //分页开始方法
     handleSizeChange(val) {
@@ -166,34 +168,31 @@ export default {
     },
     editContent(row) {
       this.$store.commit("getEditConData", row);
-      // console.log(this.$store.state.editContentData);
       this.$router.push({
         name: "editContent"
       });
     },
     deleteContent(row) {
-      // console.log(row);
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          // console.log(row.id);
-          this.axios
-            .post(
-              `http://qa.fortrun.cn:8121/discoveryContent/delete?id=${row.id}`
-            )
-            .then(res => {
-              // console.log(res);
-              if (res.status === 200) {
+          this.deleteClassify({
+            id:row.id,
+            onsuccess: body => {
+              // console.log(body)
+              if (body) {
+
                 this.initList();
                 this.$message({
                   type: "success",
                   message: "删除成功!"
                 });
               }
-            });
+            }
+          })
         })
         .catch(() => {
           this.$message({

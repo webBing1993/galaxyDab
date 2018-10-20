@@ -38,8 +38,8 @@
       </el-form-item>
       <el-form-item label="内容类型" prop="introduce">
         <template>
-          <el-radio v-model="radio" label="1" @change="lianjie" id="supeurl">超链接</el-radio>
-          <el-radio v-model="radio" label="2" @change="tuIntroduce" id="introdu">图文介绍</el-radio>
+          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>
+          <el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>
         </template>
       </el-form-item>
       <el-form-item label="超链接URL" prop="superURL" v-show="chaolian">
@@ -149,7 +149,7 @@
       },
     },
     mounted () {
-
+      this.initUeditor();
     },
     methods: {
       ...mapActions([
@@ -186,16 +186,17 @@
           this.editor.focus() // 确保UE加载完成后，放入内容。
         })
       },
-      lianjie () {
-        this.introContent = false;
-        this.chaolian = true;
+      lianjie (e, num) {
+        this.introContent = false
+        this.chaolian = true
+        this.contentType = num
       },
-      tuIntroduce () {
-
-        this.introContent = true;
-        this.chaolian = false;
-
-        this.initUeditor();
+      tuIntroduce (e, num) {
+        this.introContent = true
+        this.chaolian = false
+        this.contentType = num
+        console.log(num)
+        this.editorContent = this.editor.getContent()
       },
       getContent() { // 获取内容方法
         return this.editor.getContent()
@@ -207,29 +208,41 @@
       editContentForm (formname) {
         // console.log(this.editor.getContent().length);
         var that = this;
-        this.editAdver({
-          id: that.$store.state.editData.id,
-          type: that.officialId,
-          name: that.esAdvertisingForm.advertisingName,
-          picture: that.addEmployeeInfo.picUrl,
-          location: that.addressId,
-          contentType: that.$store.state.editData.contentType,
-          url: that.esAdvertisingForm.superUR,
-          contents: '你好',
-          sort: that.esAdvertisingForm.sort,
-          onsuccess: (body) => {
-            console.log(body)
-              this.$message({
-                type: "success",
-                message: "添加成功!"
-              });
-              this.$router.push({ name: "advertising" });
-          }
-        })
+        // this.$refs[formname].validate(valide => {
+          // if (valide) {
+            if (this.contentType == 1) {
+              this.editorContent = ''
+            }
+            else {
+              this.esAdvertisingForm.superUR= ''
+              this.editorContent = this.editor.getContent()
+
+            }
+            this.editAdver({
+              id: that.$store.state.editData.id,
+              type: that.officialId,
+              name: that.esAdvertisingForm.advertisingName,
+              picture: that.addEmployeeInfo.picUrl,
+              location: that.addressId,
+              contentType: that.$store.state.editData.contentType,
+              url: that.esAdvertisingForm.superUR,
+              contents: this.editorContent,
+              sort: that.esAdvertisingForm.sort,
+              onsuccess: (body) => {
+                console.log(body)
+                this.$message({
+                  type: "success",
+                  message: "添加成功!"
+                });
+                this.$router.push({ name: "advertising" });
+              }
+            })
+          // }
+        // })
       },
       destroyed () {
         // 将editor进行销毁
-        this.editor.destroy();
+        UE.delEditor('editor')
       },
       beforeDestroy() {
         // 组件销毁的时候，要销毁 UEditor 实例

@@ -81,7 +81,7 @@
         classifyId: '',
         introContent: false,
         editor: null,
-        editorContent: '测试内容',
+        editorContent: '',
         contentType: 1,
         addEmployeeInfo: {
           picUrl: ''
@@ -124,7 +124,8 @@
           sort: [
             {
               required: true,
-              validator: checksort,
+              // validator: checksort,
+              message: '请输入排序',
               trigger: 'blur'
             }
           ]
@@ -144,6 +145,7 @@
     },
     mounted () {
       this.officialId= this.classifyList[0].id
+      this.initUeditor();
     },
     methods: {
       ...mapActions([
@@ -180,34 +182,48 @@
         this.introContent = true
         this.chaolian = false
         this.contentType = num
-        this.initUeditor();
+        console.log(num)
+        this.editorContent = this.editor.getContent()
+        // this.initUeditor();
       },
-      // getContent() { // 获取内容方法
-      //   // return this.editor.getContent() || '测试'
-      //   return this.editor.getContent()
-      // },
+      getContent() { // 获取内容方法
+        // return this.editor.getContent() || '测试'
+        return this.editor.getContent()
+      },
       clearContent() { // 清空编辑器内容
         return this.editor.execCommand('cleardoc');
       },
       // 保存
-      SaveContentForm(){
+      SaveContentForm(formname){
+        console.log(this.editor.getContent().length)
         var that = this;
-        this.saveAdver({
-          type: this.officialId,
-          name: this.esAdvertisingForm.advertisingName,
-          picture: this.addEmployeeInfo.picUrl,
-          location: this.addressId,
-          contentType: this.contentType,
-          url: this.esAdvertisingForm.superURL,
-          contents: '你好',
-          sort: this.esAdvertisingForm.sort,
-          onsuccess: body => {
-            console.log(body)
-            if(body){
-              that.$router.push({name:'advertising'})
-            }
-          }
-        })
+          this.$refs[formname].validate(valide => {
+            if (valide) {
+                if(this.contentType == 1) {
+                  this.editorContent = ''
+                }
+                else{
+                  this.esAdvertisingForm.superURL =''
+                  this.editorContent = this.editor.getContent()
+                }
+                  this.saveAdver({
+                    type: this.officialId,
+                    name: this.esAdvertisingForm.advertisingName,
+                    picture: this.addEmployeeInfo.picUrl,
+                    location: this.addressId,
+                    contentType: this.contentType,
+                    url: this.esAdvertisingForm.superURL,
+                    contents: this.editorContent,
+                    sort: this.esAdvertisingForm.sort,
+                    onsuccess: body => {
+                      console.log(body)
+                      if (body) {
+                        that.$router.push({name: 'advertising'})
+                      }
+                    }
+                  })
+                }
+          })
       },
 
     },
