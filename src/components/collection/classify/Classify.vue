@@ -33,7 +33,7 @@
           <el-input v-model="addClassifyForm.classifyName" placeholder="请输入分类名称" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" label-width="120px" prop="classifySort">
-          <el-input v-model.number="addClassifyForm.classifySort" placeholder="请输入排序，如1，2，3" autocomplete="off"></el-input>
+          <el-input type="number" v-model.number="addClassifyForm.classifySort" placeholder="请输入排序，如1，2，3" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -48,7 +48,7 @@
           <el-input v-model="editClassifyForm.editclassifyName" placeholder="请输入分类名称" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" label-width="120px" prop="editclassifySort">
-          <el-input v-model.number="editClassifyForm.editclassifySort" placeholder="请输入排序，如1，2，3" autocomplete="off"></el-input>
+          <el-input type="number" v-model.number="editClassifyForm.editclassifySort" placeholder="请输入排序，如1，2，3" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -187,11 +187,12 @@ export default {
     allClassifylist(){
       this.findAllClassify({
         onsuccess: body => {
-          // console.log(body)
+          console.log(body)
           this.allList=body.data
           this.allList.forEach(item=>{
             this.allListName.push(item.name)
           })
+          console.log(this.allListName)
         }
       })
     },
@@ -236,7 +237,17 @@ export default {
       this.addClassifyDialog = false
     },
     SureAddClassifyDialog (formname) {
-      // console.log(this.allListName)
+      this.allListName.forEach((item,index)=>{
+        // console.log(item)
+        if(item == this.addClassifyForm.classifyName){
+          // console.log(item)
+          this.addClassifyForm.classifyName =''
+          this.$message({
+            message: '此分类已经有请重新输入',
+            type: 'error'
+          })
+        }
+      })
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.addCla({
@@ -271,29 +282,6 @@ export default {
     SureEditClassifyDialog (formname) {
       this.$refs[formname].validate(valide => {
         if (valide) {
-          // this.axios
-            // .post(
-            //   `http://qa.fortrun.cn:8121/discoveryCatalog/update?id=${
-            //     this.editId
-            //   }&name=${this.editClassifyForm.editclassifyName}&sort=${
-            //     this.editClassifyForm.editclassifySort
-            //   }`
-            // )
-            // .then(res => {
-            //   if (res.status === 200) {
-            //     this.$message({
-            //       message: '修改成功',
-            //       type: 'success'
-            //     })
-            //   } else {
-            //     this.$message({
-            //       message: '修改失败',
-            //       type: 'error'
-            //     })
-            //   }
-            //   this.editClassifyDialog = false
-            //   this.initlist()
-            // })
           this.editCla({
             id: this.editId,
             name:this.editClassifyForm.editclassifyName,
