@@ -280,6 +280,14 @@ export default {
       this.editClassifyDialog = false
     },
     SureEditClassifyDialog (formname) {
+      if(this.allListName.indexOf(this.editClassifyForm.editclassifyName) == -1)
+      {
+        this.editClassifyForm.editclassifyName ='';
+        this.$message({
+          message: '此分类不存在',
+          type: 'success'
+        })
+      }
       this.$refs[formname].validate(valide => {
         if (valide) {
           this.editCla({

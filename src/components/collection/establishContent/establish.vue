@@ -3,7 +3,7 @@
     创建基本信息
     <el-form :model="contentForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别" prop="viewContent">
-        <el-select v-model="selectClassify" placeholder="请选择分类">
+        <el-select v-model="contentForm.viewContent" placeholder="请选择分类">
           <el-option v-for="(item, index) in esclassifyList" :key="index" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -33,8 +33,8 @@
       <el-form-item label="电话" prop="phone" style="margin-top:70px">
         <el-input v-model="contentForm.phone"></el-input>
       </el-form-item>
-      <el-form-item label="省/市/区">
-        <el-cascader size="large" :options="options" v-model="selectedOptions" @change="handleChange">
+      <el-form-item label="省/市/区" prop="selectedOptions">
+        <el-cascader size="large" :options="options" v-model="contentForm.selectedOptions" @change="handleChange">
         </el-cascader>
       </el-form-item>
       <el-form-item label="地址" prop="address">
@@ -45,7 +45,7 @@
           <b-map-component></b-map-component>
         </div>
       </el-form-item>
-      <el-form-item label="介绍" prop="introduce">
+      <el-form-item label="介绍">
         <div>　
           <!--editor的div为富文本的承载容器-->
           　　 <div id="editor" style="width:700px;height:300px;"></div>
@@ -53,7 +53,7 @@
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
-        <el-input v-model="contentForm.contentSort"></el-input>
+        <el-input type="number" v-model="contentForm.contentSort"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="CancelContentForm('contentForm')">取消</el-button>
@@ -61,7 +61,6 @@
       </el-form-item>
     </el-form>
   </div>
-
 </template>
 <script>
   import { regionDataPlus } from "element-china-area-data";
@@ -73,15 +72,42 @@
       BMapComponent
     },
     data() {
+      var checksort = (rule, value, callback) => {
+        // var reg =/\D/g/
+        var re = new RegExp(/^[0-9]+$/)
+        if(value===''){
+          callback(new Error('请输入排序'))
+        }
+        else if(value>=6){
+          callback(new Error('序号不能大于5'))
+        }
+        else if(!re.test(value)){
+          callback(new Error('输入的必须是数字'))
+        }
+        else{
+          callback();
+        }
+      }
+      var checkphone =(rule,value,callback)=>{
+        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if(value===''){
+          return true
+        }
+        else if(!myreg.test(value)){
+          callback(new Error('手机号输入不正确'))
+        }
+        else{
+          callback();
+        }
+
+      }
       return {
-        lianxi: "",
-        selectClassify: "",
         esclassifyList:[],
         editor: null,
         editorContent: "",
         picturesort: 1,
         options: regionDataPlus,
-        selectedOptions: [],
+        // selectedOptions: [],
         imgarr: [],
         isCover: "n",
         cover: "y",
@@ -98,23 +124,24 @@
           phone: "",
           address: "",
           //还没有获取里面的内容注意王文本框里面没写数值
-          contentSort: ""
+          contentSort: "",
+          selectedOptions:[]
         },
         rules: {
           //现在只是简单的验证后面要改验证
           contentName: [
             {
+              required: true,
               message: "请输入用户名称",
               trigger: "blur"
             }
           ],
-          phone: [
-            {
-              required: true,
-              message: "请输入电话号码",
-              trigger: "blur"
-            }
-          ],
+          // phone: [
+          //   {
+          //     validator: checkphone,
+          //     trigger: "blur"
+          //   }
+          // ],
           address: [
             {
               required: true,
@@ -122,17 +149,17 @@
               trigger: "blur"
             }
           ],
-          introduce: [
+          viewContent:[
             {
               required: true,
-              message: "介绍不为空",
+              message: "请选择分类",
               trigger: "blur"
             }
           ],
           contentSort: [
             {
               required: true,
-              message: "排序不能为空",
+              validator: checksort,
               trigger: "blur"
             }
           ]
@@ -200,26 +227,30 @@
       SaveContentForm(formname) {
         let pictures = this.imgarr
         console.log(JSON.stringify(pictures))
-        this.estabContent({
-          catalogId: this.selectClassify,
-          name: this.contentForm.contentName,
-          pictures: JSON.stringify(pictures),
-          phone: this.contentForm.phone,
-          address: this.contentForm.address,
-          description: this.editor.getContent(),
-          sort: this.contentForm.contentSort,
-          cityCode: this.cityCode,
-          longitude: this.longitude,
-          latitude: this.latitude,
-          onsuccess: body => {
-            console.log(body)
-            if (body.errcode==='0') {
-              this.$message({
-                type: 'success',
-                message: '创建成功!'
-              })
-              this.$router.push({ name: "content" });
-            }
+        this.$refs[formname].validate(valide => {
+            if (valide) {
+            this.estabContent({
+              catalogId: this.contentForm.viewContent,
+              name: this.contentForm.contentName,
+              pictures: JSON.stringify(pictures),
+              phone: this.contentForm.phone,
+              address: this.contentForm.address,
+              description: this.editor.getContent(),
+              sort: this.contentForm.contentSort,
+              cityCode: this.cityCode,
+              longitude: this.longitude,
+              latitude: this.latitude,
+              onsuccess: body => {
+                console.log(body)
+                if (body.errcode === '0') {
+                  this.$message({
+                    type: 'success',
+                    message: '创建成功!'
+                  })
+                  this.$router.push({name: "content"});
+                }
+              }
+            })
           }
         })
       },

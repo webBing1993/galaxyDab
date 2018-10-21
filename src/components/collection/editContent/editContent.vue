@@ -3,7 +3,7 @@
     编辑基本信息
     <el-form :model="contentForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别" prop="viewContent">
-      <el-select v-model="selectClassify" placeholder="请选择分类">
+      <el-select v-model="contentForm.viewContent" placeholder="请选择分类">
           <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -72,9 +72,36 @@ export default {
     BMapComponent
   },
   data() {
+    var checksort = (rule, value, callback) => {
+      // var reg =/\D/g/
+      var re = new RegExp(/^[0-9]+$/)
+      if(value===''){
+        callback(new Error('请输入排序'))
+      }
+      else if(value>=6){
+        callback(new Error('序号不能大于5'))
+      }
+      else if(!re.test(value)){
+        callback(new Error('输入的必须是数字'))
+      }
+      else{
+        callback();
+      }
+    }
+    var checkphone =(rule,value,callback)=>{
+      var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+      if(value===''){
+        return true
+      }
+      else if(!myreg.test(value)){
+        callback(new Error('手机号输入不正确'))
+      }
+      else{
+        callback();
+      }
+
+    }
     return {
-      lianxi: "",
-      selectClassify: "",
       editor: null,
       editorContent: "",
       picturesort: 1,
@@ -108,13 +135,12 @@ export default {
             trigger: "blur"
           }
         ],
-        phone: [
-          {
-            required: true,
-            message: "请输入电话号码",
-            trigger: "blur"
-          }
-        ],
+        // phone: [
+        //   {
+        //     validator: checkphone,
+        //     trigger: "blur"
+        //   }
+        // ],
         address: [
           {
             required: true,
@@ -122,20 +148,20 @@ export default {
             trigger: "blur"
           }
         ],
-        introduce: [
+        viewContent:[
           {
             required: true,
-            message: "介绍不为空",
+            message: "请选择分类",
             trigger: "blur"
           }
         ],
         contentSort: [
           {
             required: true,
-            message: "排序不能为空",
+            validator: checksort,
             trigger: "blur"
           }
-        ]
+        ],
       }
     };
   },
@@ -166,17 +192,18 @@ export default {
         this.addEmployeeInfo.picUrl = res.data;
         this.imgarr.push({
           url: this.addEmployeeInfo.picUrl,
-          sort:String(Math.floor(Math.random() * 5 + 1)),
+          sort: this.contentForm.contentSort,
           isCover: "n"
         });
       }
     },
     initlist() {
+      console.log(this.$store.state.editContentData)
       this.contentForm.contentName = this.$store.state.editContentData.name;
       this.contentForm.phone = this.$store.state.editContentData.phone;
       this.contentForm.address = this.$store.state.editContentData.address;
       this.contentForm.contentSort = this.$store.state.editContentData.sort;
-      // this.selectClassify = this.$store.state.editContentData.id;
+      this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
       this.imgarr = this.$store.state.editContentData.pictures;
       this.findAllClassify({
         onsuccess:(body)=>{
@@ -195,6 +222,7 @@ export default {
       this.editor.addListener("ready", () => {
         this.editor.execCommand('insertHtml', this.editorContent);
         this.editor.focus() // 确保UE加载完成后，放入内容。
+        this.editor.setContent(this.$store.state.editContentData.description);
       })
     },
     getContent() { // 获取内容方法
@@ -209,9 +237,11 @@ export default {
     },
     SaveContentForm(formname) {
       let pictures = this.imgarr
-      this.editCon({
+      // this.$refs[formname].validate(valide => {
+      //   if (valide) {
+          this.editCon({
             id: this.$store.state.editContentData.id,
-            catalogId: this.selectClassify,
+            catalogId: this.contentForm.viewContent,
             name: this.contentForm.contentName,
             picture: JSON.stringify(pictures),
             phone: this.contentForm.phone,
@@ -221,13 +251,15 @@ export default {
             cityCode: this.cityCode,
             longitude: this.longitude,
             latitude: this.latitude,
-         onsuccess: body => {
+            onsuccess: body => {
               console.log(body)
-            if (body.errcode==='0') {
-              this.$router.push({ name: "content" });
+              if (body.errcode === '0') {
+                this.$router.push({name: "content"});
+              }
             }
-         }
-        })
+          })
+      //   }
+      // })
     },
     handleChange(value) {
       this.cityCode = value[2];

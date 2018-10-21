@@ -1,7 +1,7 @@
 <template>
   <div>
     创建广告
-    <el-form :model="esAdvertisingForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="esAdvertisingForm" :rules="rules" ref="esAdvertisingForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别">
         <el-select v-model="officialId" placeholder="官方广告">
           <el-option v-for="(classify, index) in classifyList" :key="index" :label="classify.classifyName" :value="classify.id">
@@ -11,8 +11,8 @@
       <el-form-item label="名称" prop="advertisingName">
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片">
-        <img :src="addEmployeeInfo.picUrl" alt="" width="200px" height="100px">
+      <el-form-item label="相册图片" prop="picUrl">
+        <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
       </el-form-item>
       <el-form-item label="">
         <el-upload
@@ -27,8 +27,8 @@
             图片上传</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="位置">
-        <el-select v-model="addressId" placeholder="首页">
+      <el-form-item label="位置" prop="addressId">
+        <el-select v-model="esAdvertisingForm.addressId" placeholder="首页">
           <el-option v-for="(address, index) in roleList" :key="index" :label="address.roleName" :value="address.id">
           </el-option>
         </el-select>
@@ -49,11 +49,11 @@
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
-        <el-input v-model.number="esAdvertisingForm.sort"></el-input>
+        <el-input type="number" v-model.number="esAdvertisingForm.sort"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="CancelContentForm('contentForm')">取消</el-button>
-        <el-button type="primary" @click="SaveContentForm('contentForm')">保存</el-button>
+        <el-button type="primary" @click="CancelContentForm('esAdvertisingForm')">取消</el-button>
+        <el-button type="primary" @click="SaveContentForm('esAdvertisingForm')">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -62,30 +62,36 @@
   import {mapActions} from 'vuex'
   export default {
     data () {
-      var checksort = (rule, value, cllback) => {
-          if (!value) {
-            return cllback(new Error('排序不能为空'))
-          }
-          if (value > 5) {
-            return cllback(new Error('排序不能大于5'))
-          }
+      var checksort = (rule, value, callback) => {
+        // var reg =/\D/g/
+        var re = new RegExp(/^[0-9]+$/)
+        if(value===''){
+          callback(new Error('请输入排序'))
         }
+        else if(value>=6){
+          callback(new Error('序号不能大于5'))
+        }
+        else if(!re.test(value)){
+          callback(new Error('输入的必须是数字'))
+        }
+        else{
+          callback();
+        }
+
+      }
       return {
         isDisabled: false,
         officialId: '',
         isDis: true,
         radio: '1',
         chaolian: true,
-        addressId: '',
+        // addressId: '',
         imgurl: '',
         classifyId: '',
         introContent: false,
         editor: null,
         editorContent: '',
         contentType: 1,
-        addEmployeeInfo: {
-          picUrl: ''
-        },
         roleList: [
           {
             id: 1,
@@ -107,6 +113,8 @@
           viewAdvertising: '',
           advertisingName: '',
           adverAdress: '',
+          addressId:'',
+          picUrl: '',
           superURL: '',
           // 还没有获取里面的内容注意王文本框里面没写数值
           sort: '',
@@ -124,10 +132,23 @@
           sort: [
             {
               required: true,
-              // validator: checksort,
-              message: '请输入排序',
+              validator: checksort,
+              // message: '请输入排序',
               trigger: 'blur'
             }
+          ],
+          picUrl:[
+            {
+              required: true,
+              message: '图片不能为空',
+              trigger: 'blur'
+            }
+          ],
+          addressId:[{
+            required: true,
+            message: '位置必选不能为空',
+            trigger: 'blur'
+          }
           ]
         }
       }
@@ -154,7 +175,7 @@
       ]),
       filterScriptSuccess(res, file, list) {
         if (res.data) {
-          this.addEmployeeInfo.picUrl = res.data;
+          this.esAdvertisingForm.picUrl = res.data;
         }
       },
       // 取消
@@ -195,35 +216,34 @@
       },
       // 保存
       SaveContentForm(formname){
-        console.log(this.editor.getContent().length)
         var that = this;
-          this.$refs[formname].validate(valide => {
-            if (valide) {
-                if(this.contentType == 1) {
-                  this.editorContent = ''
+        that.$refs[formname].validate(valide => {
+          if (valide) {
+            if(that.contentType == 1) {
+              that.editorContent = ''
+            }
+            else{
+              that.esAdvertisingForm.superURL =''
+              that.editorContent = that.editor.getContent()
+            }
+            that.saveAdver({
+              type: that.officialId,
+              name: that.esAdvertisingForm.advertisingName,
+              picture: that.esAdvertisingForm.picUrl,
+              location: that.esAdvertisingForm.addressId,
+              contentType: that.contentType,
+              url: that.esAdvertisingForm.superURL,
+              contents: that.editorContent,
+              sort: that.esAdvertisingForm.sort,
+              onsuccess: body => {
+                console.log(body)
+                if (body) {
+                  that.$router.push({name: 'advertising'})
                 }
-                else{
-                  this.esAdvertisingForm.superURL =''
-                  this.editorContent = this.editor.getContent()
-                }
-                  this.saveAdver({
-                    type: this.officialId,
-                    name: this.esAdvertisingForm.advertisingName,
-                    picture: this.addEmployeeInfo.picUrl,
-                    location: this.addressId,
-                    contentType: this.contentType,
-                    url: this.esAdvertisingForm.superURL,
-                    contents: this.editorContent,
-                    sort: this.esAdvertisingForm.sort,
-                    onsuccess: body => {
-                      console.log(body)
-                      if (body) {
-                        that.$router.push({name: 'advertising'})
-                      }
-                    }
-                  })
-                }
-          })
+              }
+            })
+          }
+        })
       },
 
     },

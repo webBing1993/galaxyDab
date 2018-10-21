@@ -52,7 +52,7 @@
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
-        <el-input v-model="esAdvertisingForm.sort"></el-input>
+        <el-input type="number" v-model="esAdvertisingForm.sort"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="CancelContentForm('contentForm')">取消</el-button>
@@ -65,12 +65,20 @@
   import {mapActions} from 'vuex'
   export default {
     data () {
-      var checksort = (rule, value, cllback) => {
-        if (!value) {
-          return cllback(new Error('排序不能为空'))
+      var checksort = (rule, value, callback) => {
+        // var reg =/\D/g/
+        var re = new RegExp(/^[0-9]+$/)
+        if(value===''){
+          callback(new Error('请输入排序'))
         }
-        if (value > 5) {
-          return cllback(new Error('排序不能大于5'))
+        else if(value>=6){
+          callback(new Error('序号不能大于5'))
+        }
+        else if(!re.test(value)){
+          callback(new Error('输入的必须是数字'))
+        }
+        else{
+          callback();
         }
       }
       //url验证
@@ -89,6 +97,7 @@
         addEmployeeInfo: {
           picUrl: ''
         },
+        contentType: 1,
         roleList: [
           {
             id: 1,
@@ -150,6 +159,7 @@
     },
     mounted () {
       this.initUeditor();
+
     },
     methods: {
       ...mapActions([
@@ -165,7 +175,7 @@
            this.$router.push({name:'advertising'})
       },
       initlist () {
-        //console.log(this.$store.state.editData);
+        console.log(this.$store.state.editData);
         this.esAdvertisingForm.advertisingName = this.$store.state.editData.name;
         this.esAdvertisingForm.superURL = this.$store.state.editData.url;
         this.esAdvertisingForm.sort = this.$store.state.editData.sort;
@@ -190,13 +200,14 @@
         this.introContent = false
         this.chaolian = true
         this.contentType = num
+        console.log(this.contentType)
       },
       tuIntroduce (e, num) {
         this.introContent = true
         this.chaolian = false
         this.contentType = num
-        console.log(num)
         this.editorContent = this.editor.getContent()
+        console.log(this.contentType)
       },
       getContent() { // 获取内容方法
         return this.editor.getContent()
@@ -208,27 +219,32 @@
       editContentForm (formname) {
         // console.log(this.editor.getContent().length);
         var that = this;
-        // this.$refs[formname].validate(valide => {
-          // if (valide) {
+        console.log(that.esAdvertisingForm.superUR)
+        this.$refs[formname].validate(valide => {
+          if (valide) {
+            console.log(this.contentType)
             if (this.contentType == 1) {
               this.editorContent = ''
             }
             else {
-              this.esAdvertisingForm.superUR= ''
+              this.esAdvertisingForm.superURL= ''
               this.editorContent = this.editor.getContent()
 
             }
+            console.log( this.esAdvertisingForm.superUR)
             this.editAdver({
               id: that.$store.state.editData.id,
               type: that.officialId,
               name: that.esAdvertisingForm.advertisingName,
               picture: that.addEmployeeInfo.picUrl,
               location: that.addressId,
-              contentType: that.$store.state.editData.contentType,
-              url: that.esAdvertisingForm.superUR,
+              contentType: that.contentType,
+              url: that.esAdvertisingForm.superURL,
               contents: this.editorContent,
               sort: that.esAdvertisingForm.sort,
               onsuccess: (body) => {
+                console.log(that.contentType)
+                console.log(that.editorContent)
                 console.log(body)
                 this.$message({
                   type: "success",
@@ -237,8 +253,8 @@
                 this.$router.push({ name: "advertising" });
               }
             })
-          // }
-        // })
+          }
+        })
       },
       destroyed () {
         // 将editor进行销毁
