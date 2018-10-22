@@ -11,9 +11,10 @@
       <el-form-item label="名称" prop="contentName">
         <el-input v-model="contentForm.contentName"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片">
-        <div v-for="(item,index) in imgarr" :key="index" class="tupian">
+      <el-form-item label="相册图片" prop ="imgarr">
+        <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
           <img :src="item.url" alt="" width="200px" height="100px">
+          <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
           <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>
         </div>
       </el-form-item>
@@ -45,7 +46,7 @@
           <b-map-component></b-map-component>
         </div>
       </el-form-item>
-      <el-form-item label="介绍">
+      <el-form-item label="介绍" prop="introduce">
         <div>　
           <!--editor的div为富文本的承载容器-->
           　　 <div id="editor" style="width:700px;height:300px;"></div>
@@ -78,8 +79,8 @@
         if(value===''){
           callback(new Error('请输入排序'))
         }
-        else if(value>=6){
-          callback(new Error('序号不能大于5'))
+        else if(value>=6||value<1){
+          callback(new Error('序号在0-5之间'))
         }
         else if(!re.test(value)){
           callback(new Error('输入的必须是数字'))
@@ -108,7 +109,7 @@
         picturesort: 1,
         options: regionDataPlus,
         // selectedOptions: [],
-        imgarr: [],
+        // imgarr: [],
         isCover: "n",
         cover: "y",
         showClassify: [],
@@ -125,7 +126,8 @@
           address: "",
           //还没有获取里面的内容注意王文本框里面没写数值
           contentSort: "",
-          selectedOptions:[]
+          selectedOptions:[],
+          imgarr:[]
         },
         rules: {
           //现在只是简单的验证后面要改验证
@@ -142,6 +144,24 @@
           //     trigger: "blur"
           //   }
           // ],
+          introduce:[{
+            // required:true,
+            // message:'内容不能为空',
+            // trigger:'blur'
+          }],
+          selectedOptions:[{
+            required:true,
+            message:'请选择省市区',
+            trigger:'blur'
+          }
+          ],
+          imgarr:[{
+            required:true,
+            message:'图片不能为空',
+            trigger:'blur'
+
+          }
+          ],
           address: [
             {
               required: true,
@@ -182,6 +202,15 @@
     mounted() {
       this.initUeditor();
       this.initlist()
+      Array.prototype.delete=function(delIndex){
+        var temArray=[];
+        for(var i=0;i<this.length;i++){
+          if(i!=delIndex){
+            temArray.push(this[i]);
+          }
+        }
+        return temArray;
+      }
     },
     methods: {
       ...mapActions([
@@ -199,11 +228,12 @@
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
-          this.imgarr.push({
+          this.contentForm.imgarr.push({
             url: this.addEmployeeInfo.picUrl,
             sort:String(Math.floor(Math.random() * 5 + 1)),
             isCover: "n"
           });
+          console.log(this.contentForm.imgarr)
         }
       },
       initUeditor(){
@@ -225,8 +255,7 @@
         return this.editor.execCommand('cleardoc');
       },
       SaveContentForm(formname) {
-        let pictures = this.imgarr
-        console.log(JSON.stringify(pictures))
+        let pictures = this.contentForm.imgarr
         this.$refs[formname].validate(valide => {
             if (valide) {
             this.estabContent({
@@ -255,6 +284,7 @@
         })
       },
       handleChange(value) {
+        console.log(value)
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){
@@ -268,7 +298,7 @@
           type: "success",
           message: "设置此张图片为背景图片!"
         });
-        this.imgarr.forEach(item => {
+        this.contentForm.imgarr.forEach(item => {
           if (item.url == img) {
             item.isCover = "y";
             console.log(item.url);
@@ -277,7 +307,10 @@
             item.isCover = "n";
           }
         });
-        console.log(this.imgarr);
+      },
+      deleteImg(e, img, sort, cover,index){
+        this.contentForm.imgarr.splice(index,1)
+        console.log(this.contentForm.imgarr)
       },
       CancelContentForm(){
         this.$router.push({name:'content'})
@@ -332,6 +365,17 @@
     cursor: pointer;
   }
   .tupian{
-    float:left
+    float:left;
+    position:relative;
+    .cancelImg{
+      position:absolute;
+      top:-10px;
+      right:0px;
+      cursor: pointer;
+      width:20px;
+      height:20px;
+      text-align: center;
+
+    }
   }
 </style>
