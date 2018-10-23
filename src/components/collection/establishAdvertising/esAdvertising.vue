@@ -71,7 +71,7 @@
           callback(new Error('请输入排序'))
         }
         else if(value>=6||value<1){
-          callback(new Error('序号在0-5之间'))
+          callback(new Error('序号在1-5之间'))
         }
         else if(!re.test(value)){
           callback(new Error('输入的必须是数字'))
