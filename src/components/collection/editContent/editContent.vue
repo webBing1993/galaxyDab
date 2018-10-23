@@ -247,6 +247,7 @@
 
       },
       initlist() {
+        console.log(this.$store.state.editContentData)
         let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
         let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
         let xian = this.$store.state.editContentData.cityCode
@@ -257,6 +258,7 @@
         this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
         this.contentForm.imgarr = this.$store.state.editContentData.pictures;
         let descrep=this.$store.state.editContentData.description
+        this.contentForm.description = this.$store.state.editContentData.description
         this.contentForm.introduceMsg = this.$store.state.editContentData.description;
         this.contentForm.selectedOptions =[service,city,xian]
         this.findAllClassify({

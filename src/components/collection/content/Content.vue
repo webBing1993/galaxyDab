@@ -132,9 +132,6 @@ export default {
             this.loading = false;
             this.contentList = body.data.items;
             this.contentList.forEach(item=>{
-              if(item.description.length>10){
-                item.description = item.description.substring(0,30)+"..."
-              }
               let service =CodeToText[item.cityCode.substring(0,2)+'0000']
               let city = CodeToText[item.cityCode.substring(0,4)+'00']
               let xian = CodeToText[item.cityCode]
