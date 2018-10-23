@@ -40,6 +40,7 @@
       </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-input v-model="contentForm.address" autocomplete="off"></el-input>
+        <div style="color:#ccc">请输入详细地址</div>
       </el-form-item>
       <el-form-item label="获取定位">
         <div>
@@ -70,22 +71,21 @@
       BMapComponent
     },
     data() {
-      // var checksort = (rule, value, callback) => {
-      //   // var reg =/\D/g/
-      //   var re = new RegExp(/^[0-9]+$/)
-      //   if(value===''){
-      //     callback(new Error('请输入排序'))
-      //   }
-      //   else if(value>=6||value<1){
-      //     callback(new Error('序号在0-5之间'))
-      //   }
-      //   else if(!re.test(value)){
-      //     callback(new Error('输入的必须是数字'))
-      //   }
-      //   else{
-      //     callback();
-      //   }
-      // }
+      var checksort = (rule, value, callback) => {
+        var re = new RegExp(/^[0-9]+$/)
+        if(value == ''){
+          callback()
+        }
+        else if(value>=6||value<1){
+          callback(new Error('序号在1-5之间'))
+        }
+        else if(!re.test(value)){
+          callback(new Error('输入的必须是数字'))
+        }
+        else{
+          callback();
+        }
+      }
       var checkphone =(rule,value,callback)=>{
         var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if(value===''){
@@ -198,13 +198,12 @@
               trigger: "blur"
             }
           ],
-          // contentSort: [
-          //   {
-          //     required: true,
-          //     validator: checksort,
-          //     trigger: "blur"
-          //   }
-          // ]
+          contentSort: [
+            {
+              validator: checksort,
+              trigger: "blur"
+            }
+          ]
         }
       };
     },

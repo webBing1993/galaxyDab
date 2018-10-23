@@ -109,7 +109,7 @@ export default {
         classifyName: [
           {
             required: true,
-            message: '请输入用户名称',
+            message: '请输入分类名称',
             trigger: 'blur'
           }
         ],
@@ -123,7 +123,7 @@ export default {
         editclassifyName: [
           {
             required: true,
-            message: '请输入用户名称',
+            message: '请输入分类名称',
             trigger: 'blur'
           }
         ],

@@ -70,8 +70,8 @@
       var checksort = (rule, value, callback) => {
         // var reg =/\D/g/
         var re = new RegExp(/^[0-9]+$/)
-        if(value===''){
-          callback(new Error('请输入排序'))
+        if(value == ''){
+          callback()
         }
         else if(value>=6||value<1){
           callback(new Error('序号在1-5之间'))
