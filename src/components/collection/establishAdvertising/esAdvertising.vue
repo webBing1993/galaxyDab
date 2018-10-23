@@ -294,7 +294,11 @@
       cursor: pointer;
       width:20px;
       height:20px;
+      line-height:20px;
       text-align: center;
+      border:1px solid  #ccc;
+      background-color: #ccc;
+      border-radius: 50% ;
 
     }
   }

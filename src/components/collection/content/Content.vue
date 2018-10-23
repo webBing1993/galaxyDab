@@ -148,7 +148,9 @@ export default {
         if (picture.isCover === 'y') {
           coverImg = picture.url;
         }
-      });
+      })
+
+
       return coverImg;
     },
     //分页开始方法

@@ -38,7 +38,11 @@ module.exports = {
       }
       else if (+response.data.errcode === 0 || +response.status === 204) {
         param.onSuccess && param.onSuccess(response.data, response.headers)
-      } else if (response.data.errcode !== 0) {
+      } else if(response.data.errcode ==2){
+        param.onSuccess && param.onSuccess(response.data, response.headers)
+
+      }
+      else if (response.data.errcode !== 0) {
         param.onFail && param.onFail(response)
       }
       else {

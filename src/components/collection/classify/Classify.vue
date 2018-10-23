@@ -68,13 +68,12 @@
 export default {
   data() {
     var checksort = (rule, value, callback) => {
-      // var reg =/\D/g/
       var re = new RegExp(/^[0-9]+$/)
       if(value===''){
           callback(new Error('请输入排序'))
       }
-      else if(value>=6){
-        callback(new Error('序号不能大于5'))
+      else if(value>=6||value<1){
+        callback(new Error('序号在1-5之间'))
       }
       else if(!re.test(value)){
         callback(new Error('输入的必须是数字'))
@@ -187,12 +186,12 @@ export default {
     allClassifylist(){
       this.findAllClassify({
         onsuccess: body => {
-          console.log(body)
+          // console.log(body)
           this.allList=body.data
           this.allList.forEach(item=>{
             this.allListName.push(item.name)
           })
-          console.log(this.allListName)
+          // console.log(this.allListName)
         }
       })
     },
@@ -206,7 +205,6 @@ export default {
     // 删除分类方法
     deleteClassify (row) {
       this.initlist()
-      // console.log(row)
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -216,12 +214,18 @@ export default {
           this.deleteCla({
             id:row.id,
             onsuccess: body => {
-              if (body.errcode==='0') {
+              console.log(body)
+              if (body.errcode==0) {
                   this.$message({
                     type: 'success',
                     message: '删除成功!'
                   })
                 this.initlist()
+              }else if(body.errcode ==2){
+                this.$message({
+                  type: 'error',
+                  message: '内容管理里面该分类有内容不可删除!'
+                })
               }
             }
           })

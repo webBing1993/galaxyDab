@@ -245,11 +245,12 @@
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
           if(this.contentForm.imgarr.length<5){
-            this.contentForm.imgarr.push({
-              url: this.addEmployeeInfo.picUrl,
-              sort:String(Math.floor(Math.random() * 5 + 1)),
-              isCover: "n"
-            });
+              this.contentForm.imgarr.push({
+                url: this.addEmployeeInfo.picUrl,
+                sort:String(Math.floor(Math.random() * 5 + 1)),
+                isCover: "n"
+              })
+            this.contentForm.imgarr[0].isCover='y'
           }
           else{
             this.$message({
@@ -371,7 +372,12 @@
         cursor: pointer;
         width:20px;
         height:20px;
+        line-height:20px;
         text-align: center;
+        border:1px solid  #ccc;
+        background-color: #ccc;
+        border-radius: 50% ;
+
 
       }
     }
