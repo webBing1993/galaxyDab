@@ -74,7 +74,7 @@
     data() {
       var checksort = (rule, value, callback) => {
         var re = new RegExp(/^[0-9]+$/)
-        if(value == ''){
+        if(!value){
           callback()
         }
         else if(value>=6||value<1){
