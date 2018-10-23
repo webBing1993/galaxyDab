@@ -28,10 +28,10 @@
       </el-table-column>
       <el-table-column prop="address" label="地址">
       </el-table-column>
-      <el-table-column prop="description" label="介绍">
+      <el-table-column prop="description" label="介绍" >
            <template slot-scope="scope">
            <div v-html="scope.row.description"></div>
-        </template>
+          </template>
       </el-table-column>
       <el-table-column prop="sort" label="排序" width="50">
       </el-table-column>
@@ -119,7 +119,7 @@ export default {
     },
     // 内容列表
     initList() {
-      console.log(CodeToText['310101'])
+      // console.log(CodeToText['310101'])
       this.loading = true;
       this.getContent({
         page: this.pagenum,
@@ -127,12 +127,18 @@ export default {
         name: this.writeName,
         catalogId: this.selectClassify,
         onsuccess: body => {
-          // console.log(body)
+          console.log(body)
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
             this.contentList.forEach(item=>{
-              item.address = CodeToText[item.cityCode]+item.address
+              if(item.description.length>10){
+                item.description = item.description.substring(0,30)+"..."
+              }
+              let service =CodeToText[item.cityCode.substring(0,2)+'0000']
+              let city = CodeToText[item.cityCode.substring(0,4)+'00']
+              let xian = CodeToText[item.cityCode]
+              item.address = service+city+xian+item.address
             })
             this.total =  body.data.totalNum;
           }

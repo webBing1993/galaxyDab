@@ -2,8 +2,8 @@
   <div>
     编辑广告
     <el-form :model="esAdvertisingForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="类别">
-        <el-select v-model="officialId" placeholder="官方广告">
+      <el-form-item label="类别" prop="viewContent">
+        <el-select v-model="esAdvertisingForm.viewContent" placeholder="官方广告">
           <el-option v-for="(classify, index) in classifyList" :key="index" :label="classify.classifyName"
                      :value="classify.id">
           </el-option>
@@ -12,8 +12,11 @@
       <el-form-item label="名称" prop="advertisingName">
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片">
-        <img :src="addEmployeeInfo.picUrl" alt="" width="200px" height="100px">
+      <el-form-item label="相册图片" prop="picUrl">
+        <div class="tupian">
+          <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
+          <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
+        </div>
       </el-form-item>
       <el-form-item label="">
         <el-upload
@@ -29,8 +32,8 @@
           </el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="位置">
-        <el-select v-model="addressId" placeholder="首页">
+      <el-form-item label="位置" prop="addressId">
+        <el-select v-model="esAdvertisingForm.addressId" placeholder="首页">
           <el-option v-for="(address, index) in roleList" :key="index" :label="address.roleName"
                      :value="address.id">
           </el-option>
@@ -47,8 +50,7 @@
       </el-form-item>
       <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
         <div>　
-          <!--editor的div为富文本的承载容器-->
-          <div id="editor" style="width:700px;height:300px;"></div>
+          <mavon-editor class="mavonEditor" v-model="introduceMsg" @save="showmsg" ref="showm" :subfield="false" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
@@ -84,19 +86,21 @@
       //url验证
       return {
         isDisabled: false,
-        officialId: "",
+        // officialId: "",
         isDis: true,
         radio: "1",
         chaolian: true,
-        addressId: "",
+        showpicUrl:true,
+        // addressId: "",
         imgurl: "",
+        introduceMsg:'',
         classifyId: "",
         introContent: false,
         editor: null,
         editorContent: "",
-        addEmployeeInfo: {
-          picUrl: ''
-        },
+        // addEmployeeInfo: {
+        //   picUrl: ''
+        // },
         contentType: 1,
         roleList: [
           {
@@ -105,7 +109,7 @@
           },
           {
             id: 2,
-            roleName: "正文"
+            roleName: "全部"
           }
         ],
         classifyList: [
@@ -123,6 +127,9 @@
           //还没有获取里面的内容注意王文本框里面没写数值
           sort: "",
           introduce: "",
+          viewContent:"",
+          picUrl: '',
+          addressId:''
         },
         rules: {
           //现在只是简单的验证后面要改验证
@@ -135,10 +142,29 @@
           ],
           sort: [
             {
-              required: true,
               validator: checksort,
               trigger: "blur"
             }
+          ],
+          viewContent:[
+            {
+              required: true,
+              message: "请选择分类",
+              trigger: "blur"
+            }
+          ],
+          picUrl:[
+            {
+              required: true,
+              message: '图片不能为空',
+              trigger: 'blur'
+            }
+          ],
+          addressId:[{
+            required: true,
+            message: '位置必选不能为空',
+            trigger: 'blur'
+          }
           ]
         }
       };
@@ -158,17 +184,21 @@
       },
     },
     mounted () {
-      this.initUeditor();
 
     },
     methods: {
       ...mapActions([
         'editAdver'
       ]),
+      showmsg(value,render){
+        console.log(render)
+        this.introduceMessage = render
+      },
       //图片内容显示到对应的框中
       filterScriptSuccess (res, file, list) {
         if (res.data) {
-          this.addEmployeeInfo.picUrl = res.data;
+          this.esAdvertisingForm.picUrl = res.data;
+          this.showpicUrl=true;
         }
       },
       CancelContentForm(){
@@ -179,73 +209,50 @@
         this.esAdvertisingForm.advertisingName = this.$store.state.editData.name;
         this.esAdvertisingForm.superURL = this.$store.state.editData.url;
         this.esAdvertisingForm.sort = this.$store.state.editData.sort;
-        this.officialId = this.$store.state.editData.type;
-        this.addressId = this.$store.state.editData.location;
+        this.esAdvertisingForm.viewContent = this.$store.state.editData.type;
+        this.esAdvertisingForm.addressId = this.$store.state.editData.location;
         this.imgurl = this.$store.state.editData.picture;
-        this.addEmployeeInfo.picUrl = this.imgurl;
-      },
-      initUeditor(){
-        UE.delEditor('editor');
-        this.editor = UE.getEditor('editor', {
-          BaseUrl: '',
-          UEDITOR_HOME_URL: 'static/Ueditor/',
-          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
-        }); // 初始化UE
-        this.editor.addListener("ready", () => {
-          this.editor.execCommand('insertHtml', this.editorContent);
-          this.editor.focus() // 确保UE加载完成后，放入内容。
-        })
+        this.esAdvertisingForm.picUrl = this.imgurl;
       },
       lianjie (e, num) {
         this.introContent = false
         this.chaolian = true
         this.contentType = num
-        console.log(this.contentType)
       },
       tuIntroduce (e, num) {
         this.introContent = true
         this.chaolian = false
         this.contentType = num
-        this.editorContent = this.editor.getContent()
-        console.log(this.contentType)
-      },
-      getContent() { // 获取内容方法
-        return this.editor.getContent()
-      },
-      clearContent() { // 清空编辑器内容
-        return this.editor.execCommand('cleardoc');
       },
       //保存
       editContentForm (formname) {
+        document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         // console.log(this.editor.getContent().length);
         var that = this;
+        console.log(that.introduceMessage)
         console.log(that.esAdvertisingForm.superUR)
         this.$refs[formname].validate(valide => {
           if (valide) {
-            console.log(this.contentType)
+        //     console.log(this.contentType)
             if (this.contentType == 1) {
-              this.editorContent = ''
+              that.introduceMessage = ''
             }
             else {
-              this.esAdvertisingForm.superURL= ''
-              this.editorContent = this.editor.getContent()
+              that.esAdvertisingForm.superURL= ''
 
             }
             console.log( this.esAdvertisingForm.superUR)
             this.editAdver({
               id: that.$store.state.editData.id,
-              type: that.officialId,
+              type: that.esAdvertisingForm.viewContent,
               name: that.esAdvertisingForm.advertisingName,
-              picture: that.addEmployeeInfo.picUrl,
-              location: that.addressId,
+              picture: that.esAdvertisingForm.picUrl,
+              location: that.esAdvertisingForm.addressId,
               contentType: that.contentType,
               url: that.esAdvertisingForm.superURL,
-              contents: this.editorContent,
+              contents: that.introduceMessage,
               sort: that.esAdvertisingForm.sort,
               onsuccess: (body) => {
-                console.log(that.contentType)
-                console.log(that.editorContent)
-                console.log(body)
                 this.$message({
                   type: "success",
                   message: "添加成功!"
@@ -256,15 +263,13 @@
           }
         })
       },
-      destroyed () {
-        // 将editor进行销毁
-        UE.delEditor('editor')
-      },
-      beforeDestroy() {
-        // 组件销毁的时候，要销毁 UEditor 实例
-        if (this.editor !== null && this.editor.destroy) {
-          this.editor.destroy();
-        }
+      deleteImg(e,url){
+        console.log(e)
+        console.log(url)
+        this.esAdvertisingForm.picUrl=''
+        console.log(url)
+        this.showpicUrl=false
+
       }
     }
   }
@@ -301,6 +306,24 @@
         width: 100%;
         height: 100%;
       }
+    }
+  }
+  .mavonEditor{
+    width:700px;
+  }
+  .tupian{
+    width:200px;
+    height:100px;
+    position:relative;
+    .cancelImg{
+      position:absolute;
+      top:-10px;
+      right:0px;
+      cursor: pointer;
+      width:20px;
+      height:20px;
+      text-align: center;
+
     }
   }
 </style>

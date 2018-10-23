@@ -16,10 +16,10 @@ Vue.prototype.Home = '/api'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 //Ueditor  基础文件引入
-import '../static/Ueditor/ueditor.config.js'
-import '../static/Ueditor/ueditor.all.min.js'
-import '../static/Ueditor/lang/zh-cn/zh-cn.js'
-import '../static/Ueditor/ueditor.parse.min.js'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
+Vue.use(mavonEditor)
 Vue.config.productionTip = false
 Vue.use(iView);
 /* eslint-disable no-new */

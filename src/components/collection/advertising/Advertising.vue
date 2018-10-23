@@ -112,7 +112,7 @@ export default {
         pageNum:this.pagenum,
         onsuccess: (body,headers) => {
           if (body) {
-            console.log(body)
+            // console.log(body)
              // console.log(headers["x-total"])
             this.AdvertisingTableData = body.data
             this.total = Number(headers['x-total'])
@@ -145,7 +145,7 @@ export default {
           this.deleteAdver({
             id: row.id,
             onsuccess: body => {
-              console.log(body)
+              // console.log(body)
               if (body) {
                 this.initlist();
                 this.$message({

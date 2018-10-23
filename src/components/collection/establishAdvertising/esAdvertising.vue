@@ -2,8 +2,8 @@
   <div>
     创建广告
     <el-form :model="esAdvertisingForm" :rules="rules" ref="esAdvertisingForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="类别">
-        <el-select v-model="officialId" placeholder="官方广告">
+      <el-form-item label="类别" prop="viewContent">
+        <el-select v-model="esAdvertisingForm.viewContent" placeholder="官方广告">
           <el-option v-for="(classify, index) in classifyList" :key="index" :label="classify.classifyName" :value="classify.id">
           </el-option>
         </el-select>
@@ -12,9 +12,12 @@
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
       <el-form-item label="相册图片" prop="picUrl">
-        <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
+        <div class="tupian">
+          <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
+          <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
+        </div>
       </el-form-item>
-      <el-form-item label="">
+      <el-form-item>
         <el-upload
           class="upload-demo el-right"
           :action="scriptUpload"
@@ -33,7 +36,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="内容类型" prop="introduce">
+      <el-form-item label="内容类型">
         <template>
           <el-radio v-model="radio" label="1"  @change="lianjie($event,1)" id="supeurl">超链接</el-radio>
           <el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>
@@ -44,8 +47,7 @@
       </el-form-item>
       <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
         <div>
-          <!--editor的div为富文本的承载容器-->
-          <div id="editor" style="width:700px;height:300px;"></div>
+          <mavon-editor class="mavonEditor" v-model="esAdvertisingForm.introduceMsg" @save="showmsg" ref="showm" :subfield="false" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
@@ -81,12 +83,13 @@
       }
       return {
         isDisabled: false,
-        officialId: '',
+        // officialId: '',
         isDis: true,
         radio: '1',
         chaolian: true,
         // addressId: '',
         imgurl: '',
+        showpicUrl:false,
         classifyId: '',
         introContent: false,
         editor: null,
@@ -116,9 +119,11 @@
           addressId:'',
           picUrl: '',
           superURL: '',
+          introduceMsg:'',
+          viewContent: "",
           // 还没有获取里面的内容注意王文本框里面没写数值
           sort: '',
-          introduce: ''
+          introduce: '',
         },
         rules: {
           // 现在只是简单的验证后面要改验证
@@ -131,7 +136,6 @@
           ],
           sort: [
             {
-              required: true,
               validator: checksort,
               // message: '请输入排序',
               trigger: 'blur'
@@ -142,6 +146,13 @@
               required: true,
               message: '图片不能为空',
               trigger: 'blur'
+            }
+          ],
+          viewContent:[
+            {
+              required: true,
+              message: "请选择分类",
+              trigger: "blur"
             }
           ],
           addressId:[{
@@ -165,34 +176,26 @@
       }
     },
     mounted () {
-      this.officialId= this.classifyList[0].id
-      this.initUeditor();
+      this.esAdvertisingForm.viewContent= this.classifyList[0].id
     },
     methods: {
       ...mapActions([
         'updateMsg',
         'saveAdver'
       ]),
+      showmsg(value,render){
+        console.log(render)
+        this.introduceMessage = render
+      },
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.esAdvertisingForm.picUrl = res.data;
+          this.showpicUrl=true
         }
       },
       // 取消
       CancelContentForm () {
         this.$router.push({ name: 'advertising' })
-      },
-      initUeditor(){
-        UE.delEditor('editor');
-        this.editor = UE.getEditor('editor', {
-          BaseUrl: '',
-          UEDITOR_HOME_URL: 'static/Ueditor/',
-          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
-        }); // 初始化UE
-        this.editor.addListener("ready", () => {
-          this.editor.execCommand('insertHtml', this.editorContent);
-          this.editor.focus() // 确保UE加载完成后，放入内容。
-        })
       },
       lianjie (e, num) {
         this.introContent = false
@@ -204,36 +207,28 @@
         this.chaolian = false
         this.contentType = num
         console.log(num)
-        this.editorContent = this.editor.getContent()
         // this.initUeditor();
-      },
-      getContent() { // 获取内容方法
-        // return this.editor.getContent() || '测试'
-        return this.editor.getContent()
-      },
-      clearContent() { // 清空编辑器内容
-        return this.editor.execCommand('cleardoc');
       },
       // 保存
       SaveContentForm(formname){
+        document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         var that = this;
         that.$refs[formname].validate(valide => {
           if (valide) {
             if(that.contentType == 1) {
-              that.editorContent = ''
+              that.introduceMessage = ''
             }
             else{
               that.esAdvertisingForm.superURL =''
-              that.editorContent = that.editor.getContent()
             }
             that.saveAdver({
-              type: that.officialId,
+              type: that.esAdvertisingForm.viewContent,
               name: that.esAdvertisingForm.advertisingName,
               picture: that.esAdvertisingForm.picUrl,
               location: that.esAdvertisingForm.addressId,
               contentType: that.contentType,
               url: that.esAdvertisingForm.superURL,
-              contents: that.editorContent,
+              contents: that.introduceMessage,
               sort: that.esAdvertisingForm.sort,
               onsuccess: body => {
                 console.log(body)
@@ -245,18 +240,15 @@
           }
         })
       },
+      deleteImg(e,url){
+        console.log(e)
+        console.log(url)
+        this.esAdvertisingForm.picUrl=''
+        console.log(url)
+        this.showpicUrl=false
 
-    },
-    destroyed () {
-      // 将editor进行销毁
-      // this.editor.destroy();
-      UE.delEditor('editor')
-    },
-    beforeDestroy() {
-      // 组件销毁的时候，要销毁 UEditor 实例
-      if (this.editor !== null && this.editor.destroy) {
-        this.editor.destroy();
       }
+
     }
   }
 </script>
@@ -290,5 +282,23 @@
         height: 100%;
       }
     }
+  }
+  .tupian{
+    width:200px;
+    height:100px;
+    position:relative;
+    .cancelImg{
+      position:absolute;
+      top:-10px;
+      right:0px;
+      cursor: pointer;
+      width:20px;
+      height:20px;
+      text-align: center;
+
+    }
+  }
+  .mavonEditor{
+    width:700px;
   }
 </style>

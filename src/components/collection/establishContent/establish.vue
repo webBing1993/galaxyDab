@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="establishContent">
     创建基本信息
     <el-form :model="contentForm" :rules="rules" ref="contentForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="类别" prop="viewContent">
@@ -46,11 +46,9 @@
           <b-map-component></b-map-component>
         </div>
       </el-form-item>
-      <el-form-item label="介绍" prop="introduce">
+      <el-form-item label="介绍" prop="introduceMsg">
         <div>　
-          <!--editor的div为富文本的承载容器-->
-          　　 <div id="editor" style="width:700px;height:300px;"></div>
-          <!-- 　　<button type="" @click="gettext">点击</button> -->
+          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg" ref="showm"  :subfield="false" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -66,29 +64,28 @@
 <script>
   import { regionDataPlus } from "element-china-area-data";
   import BMapComponent from "@/components/collection/BMapComponent";
-  import qs from "qs";
   import {mapActions} from 'vuex'
   export default {
     components: {
       BMapComponent
     },
     data() {
-      var checksort = (rule, value, callback) => {
-        // var reg =/\D/g/
-        var re = new RegExp(/^[0-9]+$/)
-        if(value===''){
-          callback(new Error('请输入排序'))
-        }
-        else if(value>=6||value<1){
-          callback(new Error('序号在0-5之间'))
-        }
-        else if(!re.test(value)){
-          callback(new Error('输入的必须是数字'))
-        }
-        else{
-          callback();
-        }
-      }
+      // var checksort = (rule, value, callback) => {
+      //   // var reg =/\D/g/
+      //   var re = new RegExp(/^[0-9]+$/)
+      //   if(value===''){
+      //     callback(new Error('请输入排序'))
+      //   }
+      //   else if(value>=6||value<1){
+      //     callback(new Error('序号在0-5之间'))
+      //   }
+      //   else if(!re.test(value)){
+      //     callback(new Error('输入的必须是数字'))
+      //   }
+      //   else{
+      //     callback();
+      //   }
+      // }
       var checkphone =(rule,value,callback)=>{
         var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if(value===''){
@@ -103,10 +100,25 @@
 
       }
       return {
+        toolbars: {
+          bold: false, // 粗体
+          italic: false, // 斜体
+          header: false, // 标题
+          underline: false, // 下划线
+          strikethrough: false, // 中划线
+          mark: false, // 标记
+          superscript: false, // 上角标
+          subscript: false, // 下角标
+          quote: false, // 引用
+          ol: false, // 有序列表
+          ul: false, // 无序列表
+          link: false, // 链接
+        },
         esclassifyList:[],
         editor: null,
         editorContent: "",
         picturesort: 1,
+        shuanglan:false,
         options: regionDataPlus,
         // selectedOptions: [],
         // imgarr: [],
@@ -114,8 +126,10 @@
         cover: "y",
         showClassify: [],
         cityCode: "",
+        // introduceMsg:'',
         longitude: "31.2304324029",
         latitude: "121.4737919321",
+        introduceMessage:'',
         addEmployeeInfo: {
           picUrl: ''
         },
@@ -127,7 +141,8 @@
           //还没有获取里面的内容注意王文本框里面没写数值
           contentSort: "",
           selectedOptions:[],
-          imgarr:[]
+          imgarr:[],
+          introduceMsg:''
         },
         rules: {
           //现在只是简单的验证后面要改验证
@@ -144,6 +159,13 @@
           //     trigger: "blur"
           //   }
           // ],
+          introduceMsg:[
+            {
+              required:true,
+              message:'请输入内容',
+              trigger:'blur'
+            }
+          ],
           introduce:[{
             // required:true,
             // message:'内容不能为空',
@@ -176,13 +198,13 @@
               trigger: "blur"
             }
           ],
-          contentSort: [
-            {
-              required: true,
-              validator: checksort,
-              trigger: "blur"
-            }
-          ]
+          // contentSort: [
+          //   {
+          //     required: true,
+          //     validator: checksort,
+          //     trigger: "blur"
+          //   }
+          // ]
         }
       };
     },
@@ -200,23 +222,17 @@
       }
     },
     mounted() {
-      this.initUeditor();
       this.initlist()
-      Array.prototype.delete=function(delIndex){
-        var temArray=[];
-        for(var i=0;i<this.length;i++){
-          if(i!=delIndex){
-            temArray.push(this[i]);
-          }
-        }
-        return temArray;
-      }
     },
     methods: {
       ...mapActions([
         'estabContent',
         'findAllClassify'
       ]),
+      showmsg(value,render){
+        console.log(render)
+        this.introduceMessage = render
+      },
       initlist(){
         this.findAllClassify({
           onsuccess:(body)=>{
@@ -228,33 +244,24 @@
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
-          this.contentForm.imgarr.push({
-            url: this.addEmployeeInfo.picUrl,
-            sort:String(Math.floor(Math.random() * 5 + 1)),
-            isCover: "n"
-          });
-          console.log(this.contentForm.imgarr)
+          if(this.contentForm.imgarr.length<5){
+            this.contentForm.imgarr.push({
+              url: this.addEmployeeInfo.picUrl,
+              sort:String(Math.floor(Math.random() * 5 + 1)),
+              isCover: "n"
+            });
+          }
+          else{
+            this.$message({
+              type: 'error',
+              message: '图片只能有5张!'
+            })
+
+          }
         }
       },
-      initUeditor(){
-        UE.delEditor('editor');
-        this.editor = UE.getEditor('editor', {
-          BaseUrl: '',
-          UEDITOR_HOME_URL: 'static/Ueditor/',
-          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
-        }); // 初始化UE
-        this.editor.addListener("ready", () => {
-          this.editor.execCommand('insertHtml', this.editorContent);
-          this.editor.focus() // 确保UE加载完成后，放入内容。
-        })
-      },
-      getContent() { // 获取内容方法
-        return this.editor.getContent()
-      },
-      clearContent() { // 清空编辑器内容
-        return this.editor.execCommand('cleardoc');
-      },
       SaveContentForm(formname) {
+        document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
         this.$refs[formname].validate(valide => {
             if (valide) {
@@ -264,7 +271,7 @@
               pictures: JSON.stringify(pictures),
               phone: this.contentForm.phone,
               address: this.contentForm.address,
-              description: this.editor.getContent(),
+              description: this.introduceMessage,
               sort: this.contentForm.contentSort,
               cityCode: this.cityCode,
               longitude: this.longitude,
@@ -315,67 +322,62 @@
       CancelContentForm(){
         this.$router.push({name:'content'})
       }
-    },
-    destroyed () {
-      // 将editor进行销毁
-      // this.editor.destroy();
-    },
-    beforeDestroy() {
-      // 组件销毁的时候，要销毁 UEditor 实例
-      if (this.editor !== null && this.editor.destroy) {
-        this.editor.destroy();
-      }
     }
   };
 </script>
 <style lang="less" scoped>
-  .el-input {
-    width: 400px;
-  }
-
-  #editor {
-    width: 700px;
-    position:relative;
-  }
-  .file {
-    float: left;
-    line-height: 25px;
-    margin-top: 60.5px;
-    margin-left: 50px;
-  }
-  .tpicture {
-    line-height: 150px;
-    .picture {
-      width: 150px;
-      height: 150px;
+  .establishContent{
+    .el-input {
+      width: 400px;
+    }
+    #editor {
+      width: 700px;
+      position:relative;
+    }
+    .file {
       float: left;
-      margin-right: 40px;
+      line-height: 25px;
+      margin-top: 60.5px;
+      margin-left: 50px;
+    }
+    .tpicture {
+      line-height: 150px;
+      .picture {
+        width: 150px;
+        height: 150px;
+        float: left;
+        margin-right: 40px;
 
-      background: #f7f7f7;
-      img {
-        width: 100%;
-        height: 100%;
-        border: none;
+        background: #f7f7f7;
+        img {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
       }
     }
-  }
-  .bgf {
-    width: 150px;
-    text-align: center;
-    cursor: pointer;
-  }
-  .tupian{
-    float:left;
-    position:relative;
-    .cancelImg{
-      position:absolute;
-      top:-10px;
-      right:0px;
-      cursor: pointer;
-      width:20px;
-      height:20px;
+    .bgf {
+      width: 150px;
       text-align: center;
+      cursor: pointer;
+    }
+    .tupian{
+      float:left;
+      position:relative;
+      .cancelImg{
+        position:absolute;
+        top:-10px;
+        right:0px;
+        cursor: pointer;
+        width:20px;
+        height:20px;
+        text-align: center;
 
+      }
+    }
+    .mavonEditor{
+      width:700px;
     }
   }
+
 </style>

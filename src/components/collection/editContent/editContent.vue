@@ -34,8 +34,8 @@
       <el-form-item label="电话" prop="phone" style="margin-top:70px">
         <el-input v-model="contentForm.phone"></el-input>
       </el-form-item>
-      <el-form-item label="省/市/区">
-        <el-cascader size="large" :options="options" v-model="selectedOptions" @change="handleChange">
+      <el-form-item label="省/市/区" prop="selectedOptions">
+        <el-cascader size="large" :options="options" v-model="contentForm.selectedOptions" @change="handleChange">
         </el-cascader>
       </el-form-item>
       <el-form-item label="地址" prop="address">
@@ -46,10 +46,9 @@
           <b-map-component></b-map-component>
         </div>
       </el-form-item>
-      <el-form-item label="介绍" prop="introduce">
+      <el-form-item label="介绍" prop="introduceMsg">
         <div>　
-          <!--editor的div为富文本的承载容器-->
-          <div id="editor" style="width:700px;height:300px;"></div>
+          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg" ref="showm" :subfield="false" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -66,29 +65,28 @@
 <script>
   import { regionDataPlus } from "element-china-area-data";
   import BMapComponent from "@/components/collection/BMapComponent";
-  import qs from "qs";
   import {mapActions} from 'vuex'
   export default {
     components: {
       BMapComponent
     },
     data() {
-      var checksort = (rule, value, callback) => {
-        // var reg =/\D/g/
-        var re = new RegExp(/^[0-9]+$/)
-        if(value===''){
-          callback(new Error('请输入排序'))
-        }
-        else if(value>=6||value<1){
-          callback(new Error('序号在0-5之间'))
-        }
-        else if(!re.test(value)){
-          callback(new Error('输入的必须是数字'))
-        }
-        else{
-          callback();
-        }
-      }
+      // var checksort = (rule, value, callback) => {
+      //   // var reg =/\D/g/
+      //   var re = new RegExp(/^[0-9]+$/)
+      //   if(value===''){
+      //     callback(new Error('请输入排序'))
+      //   }
+      //   else if(value<1||value>=6){
+      //     callback(new Error('序号在1-5之间'))
+      //   }
+      //   else if(!re.test(value)){
+      //     callback(new Error('输入的必须是数字'))
+      //   }
+      //   else{
+      //     callback();
+      //   }
+      // }
       var checkphone =(rule,value,callback)=>{
         var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if(value===''){
@@ -107,13 +105,15 @@
         editorContent: "",
         picturesort: 1,
         options: regionDataPlus,
-        selectedOptions: [],
+        // selectedOptions: [],
         classifyList:[],
         // imgarr: [],
         isCover: "n",
         cover: "y",
         showClassify: [],
         cityCode: "",
+        // introduceMsg:'',
+        introduceMessage:'',
         longitude: "31.2304324029",
         latitude: "121.4737919321",
         addEmployeeInfo: {
@@ -126,7 +126,9 @@
           address: "",
           //还没有获取里面的内容注意王文本框里面没写数值
           contentSort: "",
-          imgarr:[]
+          imgarr:[],
+          selectedOptions:[],
+          introduceMsg:''
         },
         rules: {
           //现在只是简单的验证后面要改验证
@@ -143,6 +145,26 @@
           //     trigger: "blur"
           //   }
           // ],
+          selectedOptions:[{
+            required:true,
+            message:'请选择省市区',
+            trigger:'blur'
+          }
+          ],
+          imgarr:[{
+            required:true,
+            message:'图片不能为空',
+            trigger:'blur'
+
+          }
+          ],
+          introduceMsg:[
+            {
+              required:true,
+              message:'请输入内容',
+              trigger:'blur'
+            }
+          ],
           address: [
             {
               required: true,
@@ -157,13 +179,13 @@
               trigger: "blur"
             }
           ],
-          contentSort: [
-            {
-              required: true,
-              validator: checksort,
-              trigger: "blur"
-            }
-          ],
+          // contentSort: [
+          //   {
+          //     required: true,
+          //     validator: checksort,
+          //     trigger: "blur"
+          //   }
+          // ],
         }
       };
     },
@@ -182,31 +204,61 @@
       }
     },
     mounted() {
-      this.initUeditor();
+      // this.$nextTick(()=> {
+      //   document.getElementsByClassName('fa-mavon-floppy-o')[0].blur(); // 获取textarea 不一定是auto-textarea-input
+      //   window.scrollTo(0, 0)
+      // })
+      // function reReplace(context){
+      //   return context.replace(/;lt/g, "<").replace(/;gt/g, '>').replace(/;lg/g, "/");
+      // }
+
     },
     methods: {
       ...mapActions([
         'editCon',
         'findAllClassify'
       ]),
+      showmsg(value,render){
+        console.log(render)
+        this.introduceMessage = render
+      },
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
-          this.contentForm.imgarr.push({
-            url: this.addEmployeeInfo.picUrl,
-            sort: this.contentForm.contentSort,
-            isCover: "n"
-          });
+          if(this.contentForm.imgarr.length<5){
+            this.contentForm.imgarr.push({
+              url: this.addEmployeeInfo.picUrl,
+              sort:String(Math.floor(Math.random() * 5 + 1)),
+              isCover: "n"
+            });
+          }
+          else{
+            this.$message({
+              type: 'error',
+              message: '图片只能有5张!'
+            })
+
+          }
         }
       },
+      reReplace(context) {
+
+        return context.replace(/;lt/g, "<").replace(/;gt/g, '>').replace(/;lg/g, "/");
+
+      },
       initlist() {
-        console.log(this.$store.state.editContentData)
+        let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
+        let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
+        let xian = this.$store.state.editContentData.cityCode
         this.contentForm.contentName = this.$store.state.editContentData.name;
         this.contentForm.phone = this.$store.state.editContentData.phone;
         this.contentForm.address = this.$store.state.editContentData.address;
         this.contentForm.contentSort = this.$store.state.editContentData.sort;
         this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
         this.contentForm.imgarr = this.$store.state.editContentData.pictures;
+        let descrep=this.$store.state.editContentData.description
+        this.contentForm.introduceMsg = this.$store.state.editContentData.description;
+        this.contentForm.selectedOptions =[service,city,xian]
         this.findAllClassify({
           onsuccess:(body)=>{
             console.log(body.data)
@@ -214,33 +266,15 @@
           }
         })
       },
-      initUeditor(){
-        UE.delEditor('editor');
-        this.editor = UE.getEditor('editor', {
-          BaseUrl: '',
-          UEDITOR_HOME_URL: 'static/Ueditor/',
-          serverUrl:   "http://qa.fortrun.cn:9201/adv/ueditor/upload",
-        }); // 初始化UE
-        this.editor.addListener("ready", () => {
-          this.editor.execCommand('insertHtml', this.editorContent);
-          this.editor.focus() // 确保UE加载完成后，放入内容。
-          this.editor.setContent(this.$store.state.editContentData.description);
-        })
-      },
-      getContent() { // 获取内容方法
-        return this.editor.getContent()
-      },
-      clearContent() { // 清空编辑器内容
-        return this.editor.execCommand('cleardoc');
-      },
       CancelContentForm(){
         this.$router.push({name:'content'})
 
       },
       SaveContentForm(formname) {
+        document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
-        // this.$refs[formname].validate(valide => {
-        //   if (valide) {
+        this.$refs[formname].validate(valide => {
+          if (valide) {
         this.editCon({
           id: this.$store.state.editContentData.id,
           catalogId: this.contentForm.viewContent,
@@ -248,7 +282,7 @@
           picture: JSON.stringify(pictures),
           phone: this.contentForm.phone,
           address: this.contentForm.address,
-          description: this.editor.getContent(),
+          description: this.introduceMessage,
           sort: this.contentForm.contentSort,
           cityCode: this.cityCode,
           longitude: this.longitude,
@@ -260,12 +294,16 @@
             }
           }
         })
-        //   }
-        // })
+          }
+        })
       },
       handleChange(value) {
-        this.cityCode = value[2];
-        console.log(this.cityCode);
+        this.cityCode = value[value.length-1]
+        value.forEach((item,index)=>{
+          if(value[index] == ''){
+            this.cityCode = value[index-1]
+          }
+        })
       },
       setCover(e, img, sort, cover) {
         console.log(img);
@@ -277,34 +315,17 @@
           if (item.url == img) {
             item.isCover = "y";
             console.log(item.url);
-            // console.log(item.isCover);
           } else {
             item.isCover = "n";
           }
         });
       },
       deleteImg(e, img, sort, cover,index){
-        console.log(e)
-        console.log(img)
-        console.log(sort)
-        console.log(cover)
-        console.log(index)
-        console.log(this.contentForm.imgarr)
         this.contentForm.imgarr.splice(index,1)
-        console.log(this.contentForm.imgarr)
+
 
       },
     },
-    destroyed () {
-      // 将editor进行销毁
-      // this.editor.destroy();
-    },
-    beforeDestroy() {
-      // 组件销毁的时候，要销毁 UEditor 实例
-      if (this.editor !== null && this.editor.destroy) {
-        this.editor.destroy();
-      }
-    }
   };
 </script>
 <style lang="less" scoped>
@@ -329,7 +350,6 @@
       height: 150px;
       float: left;
       margin-right: 40px;
-
       background: #f7f7f7;
       img {
         width: 100%;
@@ -356,5 +376,9 @@
       text-align: center;
 
     }
+
+  }
+  .mavonEditor{
+    width:700px;
   }
 </style>
