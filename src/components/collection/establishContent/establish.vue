@@ -42,14 +42,12 @@
         <el-input v-model="contentForm.address" autocomplete="off" id="suggestId" name="address_detail"></el-input>
         <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
-
       <el-form-item label="获取定位">
-          <!--<b-map-component></b-map-component>-->
         <div>
             <div id="allmap"></div>
             <div>
-              <input type="text" v-model="longitude" >{{longitude+11111}}{{latitude+22222}}
-              <input type="text" v-model="latitude">
+              经度<input type="text" v-model="longitude" disabled>
+              纬度<input type="text" v-model="latitude" disabled>
             </div>
         </div>
       </el-form-item>
@@ -230,7 +228,7 @@
         ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
           var _value = e.item.value;
           myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-          this.address_detail = myValue
+          th.address_detail = myValue
           setPlace();
         });
 
@@ -253,10 +251,10 @@
             // longitude: "",
             //   latitude: "",
 
-            this.longitude = th.userlocation.lng
-            this.latitude = th.userlocation.lat
-            console.log(this.longitude)
-            console.log(this.latitude)
+            th.longitude = th.userlocation.lng
+            th.latitude = th.userlocation.lat
+            console.log(th.longitude)
+            console.log(th.latitude)
 
           })
         }
@@ -301,6 +299,7 @@
       },
       SaveContentForm(formname) {
         console.log(this.longitude)
+        console.log(this.latitude)
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
         this.$refs[formname].validate(valide => {

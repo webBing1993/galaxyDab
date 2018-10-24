@@ -39,12 +39,16 @@
         </el-cascader>
       </el-form-item>
       <el-form-item label="地址" prop="address">
-        <el-input v-model="contentForm.address" autocomplete="off"></el-input>
+        <el-input v-model="contentForm.address" autocomplete="off" id="suggestId" name="address_detail"></el-input>
         <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
       <el-form-item label="获取定位">
         <div>
-          <b-map-component></b-map-component>
+          <div id="allmap"></div>
+          <div>
+            经度<input type="text" v-model="longitude" disabled>
+            纬度<input type="text" v-model="latitude" disabled>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="介绍" prop="introduceMsg">
@@ -65,12 +69,8 @@
 </template>
 <script>
   import { regionDataPlus } from "element-china-area-data";
-  import BMapComponent from "@/components/collection/BMapComponent";
   import {mapActions} from 'vuex'
   export default {
-    components: {
-      BMapComponent
-    },
     data() {
       var checksort = (rule, value, callback) => {
         var re = new RegExp(/^[0-9]+$/)
@@ -101,6 +101,8 @@
 
       }
       return {
+        address_detail: null, //详细地址
+        userlocation: {lng: "", lat: ""},
         editor: null,
         editorContent: "",
         picturesort: 1,
@@ -115,8 +117,8 @@
         cityCode: "",
         // introduceMsg:'',
         introduceMessage:'',
-        longitude: "31.2304324029",
-        latitude: "121.4737919321",
+        longitude: "",
+        latitude: "",
         addEmployeeInfo: {
           picUrl: ''
         },
@@ -204,14 +206,54 @@
       }
     },
     mounted() {
-      // this.$nextTick(()=> {
-      //   document.getElementsByClassName('fa-mavon-floppy-o')[0].blur(); // 获取textarea 不一定是auto-textarea-input
-      //   window.scrollTo(0, 0)
-      // })
-      // function reReplace(context){
-      //   return context.replace(/;lt/g, "<").replace(/;gt/g, '>').replace(/;lg/g, "/");
-      // }
+      this.$nextTick(function () {
+        var th = this
+        // 创建Map实例
+        var map = new BMap.Map("allmap");
+        // 初始化地图,设置中心点坐标，
+        var point = new BMap.Point(121.160724,31.173277); // 创建点坐标，汉得公司的经纬度坐标
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom();
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+          {
+            "input": "suggestId"
+            , "location": map
+          })
+        var myValue
+        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+          var _value = e.item.value;
+          myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+          th.address_detail = myValue
+          setPlace();
+        });
 
+        function setPlace() {
+          map.clearOverlays();    //清除地图上所有覆盖物
+          function myFun() {
+            th.userlocation = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            map.centerAndZoom(th.userlocation, 18);
+            map.addOverlay(new BMap.Marker(th.userlocation));    //添加标注
+          }
+
+          var local = new BMap.LocalSearch(map, { //智能搜索
+            onSearchComplete: myFun
+          });
+          local.search(myValue);
+
+          //测试输出坐标（指的是输入框最后确定地点的经纬度）
+          map.addEventListener("click",function(e){
+            //经度
+            // longitude: "",
+            //   latitude: "",
+
+            th.longitude = th.userlocation.lng
+            th.latitude = th.userlocation.lat
+            console.log(th.longitude)
+            console.log(th.latitude)
+
+          })
+        }
+      })
     },
     methods: {
       ...mapActions([
@@ -388,5 +430,11 @@
   }
   .mavonEditor{
     width:700px;
+  }
+  #allmap{
+    width: 700px;
+    height: 300px;
+    font-family: "微软雅黑";
+    border:1px solid green;
   }
 </style>
