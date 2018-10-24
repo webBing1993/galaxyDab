@@ -138,7 +138,7 @@ export default {
             console.log(this.contentList)
             this.contentList.forEach(item=>{
               item.description2 =item.description
-              item.description = item.description.substr(0,5) + '...' ;
+              item.description = item.description.substr(0,20) + '...' ;
               if(CodeToText[item.cityCode.substring(0,2)+'0000'] == '全部'){
                 item.address=item.address
               }
