@@ -40,7 +40,7 @@
       </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-input v-model="contentForm.address" autocomplete="off"></el-input>
-        <div style="color:#ccc">请输入详细地址</div>
+        <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
       <el-form-item label="获取定位">
         <div>

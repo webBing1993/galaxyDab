@@ -233,7 +233,6 @@
         console.log(that.esAdvertisingForm.superUR)
         this.$refs[formname].validate(valide => {
           if (valide) {
-        //     console.log(this.contentType)
             if (this.contentType == 1) {
               that.introduceMessage = ''
             }

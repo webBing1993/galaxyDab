@@ -15,7 +15,7 @@
         <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
           <img :src="item.url" alt="" width="200px" height="100px">
           <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
-          <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>
+          <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">{{backgroundCover}}</p>
         </div>
       </el-form-item>
       <el-form-item label="">
@@ -40,7 +40,7 @@
       </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-input v-model="contentForm.address" autocomplete="off"></el-input>
-        <div style="color:#ccc">请输入详细地址</div>
+        <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
       <el-form-item label="获取定位">
         <div>
@@ -104,6 +104,7 @@
         editor: null,
         editorContent: "",
         picturesort: 1,
+        backgroundCover:'设为封面',
         options: regionDataPlus,
         // selectedOptions: [],
         classifyList:[],
@@ -247,7 +248,7 @@
 
       },
       initlist() {
-        console.log(this.$store.state.editContentData)
+        console.log(this.$store.state.editContentData.address)
         let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
         let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
         let xian = this.$store.state.editContentData.cityCode
@@ -258,12 +259,12 @@
         this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
         this.contentForm.imgarr = this.$store.state.editContentData.pictures;
         let descrep=this.$store.state.editContentData.description
-        this.contentForm.description = this.$store.state.editContentData.description
-        this.contentForm.introduceMsg = this.$store.state.editContentData.description;
+        // this.contentForm.description = this.$store.state.editContentData.description
+        this.contentForm.introduceMsg = this.$store.state.editContentData.description2;
         this.contentForm.selectedOptions =[service,city,xian]
         this.findAllClassify({
           onsuccess:(body)=>{
-            console.log(body.data)
+            // console.log(body.data)
             this.classifyList = body.data;
           }
         })
@@ -309,6 +310,7 @@
       },
       setCover(e, img, sort, cover) {
         console.log(img);
+
         this.$message({
           type: "success",
           message: "设置此张图片为背景图片!"

@@ -224,7 +224,7 @@ export default {
               }else if(body.errcode ==2){
                 this.$message({
                   type: 'error',
-                  message: '内容管理里面该分类有内容不可删除!'
+                  message: '不可操作，如需删除请移除分类下有所有内容!'
                 })
               }
             }
@@ -284,11 +284,11 @@ export default {
       this.editClassifyDialog = false
     },
     SureEditClassifyDialog (formname) {
-      if(this.allListName.indexOf(this.editClassifyForm.editclassifyName) == -1)
+      if(this.allListName.indexOf(this.editClassifyForm.editclassifyName) != -1)
       {
         this.editClassifyForm.editclassifyName ='';
         this.$message({
-          message: '此分类不存在',
+          message: '此分类已经存在',
           type: 'success'
         })
       }

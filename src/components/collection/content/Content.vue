@@ -28,7 +28,7 @@
       </el-table-column>
       <el-table-column prop="address" label="地址">
       </el-table-column>
-      <el-table-column prop="description" label="介绍" >
+      <el-table-column prop="description2" label="介绍">
            <template slot-scope="scope">
            <div v-html="scope.row.description"></div>
           </template>
@@ -58,6 +58,10 @@
 export default {
   data() {
     return {
+      service:'',
+      city:'',
+      xian:'',
+      totaladdress:'',
       selectClassify: '',
       total: 0,
       page: 1,
@@ -131,12 +135,24 @@ export default {
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
+            console.log(this.contentList)
             this.contentList.forEach(item=>{
-              let service =CodeToText[item.cityCode.substring(0,2)+'0000']
-              let city = CodeToText[item.cityCode.substring(0,4)+'00']
-              let xian = CodeToText[item.cityCode]
-              item.address = service+city+xian+item.address
+              item.description2 =item.description
+              item.description = item.description.substr(0,5) + '...' ;
+              if(CodeToText[item.cityCode.substring(0,2)+'0000'] == '全部'){
+                item.address=item.address
+              }
+              else if(CodeToText[item.cityCode.substring(0,4)+'00'] == '全部'){
+                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+item.address
+              }
+              else if(CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区'){
+                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode]+item.address
+              }
+              else{
+                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+CodeToText[item.cityCode]+item.address
+              }
             })
+            console.log(this.contentList)
             this.total =  body.data.totalNum;
           }
         }
@@ -172,6 +188,7 @@ export default {
       });
     },
     editContent(row) {
+      console.log(row.description)
       this.$store.commit("getEditConData", row);
       this.$router.push({
         name: "editContent"
@@ -240,4 +257,5 @@ export default {
 .deleteall {
   color: red;
 }
+
 </style>
