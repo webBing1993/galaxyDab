@@ -39,12 +39,18 @@
         </el-cascader>
       </el-form-item>
       <el-form-item label="地址" prop="address">
-        <el-input v-model="contentForm.address" autocomplete="off"></el-input>
+        <el-input v-model="contentForm.address" autocomplete="off" id="suggestId" name="address_detail"></el-input>
         <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
+
       <el-form-item label="获取定位">
+          <!--<b-map-component></b-map-component>-->
         <div>
-          <b-map-component></b-map-component>
+            <div id="allmap"></div>
+            <div>
+              <input type="text" v-model="longitude" >{{longitude+11111}}{{latitude+22222}}
+              <input type="text" v-model="latitude">
+            </div>
         </div>
       </el-form-item>
       <el-form-item label="介绍" prop="introduceMsg">
@@ -64,11 +70,11 @@
 </template>
 <script>
   import { regionDataPlus } from "element-china-area-data";
-  import BMapComponent from "@/components/collection/BMapComponent";
+  // import BMapComponent from "@/components/collection/BMapComponent";
   import {mapActions} from 'vuex'
   export default {
     components: {
-      BMapComponent
+      // BMapComponent
     },
     data() {
       var checksort = (rule, value, callback) => {
@@ -100,35 +106,19 @@
 
       }
       return {
-        toolbars: {
-          bold: false, // 粗体
-          italic: false, // 斜体
-          header: false, // 标题
-          underline: false, // 下划线
-          strikethrough: false, // 中划线
-          mark: false, // 标记
-          superscript: false, // 上角标
-          subscript: false, // 下角标
-          quote: false, // 引用
-          ol: false, // 有序列表
-          ul: false, // 无序列表
-          link: false, // 链接
-        },
+        address_detail: null, //详细地址
+        userlocation: {lng: "", lat: ""},
         esclassifyList:[],
         editor: null,
         editorContent: "",
         picturesort: 1,
         shuanglan:false,
         options: regionDataPlus,
-        // selectedOptions: [],
-        // imgarr: [],
-        isCover: "n",
-        cover: "y",
         showClassify: [],
         cityCode: "",
         // introduceMsg:'',
-        longitude: "31.2304324029",
-        latitude: "121.4737919321",
+        longitude: "",
+        latitude: "",
         introduceMessage:'',
         addEmployeeInfo: {
           picUrl: ''
@@ -221,7 +211,56 @@
       }
     },
     mounted() {
+
       this.initlist()
+      this.$nextTick(function () {
+        var th = this
+        // 创建Map实例
+        var map = new BMap.Map("allmap");
+        // 初始化地图,设置中心点坐标，
+        var point = new BMap.Point(121.160724,31.173277); // 创建点坐标，汉得公司的经纬度坐标
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom();
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+          {
+            "input": "suggestId"
+            , "location": map
+          })
+        var myValue
+        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+          var _value = e.item.value;
+          myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+          this.address_detail = myValue
+          setPlace();
+        });
+
+        function setPlace() {
+          map.clearOverlays();    //清除地图上所有覆盖物
+          function myFun() {
+            th.userlocation = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            map.centerAndZoom(th.userlocation, 18);
+            map.addOverlay(new BMap.Marker(th.userlocation));    //添加标注
+          }
+
+          var local = new BMap.LocalSearch(map, { //智能搜索
+            onSearchComplete: myFun
+          });
+          local.search(myValue);
+
+          //测试输出坐标（指的是输入框最后确定地点的经纬度）
+          map.addEventListener("click",function(e){
+            //经度
+            // longitude: "",
+            //   latitude: "",
+
+            this.longitude = th.userlocation.lng
+            this.latitude = th.userlocation.lat
+            console.log(this.longitude)
+            console.log(this.latitude)
+
+          })
+        }
+      })
     },
     methods: {
       ...mapActions([
@@ -229,13 +268,13 @@
         'findAllClassify'
       ]),
       showmsg(value,render){
-        console.log(render)
+        // console.log(render)
         this.introduceMessage = render
       },
       initlist(){
         this.findAllClassify({
           onsuccess:(body)=>{
-            console.log(body.data)
+            // console.log(body.data)
             this.esclassifyList = body.data;
           }
         })
@@ -261,6 +300,7 @@
         }
       },
       SaveContentForm(formname) {
+        console.log(this.longitude)
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
         this.$refs[formname].validate(valide => {
@@ -277,7 +317,7 @@
               longitude: this.longitude,
               latitude: this.latitude,
               onsuccess: body => {
-                console.log(body)
+                // console.log(body)
                 if (body.errcode === '0') {
                   this.$message({
                     type: 'success',
@@ -291,7 +331,7 @@
         })
       },
       handleChange(value) {
-        console.log(value)
+        // console.log(value)
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){
@@ -300,7 +340,7 @@
         })
       },
       setCover(e, img, sort, cover) {
-        console.log(img);
+        // console.log(img);
         this.$message({
           type: "success",
           message: "设置此张图片为背景图片!"
@@ -308,7 +348,7 @@
         this.contentForm.imgarr.forEach(item => {
           if (item.url == img) {
             item.isCover = "y";
-            console.log(item.url);
+            // console.log(item.url);
             // console.log(item.isCover);
           } else {
             item.isCover = "n";
@@ -317,7 +357,7 @@
       },
       deleteImg(e, img, sort, cover,index){
         this.contentForm.imgarr.splice(index,1)
-        console.log(this.contentForm.imgarr)
+        // console.log(this.contentForm.imgarr)
       },
       CancelContentForm(){
         this.$router.push({name:'content'})
@@ -383,6 +423,12 @@
     .mavonEditor{
       width:700px;
     }
+  }
+  #allmap{
+    width: 700px;
+    height: 300px;
+    font-family: "微软雅黑";
+    border:1px solid green;
   }
 
 </style>

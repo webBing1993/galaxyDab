@@ -11,7 +11,7 @@
 <script>
   export default {
     data() {
-       return {}
+      return {}
     },
     mounted() {
       // 百度地图API功能
