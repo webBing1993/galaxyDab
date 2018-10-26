@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="alladvertising">
     <el-row>
       <el-button type="success" class="establish" @click="establishAdvertising">创建广告</el-button>
       <div class="searchname">
@@ -51,6 +51,11 @@
         :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
      </div>
+   <div class="tupian" v-if="showTupian">
+     <img src="../../../assets/img/1.png">
+     <div style="text-align: center">暂无内容</div>
+   </div>
+
    </div>
 </template>
 <script>
@@ -58,6 +63,7 @@ import {mapActions} from 'vuex'
 export default {
   data () {
     return {
+      showTupian:false,
       changshi: '',
       total: 0,
       page: 1,
@@ -115,6 +121,9 @@ export default {
             // console.log(body)
              // console.log(headers["x-total"])
             this.AdvertisingTableData = body.data
+            if(this.AdvertisingTableData.length==0){
+              this.showTupian = true
+            }
             this.total = Number(headers['x-total'])
             this.loading = false
           } else {
@@ -168,43 +177,54 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.el-row {
-  position: relative;
-  margin-bottom: 20px;
+  .alladvertising{
+    position:relative;
+    .el-row {
+      position: relative;
+      margin-bottom: 20px;
 
-  .establish {
-    background: #00cd78 !important;
-  }
+      .establish {
+        background: #00cd78 !important;
+      }
 
-  .searchname {
-    position: absolute;
-    top: 0px;
-    right: 20px;
+      .searchname {
+        position: absolute;
+        top: 0px;
+        right: 20px;
 
-    .search {
-      background: #2574ed !important;
+        .search {
+          background: #2574ed !important;
+        }
+
+        .writeName {
+          width: 200px;
+        }
+      }
     }
 
-    .writeName {
+    .el-pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+    }
+    .el-select {
       width: 200px;
+      margin-right: 20px;
+    }
+    .deleteall {
+      color: red;
+    }
+    .tupian{
+      position:absolute;
+      left:50%;
+      top:20%;
+      transform:translate(-20%,-50%);
+
     }
   }
-}
 
-.el-pagination {
-  text-align: center;
-  margin-top: 20px;
-}
-
-img {
-  width: 100px;
-  height: 100px;
-}
-.el-select {
-  width: 200px;
-  margin-right: 20px;
-}
-.deleteall {
-  color: red;
-}
 </style>

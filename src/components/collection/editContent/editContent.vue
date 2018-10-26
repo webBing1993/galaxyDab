@@ -9,16 +9,16 @@
         </el-select>
       </el-form-item>
       <el-form-item label="名称" prop="contentName">
-        <el-input v-model="contentForm.contentName"></el-input>
+        <el-input v-model="contentForm.contentName" ref="id"></el-input>
       </el-form-item>
       <el-form-item label="相册图片" prop="imgarr">
         <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
-          <img :src="item.url" alt="" width="200px" height="100px">
+          <img :src="item.url" alt="" width="150px" height="150px">
           <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
-          <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">{{backgroundCover}}</p>
+          <!--<p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>-->
+          <div v-if="item.isCover=='y'"><p class="bgf">封面图片</p></div>
+          <div v-else><p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p></div>
         </div>
-      </el-form-item>
-      <el-form-item label="">
         <el-upload
           class="upload-demo el-right"
           :action="scriptUpload"
@@ -27,11 +27,14 @@
           name="file"
           :on-success="filterScriptSuccess"
           list-type="picture-card">
-          <el-button size="small" type="primary">
-            图片上传</el-button>
+          <el-button size="small" type="primary" margin-left="0px">
+            选择文件</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="电话" prop="phone" style="margin-top:70px">
+      <el-form-item style="color:#ccc;height:0px;margin-top: 30px;">
+        建议图片尺寸750px*600px或4：3，JPG.PNG格式，图片小于2M
+      </el-form-item>
+      <el-form-item label="电话" prop="phone" style="margin-top:40px">
         <el-input v-model="contentForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="省/市/区" prop="selectedOptions">
@@ -107,6 +110,7 @@
         editorContent: "",
         picturesort: 1,
         backgroundCover:'设为封面',
+        backCover:'封面图片',
         options: regionDataPlus,
         // selectedOptions: [],
         classifyList:[],
@@ -206,6 +210,7 @@
       }
     },
     mounted() {
+      this.myFocus()
       this.$nextTick(function () {
         var th = this
         // 创建Map实例
@@ -264,6 +269,9 @@
         console.log(render)
         this.introduceMessage = render
       },
+      myFocus:function(){
+        this.$refs.id.focus();
+      },
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
@@ -284,13 +292,8 @@
           }
         }
       },
-      reReplace(context) {
-
-        return context.replace(/;lt/g, "<").replace(/;gt/g, '>').replace(/;lg/g, "/");
-
-      },
       initlist() {
-        console.log(this.$store.state.editContentData.address)
+        console.log(this.$store.state.editContentData)
         let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
         let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
         let xian = this.$store.state.editContentData.cityCode
@@ -300,10 +303,11 @@
         this.contentForm.contentSort = this.$store.state.editContentData.sort;
         this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
         this.contentForm.imgarr = this.$store.state.editContentData.pictures;
-        let descrep=this.$store.state.editContentData.description
         // this.contentForm.description = this.$store.state.editContentData.description
-        this.contentForm.introduceMsg = this.$store.state.editContentData.description2;
-        this.contentForm.selectedOptions =[service,city,xian]
+        this.contentForm.introduceMsg =this.$store.state.editContentData.description2
+        this.longitude = this.$store.state.editContentData.longitude
+        this.latitude = this.$store.state.editContentData.latitude
+        // this.contentForm.selectedOptions =[service,city,xian]
         this.findAllClassify({
           onsuccess:(body)=>{
             // console.log(body.data)
@@ -318,6 +322,12 @@
       SaveContentForm(formname) {
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
+        if(this.cityCode == undefined){
+          this.$message({
+            type: 'error',
+            message: '请选择省市区!'
+          })
+        }
         this.$refs[formname].validate(valide => {
           if (valide) {
         this.editCon({
@@ -343,6 +353,12 @@
         })
       },
       handleChange(value) {
+        if(value[0] == ''){
+          this.$message({
+            type: 'error',
+            message: '请选择具体的省份或直辖市!'
+          })
+        }
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){
@@ -412,6 +428,8 @@
   .tupian{
     float:left;
     position:relative;
+    margin-left:10px;
+    margin-bottom:20px;
     .cancelImg{
       position:absolute;
       top:-10px;
@@ -436,5 +454,20 @@
     height: 300px;
     font-family: "微软雅黑";
     border:1px solid green;
+  }
+  /deep/ .el-upload--picture-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0px;
+    height: 0px;
+    line-height: 0px;
+    vertical-align: top;
+  }
+  /deep/ .el-button {
+    margin-top:50px;
+    margin-left:20px;
   }
 </style>

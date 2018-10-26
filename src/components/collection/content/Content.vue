@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <el-row>
+  <div class="allContent">
+    <div>
+     <el-row>
       <el-button type="success" class="establish" @click="establishContent">创建内容</el-button>
       <div class="searchname">
         <el-select v-model="selectClassify" placeholder="请选择分类">
@@ -11,8 +12,8 @@
         </el-input>
         <el-button type="success" class="search" @click="initList">搜索</el-button>
       </div>
-    </el-row>
-    <el-table class="margin-20" v-loading="loading" :data="contentList" border style="width: 100%">
+     </el-row>
+     <el-table class="margin-20" v-loading="loading" :data="contentList" border style="width: 100%">
       <el-table-column type="index" :index="typeIndex" label="编号" width="50">
       </el-table-column>
       <el-table-column prop="categoryName" label="类别" width="100">
@@ -28,7 +29,7 @@
       </el-table-column>
       <el-table-column prop="address" label="地址">
       </el-table-column>
-      <el-table-column prop="description2" label="介绍">
+      <el-table-column prop="description" label="介绍">
            <template slot-scope="scope">
            <div v-html="scope.row.description"></div>
           </template>
@@ -49,7 +50,11 @@
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
       :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
-  </div>
+    </div>
+    <div class="tupian" v-if="showTupian">
+    <img src="../../../assets/img/1.png">
+    <div style="text-align: center">暂无内容</div>
+    </div>
   </div>
 </template>
 <script>
@@ -58,6 +63,7 @@
 export default {
   data() {
     return {
+      showTupian:false,
       service:'',
       city:'',
       xian:'',
@@ -110,6 +116,11 @@ export default {
       'deleteClassify'
 
     ]),
+    reReplace:function(context){
+
+      return context.replace(/;lt/g, "<").replace(/;gt/g, ">").replace(/;lg/g, "/");
+
+    },
     //总分类列表
     getallclassify() {
       this.axios
@@ -124,36 +135,47 @@ export default {
     // 内容列表
     initList() {
       // console.log(CodeToText['310101'])
-      this.loading = true;
-      this.getContent({
-        page: this.pagenum,
-        pageSize: this.pagesize,
-        name: this.writeName,
-        catalogId: this.selectClassify,
+      var that = this
+      that.loading = true;
+      that.getContent({
+        page: that.pagenum,
+        pageSize: that.pagesize,
+        name: that.writeName,
+        catalogId: that.selectClassify,
         onsuccess: body => {
           console.log(body)
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
-            console.log(this.contentList)
+            if(this.contentList.length==0){
+              this.showTupian = true
+            }
+            this.total =  body.data.totalNum;
             this.contentList.forEach(item=>{
-              item.description2 =item.description
-              item.description = item.description.substr(0,20) + '...' ;
-              if(CodeToText[item.cityCode.substring(0,2)+'0000'] == '全部'){
-                item.address=item.address
-              }
-              else if(CodeToText[item.cityCode.substring(0,4)+'00'] == '全部'){
-                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+item.address
-              }
-              else if(CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区'){
-                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode]+item.address
-              }
-              else{
-                item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+CodeToText[item.cityCode]+item.address
-              }
+              item.description2 =that.reReplace(item.description)
+              item.description = that.reReplace(item.description.substr(0,20) + '...') ;
+
+              // console.log(item.address)
+              // console.log(CodeToText[item.cityCode])
+              item.address=CodeToText[item.cityCode]+item.address
+              // if(CodeToText[CodeToText[item.cityCode.substring(0,4)+'00'] == '全部'){}
+              // if((CodeToText[item.cityCode.substring(0,4)+'00'] == '全部' || CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区' )&& (item.cityCode.substring(4,6)==undefined)){
+              //   item.address=CodeToText[item.cityCode]+item.address
+              //   console.log(item.address)
+              // }
+              // else if((CodeToText[item.cityCode.substring(0,4)+'00'] == '全部' || CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区' )&& (item.cityCode.substring(4,6)!==undefined)){
+              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode]+item.address
+              // }
+              // else if((CodeToText[item.cityCode.substring(0,4)+'00'] !== '全部') && (CodeToText[item.cityCode.substring(0,4)+'00'] !== '全部') && (item.cityCode.substring(4,6)==undefined) ){
+              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+item.address
+              // }
+              // else{
+              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+CodeToText[item.cityCode]+item.address
+              // }
+              // else if()
             })
             console.log(this.contentList)
-            this.total =  body.data.totalNum;
+
           }
         }
       })
@@ -227,35 +249,46 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-row {
-  position: relative;
-  margin-bottom: 20px;
+  .allContent{
+    position:relative;
+    .el-row {
+      position: relative;
+      margin-bottom: 20px;
 
-  .establish {
-    background: #00cd78 !important;
-  }
+      .establish {
+        background: #00cd78 !important;
+      }
 
-  .searchname {
-    position: absolute;
-    top: 0px;
-    right: 20px;
+      .searchname {
+        position: absolute;
+        top: 0px;
+        right: 20px;
 
-    .search {
-      background: #2574ed !important;
+        .search {
+          background: #2574ed !important;
+        }
+
+        .writeName {
+          width: 200px;
+        }
+      }
     }
 
-    .writeName {
-      width: 200px;
+    .imgsize {
+      width: 100px;
+      height: 100px;
+    }
+    .deleteall {
+      color: red;
+    }
+    .tupian{
+      position:absolute;
+      left:50%;
+      top:20%;
+      transform:translate(-20%,-50%);
+
     }
   }
-}
 
-.imgsize {
-  width: 100px;
-  height: 100px;
-}
-.deleteall {
-  color: red;
-}
 
 </style>

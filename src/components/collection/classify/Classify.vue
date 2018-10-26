@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="allClassify">
     <el-row>
       <el-button type="success" class="addClassify" @click="addClassify">添加分类</el-button>
       <div class="searchname">
@@ -61,6 +61,10 @@
         :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+    <div class="tupian" v-if="showTupian">
+      <img src="../../../assets/img/1.png">
+      <div style="text-align: center">暂无内容</div>
+    </div>
   </div>
 </template>
 <script>
@@ -84,6 +88,7 @@ export default {
 
     }
     return {
+      showTupian:false,
       page: 1,
       total: 0,
       pagesize: 5,
@@ -173,6 +178,9 @@ export default {
             // console.log(body)
             if (body.errcode==='0') {
               this.classifyList = body.data.items
+              if( this.classifyList.length==0){
+                this.showTupian = true
+              }
               // console.log(this.classifyList[0].name)
               this.total = body.data.totalNum
               this.$store.commit("getAddclassifyData", body.data.items)
@@ -320,29 +328,40 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.el-row {
-  position: relative;
-  margin-bottom: 20px;
+  .allClassify{
+    position:relative;
+    .el-row {
+      position: relative;
+      margin-bottom: 20px;
 
-  .addclassify {
-    background: #00cd78 !important;
+      .addclassify {
+        background: #00cd78 !important;
+      }
+
+      .searchname {
+        position: absolute;
+        top: 0px;
+        right: 20px;
+
+        .search {
+          background: #2574ed !important;
+        }
+
+        .writeName {
+          width: 200px;
+        }
+      }
+    }
+    .deleteall {
+      color: red;
+    }
+    .tupian{
+      position:absolute;
+      left:50%;
+      top:20%;
+      transform:translate(-20%,-50%);
+
+    }
   }
 
-  .searchname {
-    position: absolute;
-    top: 0px;
-    right: 20px;
-
-    .search {
-      background: #2574ed !important;
-    }
-
-    .writeName {
-      width: 200px;
-    }
-  }
-}
-.deleteall {
-  color: red;
-}
 </style>

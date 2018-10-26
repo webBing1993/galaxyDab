@@ -17,8 +17,6 @@
           <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
         </div>
-      </el-form-item>
-      <el-form-item label="">
         <el-upload
           class="upload-demo el-right"
           :action="scriptUpload"
@@ -32,7 +30,9 @@
           </el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="位置" prop="addressId">
+      <!--<el-form-item label="">-->
+      <!--</el-form-item>-->
+      <el-form-item label="位置" prop="addressId" margin-top="40px">
         <el-select v-model="esAdvertisingForm.addressId" placeholder="首页">
           <el-option v-for="(address, index) in roleList" :key="index" :label="address.roleName"
                      :value="address.id">
@@ -48,9 +48,9 @@
       <el-form-item label="超链接URL" prop="superURL" v-show="chaolian">
         <el-input type="url" v-model="esAdvertisingForm.superURL"></el-input>
       </el-form-item>
-      <el-form-item label="介绍内容" prop="introduce" v-show="introContent">
+      <el-form-item label="介绍内容" v-show="introContent">
         <div>　
-          <mavon-editor class="mavonEditor" v-model="introduceMsg" @save="showmsg" ref="showm" :subfield="false" :ishljs="false"/>
+          <mavon-editor class="mavonEditor" @save="showmsg" v-model="introduceMsg"  :subfield="false" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
@@ -88,7 +88,7 @@
         isDisabled: false,
         // officialId: "",
         isDis: true,
-        radio: "1",
+        radio: '1',
         chaolian: true,
         showpicUrl:true,
         // addressId: "",
@@ -185,13 +185,29 @@
     },
     mounted () {
 
+      // if(this.radio == '1'){
+      //   this.chaolian = true
+      //   this.introContent = false
+      // }else{
+      //   this.chaolian = false
+      //   this.introContent = true
+      // }
+      // this.$nextTick(() => {
+      //   if(this.$store.state.editData.contentType  == '1'){
+      //     this.radio='1'
+      //     console.log(1)
+      //   }
+      //   else if(this.$store.state.editData.contentType  == '2'){
+      //     this.radio ='2'
+      //     console.log(2)
+      //   }
+      // })
     },
     methods: {
       ...mapActions([
         'editAdver'
       ]),
       showmsg(value,render){
-        console.log(render)
         this.introduceMessage = render
       },
       //图片内容显示到对应的框中
@@ -213,6 +229,13 @@
         this.esAdvertisingForm.addressId = this.$store.state.editData.location;
         this.imgurl = this.$store.state.editData.picture;
         this.esAdvertisingForm.picUrl = this.imgurl;
+        this.introduceMsg = this.$store.state.editData.contents
+        if(this.$store.state.editData.contentType == 1){
+          this.radio == '1'
+        }
+        else{
+          this.radio == '2'
+        }
       },
       lianjie (e, num) {
         this.introContent = false
@@ -227,7 +250,6 @@
       //保存
       editContentForm (formname) {
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
-        // console.log(this.editor.getContent().length);
         var that = this;
         console.log(that.introduceMessage)
         console.log(that.esAdvertisingForm.superUR)
@@ -240,7 +262,6 @@
               that.esAdvertisingForm.superURL= ''
 
             }
-            console.log( this.esAdvertisingForm.superUR)
             this.editAdver({
               id: that.$store.state.editData.id,
               type: that.esAdvertisingForm.viewContent,
@@ -263,10 +284,7 @@
         })
       },
       deleteImg(e,url){
-        console.log(e)
-        console.log(url)
         this.esAdvertisingForm.picUrl=''
-        console.log(url)
         this.showpicUrl=false
 
       }
@@ -327,5 +345,21 @@
       background-color: #ccc;
       border-radius: 50% ;
     }
+  }
+  /deep/ .el-upload--picture-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0px;
+    height: 0px;
+    line-height: 0px;
+    vertical-align: top;
+  }
+  /deep/ .el-button {
+    margin-top:20px;
+    margin-left:20px;
+    margin-bottom:20px;
   }
 </style>

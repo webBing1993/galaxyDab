@@ -9,16 +9,16 @@
         </el-select>
       </el-form-item>
       <el-form-item label="名称" prop="contentName">
-        <el-input v-model="contentForm.contentName"></el-input>
+        <el-input v-model="contentForm.contentName" ref="id"></el-input>
       </el-form-item>
       <el-form-item label="相册图片" prop ="imgarr">
         <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
-          <img :src="item.url" alt="" width="200px" height="100px">
+          <img :src="item.url" alt="" width="150px" height="150px">
           <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
-          <p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>
+          <!--<p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>-->
+          <div v-if="item.isCover=='y'"><p class="bgf">封面图片</p></div>
+          <div v-else><p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p></div>
         </div>
-      </el-form-item>
-      <el-form-item label="">
         <el-upload
           class="upload-demo el-right"
           :action="scriptUpload"
@@ -28,10 +28,13 @@
           :on-success="filterScriptSuccess"
           list-type="picture-card">
           <el-button size="small" type="primary">
-            图片上传</el-button>
+            选择文件</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="电话" prop="phone" style="margin-top:70px">
+      <el-form-item style="color:#ccc;height:0px;margin-top: 40px;">
+        建议图片尺寸750px*600px或4：3，JPG.PNG格式，图片小于2M
+      </el-form-item>
+      <el-form-item label="电话" prop="phone" style="margin-top:40px">
         <el-input v-model="contentForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="省/市/区" prop="selectedOptions">
@@ -42,12 +45,12 @@
         <el-input v-model="contentForm.address" autocomplete="off" id="suggestId" name="address_detail"></el-input>
         <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
-      <el-form-item label="获取定位">
+      <el-form-item label="获取定位" prop = "getAddress">
         <div>
             <div id="allmap"></div>
             <div>
-              经度<input type="text" v-model="longitude" disabled>
-              纬度<input type="text" v-model="latitude" disabled>
+              经度<input type="text" v-model="contentForm.getAddress.longitude" disabled>
+              纬度<input type="text" v-model="contentForm.getAddress.latitude" disabled>
             </div>
         </div>
       </el-form-item>
@@ -68,7 +71,6 @@
 </template>
 <script>
   import { regionDataPlus } from "element-china-area-data";
-  // import BMapComponent from "@/components/collection/BMapComponent";
   import {mapActions} from 'vuex'
   export default {
     components: {
@@ -115,8 +117,8 @@
         showClassify: [],
         cityCode: "",
         // introduceMsg:'',
-        longitude: "",
-        latitude: "",
+        // longitude: "",
+        // latitude: "",
         introduceMessage:'',
         addEmployeeInfo: {
           picUrl: ''
@@ -130,7 +132,9 @@
           contentSort: "",
           selectedOptions:[],
           imgarr:[],
-          introduceMsg:''
+          introduceMsg:'',
+          getAddress:[{longitude:''},{latitude:''}]
+
         },
         rules: {
           //现在只是简单的验证后面要改验证
@@ -191,7 +195,10 @@
               validator: checksort,
               trigger: "blur"
             }
-          ]
+          ],
+          getAddress:[{
+            required: true,
+          }]
         }
       };
     },
@@ -209,7 +216,7 @@
       }
     },
     mounted() {
-
+      this.myFocus()
       this.initlist()
       this.$nextTick(function () {
         var th = this
@@ -248,13 +255,10 @@
           //测试输出坐标（指的是输入框最后确定地点的经纬度）
           map.addEventListener("click",function(e){
             //经度
-            // longitude: "",
-            //   latitude: "",
-
-            th.longitude = th.userlocation.lng
-            th.latitude = th.userlocation.lat
-            console.log(th.longitude)
-            console.log(th.latitude)
+            th.contentForm.getAddress.longitude = th.userlocation.lng
+            th.contentForm.getAddress.latitude = th.userlocation.lat
+            console.log(th.contentForm.getAddress.longitude)
+            console.log(th.contentForm.getAddress.latitude)
 
           })
         }
@@ -265,6 +269,12 @@
         'estabContent',
         'findAllClassify'
       ]),
+      myFocus:function(){
+        this.$refs.id.focus();
+      },
+      textReplace:function(context){
+        return context.replace(/</g, ";lt").replace(/>/g, ";gt").replace(/\//g, ";lg");
+      },
       showmsg(value,render){
         // console.log(render)
         this.introduceMessage = render
@@ -298,39 +308,52 @@
         }
       },
       SaveContentForm(formname) {
-        console.log(this.longitude)
-        console.log(this.latitude)
+        var that = this
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
-        this.$refs[formname].validate(valide => {
-            if (valide) {
-            this.estabContent({
-              catalogId: this.contentForm.viewContent,
-              name: this.contentForm.contentName,
-              pictures: JSON.stringify(pictures),
-              phone: this.contentForm.phone,
-              address: this.contentForm.address,
-              description: this.introduceMessage,
-              sort: this.contentForm.contentSort,
-              cityCode: this.cityCode,
-              longitude: this.longitude,
-              latitude: this.latitude,
-              onsuccess: body => {
-                // console.log(body)
-                if (body.errcode === '0') {
-                  this.$message({
-                    type: 'success',
-                    message: '创建成功!'
-                  })
-                  this.$router.push({name: "content"});
-                }
-              }
+        if(that.cityCode == undefined){
+          that.$message({
+              type: 'error',
+              message: '请选择省市区!'
             })
+        }
+        that.$refs[formname].validate(valide => {
+            if (valide) {
+
+              that.estabContent({
+                  catalogId: that.contentForm.viewContent,
+                  name: that.contentForm.contentName,
+                  pictures: JSON.stringify(pictures),
+                  phone: that.contentForm.phone,
+                  address: that.contentForm.address,
+                  description:this.introduceMessage,
+                  sort: that.contentForm.contentSort,
+                  cityCode: that.cityCode,
+                  longitude: that.contentForm.getAddress.longitude,
+                  latitude: that.contentForm.getAddress.latitude,
+                  onsuccess: body => {
+                    // console.log(body)
+                    if (body.errcode === '0') {
+                      that.$message({
+                        type: 'success',
+                        message: '创建成功!'
+                      })
+                      this.$router.push({name: "content"});
+                    }
+                  }
+                })
           }
         })
       },
       handleChange(value) {
-        // console.log(value)
+        console.log(value)
+        console.log(value[3]==undefined)
+        if(value[0] == ''){
+          this.$message({
+            type: 'error',
+            message: '请选择具体的省份或直辖市!'
+          })
+        }
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){
@@ -403,6 +426,8 @@
     .tupian{
       float:left;
       position:relative;
+      margin-left:10px;
+      margin-bottom:20px;
       .cancelImg{
         position:absolute;
         top:-10px;
@@ -428,6 +453,21 @@
     height: 300px;
     font-family: "微软雅黑";
     border:1px solid green;
+  }
+  /deep/ .el-upload--picture-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0px;
+    height: 0px;
+    line-height: 0px;
+    vertical-align: top;
+  }
+  /deep/ .el-button {
+   margin-top:50px;
+    margin-left:20px;
   }
 
 </style>

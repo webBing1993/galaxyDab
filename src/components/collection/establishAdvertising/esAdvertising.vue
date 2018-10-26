@@ -16,8 +16,6 @@
           <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
         </div>
-      </el-form-item>
-      <el-form-item>
         <el-upload
           class="upload-demo el-right"
           :action="scriptUpload"
@@ -302,5 +300,21 @@
   }
   .mavonEditor{
     width:700px;
+  }
+  /deep/ .el-upload--picture-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0px;
+    height: 0px;
+    line-height: 0px;
+    vertical-align: top;
+  }
+  /deep/ .el-button {
+    margin-top:20px;
+    margin-left:20px;
+    margin-bottom:20px;
   }
 </style>
