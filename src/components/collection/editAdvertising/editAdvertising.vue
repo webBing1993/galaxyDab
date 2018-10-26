@@ -41,7 +41,7 @@
       </el-form-item>
       <el-form-item label="内容类型" prop="introduce">
         <template>
-          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>
+          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>{{radio}}
           <el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>
         </template>
       </el-form-item>
@@ -185,23 +185,6 @@
     },
     mounted () {
 
-      // if(this.radio == '1'){
-      //   this.chaolian = true
-      //   this.introContent = false
-      // }else{
-      //   this.chaolian = false
-      //   this.introContent = true
-      // }
-      // this.$nextTick(() => {
-      //   if(this.$store.state.editData.contentType  == '1'){
-      //     this.radio='1'
-      //     console.log(1)
-      //   }
-      //   else if(this.$store.state.editData.contentType  == '2'){
-      //     this.radio ='2'
-      //     console.log(2)
-      //   }
-      // })
     },
     methods: {
       ...mapActions([
@@ -221,7 +204,7 @@
            this.$router.push({name:'advertising'})
       },
       initlist () {
-        console.log(this.$store.state.editData);
+        console.log(this.$store.state.editData.contentType);
         this.esAdvertisingForm.advertisingName = this.$store.state.editData.name;
         this.esAdvertisingForm.superURL = this.$store.state.editData.url;
         this.esAdvertisingForm.sort = this.$store.state.editData.sort;
@@ -231,11 +214,17 @@
         this.esAdvertisingForm.picUrl = this.imgurl;
         this.introduceMsg = this.$store.state.editData.contents
         if(this.$store.state.editData.contentType == 1){
-          this.radio == '1'
+          this.radio = '1'
+          this.chaolian = true;
+          this.introContent = false
         }
         else{
-          this.radio == '2'
+          this.radio = '2'
+          this.introContent = true
+          this.chaolian = false;
         }
+        console.log(this.$store.state.editData.contentType);
+        console.log(this.radio)
       },
       lianjie (e, num) {
         this.introContent = false
