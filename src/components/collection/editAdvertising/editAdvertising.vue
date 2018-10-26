@@ -30,8 +30,6 @@
           </el-button>
         </el-upload>
       </el-form-item>
-      <!--<el-form-item label="">-->
-      <!--</el-form-item>-->
       <el-form-item label="位置" prop="addressId" margin-top="40px">
         <el-select v-model="esAdvertisingForm.addressId" placeholder="首页">
           <el-option v-for="(address, index) in roleList" :key="index" :label="address.roleName"
@@ -41,7 +39,7 @@
       </el-form-item>
       <el-form-item label="内容类型" prop="introduce">
         <template>
-          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>{{radio}}
+          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>
           <el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>
         </template>
       </el-form-item>

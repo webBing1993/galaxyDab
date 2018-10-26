@@ -12,7 +12,7 @@
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
       <el-form-item label="相册图片" prop="picUrl">
-        <div class="tupian">
+        <div class="tupian" v-show="showTupian">
           <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
         </div>
@@ -80,6 +80,7 @@
       return {
         isDisabled: false,
         // officialId: '',
+        showTupian:false,
         isDis: true,
         radio: '1',
         chaolian: true,
@@ -186,6 +187,7 @@
       filterScriptSuccess(res, file, list) {
         if (res.data) {
           this.esAdvertisingForm.picUrl = res.data;
+          this.showTupian=true
           this.showpicUrl=true
         }
       },
