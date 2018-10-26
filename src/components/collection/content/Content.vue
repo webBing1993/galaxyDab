@@ -116,11 +116,6 @@ export default {
       'deleteClassify'
 
     ]),
-    reReplace:function(context){
-
-      return context.replace(/;lt/g, "<").replace(/;gt/g, ">").replace(/;lg/g, "/");
-
-    },
     //总分类列表
     getallclassify() {
       this.axios
@@ -152,27 +147,15 @@ export default {
             }
             this.total =  body.data.totalNum;
             this.contentList.forEach(item=>{
-              item.description2 =that.reReplace(item.description)
-              item.description = that.reReplace(item.description.substr(0,20) + '...') ;
+              item.description2 =item.description
+              item.description = item.description.substr(0,20) + '...'
+              item.address2 = item.address
+              var city= CodeToText[item.cityCode.substring(0,4)+'00']
+              if (city=='市辖区'){
+                city=''
+              }
+              item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+city+CodeToText[item.cityCode]+item.address
 
-              // console.log(item.address)
-              // console.log(CodeToText[item.cityCode])
-              item.address=CodeToText[item.cityCode]+item.address
-              // if(CodeToText[CodeToText[item.cityCode.substring(0,4)+'00'] == '全部'){}
-              // if((CodeToText[item.cityCode.substring(0,4)+'00'] == '全部' || CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区' )&& (item.cityCode.substring(4,6)==undefined)){
-              //   item.address=CodeToText[item.cityCode]+item.address
-              //   console.log(item.address)
-              // }
-              // else if((CodeToText[item.cityCode.substring(0,4)+'00'] == '全部' || CodeToText[item.cityCode.substring(0,4)+'00'] == '市辖区' )&& (item.cityCode.substring(4,6)!==undefined)){
-              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode]+item.address
-              // }
-              // else if((CodeToText[item.cityCode.substring(0,4)+'00'] !== '全部') && (CodeToText[item.cityCode.substring(0,4)+'00'] !== '全部') && (item.cityCode.substring(4,6)==undefined) ){
-              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+item.address
-              // }
-              // else{
-              //   item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+CodeToText[item.cityCode.substring(0,4)+'00']+CodeToText[item.cityCode]+item.address
-              // }
-              // else if()
             })
             console.log(this.contentList)
 

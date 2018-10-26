@@ -71,7 +71,7 @@
 
 </template>
 <script>
-  import { regionDataPlus } from "element-china-area-data";
+  import { regionData } from "element-china-area-data";
   import {mapActions} from 'vuex'
   export default {
     data() {
@@ -111,15 +111,12 @@
         picturesort: 1,
         backgroundCover:'设为封面',
         backCover:'封面图片',
-        options: regionDataPlus,
-        // selectedOptions: [],
+        options: regionData,
         classifyList:[],
-        // imgarr: [],
         isCover: "n",
         cover: "y",
         showClassify: [],
         cityCode: "",
-        // introduceMsg:'',
         introduceMessage:'',
         longitude: "",
         latitude: "",
@@ -146,12 +143,6 @@
               trigger: "blur"
             }
           ],
-          // phone: [
-          //   {
-          //     validator: checkphone,
-          //     trigger: "blur"
-          //   }
-          // ],
           selectedOptions:[{
             required:true,
             message:'请选择省市区',
@@ -248,13 +239,8 @@
           //测试输出坐标（指的是输入框最后确定地点的经纬度）
           map.addEventListener("click",function(e){
             //经度
-            // longitude: "",
-            //   latitude: "",
-
             th.longitude = th.userlocation.lng
             th.latitude = th.userlocation.lat
-            console.log(th.longitude)
-            console.log(th.latitude)
 
           })
         }
@@ -293,21 +279,21 @@
         }
       },
       initlist() {
-        console.log(this.$store.state.editContentData)
+        console.log(this.$store.state.editContentData.cityCode)
         let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
         let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
         let xian = this.$store.state.editContentData.cityCode
         this.contentForm.contentName = this.$store.state.editContentData.name;
         this.contentForm.phone = this.$store.state.editContentData.phone;
-        this.contentForm.address = this.$store.state.editContentData.address;
+        this.contentForm.address = this.$store.state.editContentData.address2;
         this.contentForm.contentSort = this.$store.state.editContentData.sort;
         this.contentForm.viewContent = this.$store.state.editContentData.categoryId;
         this.contentForm.imgarr = this.$store.state.editContentData.pictures;
-        // this.contentForm.description = this.$store.state.editContentData.description
         this.contentForm.introduceMsg =this.$store.state.editContentData.description2
         this.longitude = this.$store.state.editContentData.longitude
         this.latitude = this.$store.state.editContentData.latitude
-        // this.contentForm.selectedOptions =[service,city,xian]
+        this.contentForm.selectedOptions = [service,city,xian]
+        this.cityCode = this.$store.state.editContentData.cityCode
         this.findAllClassify({
           onsuccess:(body)=>{
             // console.log(body.data)
@@ -322,12 +308,6 @@
       SaveContentForm(formname) {
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
-        if(this.cityCode == undefined){
-          this.$message({
-            type: 'error',
-            message: '请选择省市区!'
-          })
-        }
         this.$refs[formname].validate(valide => {
           if (valide) {
         this.editCon({
@@ -353,12 +333,6 @@
         })
       },
       handleChange(value) {
-        if(value[0] == ''){
-          this.$message({
-            type: 'error',
-            message: '请选择具体的省份或直辖市!'
-          })
-        }
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){

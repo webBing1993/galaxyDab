@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-  import { regionDataPlus } from "element-china-area-data";
+  import { regionData } from "element-china-area-data";
   import {mapActions} from 'vuex'
   export default {
     components: {
@@ -113,7 +113,7 @@
         editorContent: "",
         picturesort: 1,
         shuanglan:false,
-        options: regionDataPlus,
+        options: regionData,
         showClassify: [],
         cityCode: "",
         // introduceMsg:'',
@@ -314,8 +314,9 @@
         if(that.cityCode == undefined){
           that.$message({
               type: 'error',
-              message: '请选择省市区!'
+              message: '省市区不可选全部!'
             })
+          return;
         }
         that.$refs[formname].validate(valide => {
             if (valide) {
@@ -346,12 +347,13 @@
         })
       },
       handleChange(value) {
-        console.log(value)
-        console.log(value[3]==undefined)
-        if(value[0] == ''){
+        // console.log(value)
+        // console.log(value[3]==undefined)
+        // console.log(value[2]==undefined)
+        if(value[0] == '' || value[1] == '' || value[2] == ''){
           this.$message({
             type: 'error',
-            message: '请选择具体的省份或直辖市!'
+            message: '省市区都不可选全部!'
           })
         }
         this.cityCode = value[value.length-1]
