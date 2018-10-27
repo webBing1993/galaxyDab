@@ -74,15 +74,12 @@
 export default {
   data() {
     var checksort = (rule, value, callback) => {
-      var re = new RegExp(/^[0-9]+$/)
+      var re = new RegExp(/^[1-5]$/)
       if(value===''){
           callback(new Error('请输入排序'))
       }
-      else if(value>=6||value<1){
-        callback(new Error('序号在1-5之间'))
-      }
       else if(!re.test(value)){
-        callback(new Error('输入的必须是数字'))
+        callback(new Error('输入的必须是1-5之间的数字'))
       }
       else{
         callback();

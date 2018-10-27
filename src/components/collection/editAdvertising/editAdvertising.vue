@@ -37,12 +37,12 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="内容类型" prop="introduce">
-        <template>
-          <el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>
-          <el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>
-        </template>
-      </el-form-item>
+      <!--<el-form-item label="内容类型" prop="introduce">-->
+        <!--<template>-->
+          <!--<el-radio v-model="radio" label="1" @change="lianjie($event,1)" id="supeurl">超链接</el-radio>-->
+          <!--<el-radio v-model="radio" label="2" @change="tuIntroduce($event,2)" id="introdu">图文介绍</el-radio>-->
+        <!--</template>-->
+      <!--</el-form-item>-->
       <el-form-item label="超链接URL" prop="superURL" v-show="chaolian">
         <el-input type="url" v-model="esAdvertisingForm.superURL"></el-input>
       </el-form-item>
@@ -66,19 +66,13 @@
   export default {
     data () {
       var checksort = (rule, value, callback) => {
-        // var reg =/\D/g/
-        var re = new RegExp(/^[0-9]+$/)
-        if(value == ''){
+        var re = new RegExp(/^[1-5]$/)
+        if(!value){
           callback()
-        }
-        else if(value>=6||value<1){
-          callback(new Error('序号在1-5之间'))
-        }
-        else if(!re.test(value)){
-          callback(new Error('输入的必须是数字'))
-        }
-        else{
-          callback();
+        }else if(!re.test(value)){
+          callback(new Error('输入的必须是1-5之间的数字'))
+        }else{
+          callback()
         }
       }
       //url验证
@@ -87,7 +81,7 @@
         // officialId: "",
         isDis: true,
         radio: '1',
-        chaolian: true,
+        chaolian: false,
         showpicUrl:true,
         // addressId: "",
         imgurl: "",
@@ -213,7 +207,7 @@
         this.introduceMsg = this.$store.state.editData.contents
         if(this.$store.state.editData.contentType == 1){
           this.radio = '1'
-          this.chaolian = true;
+          this.chaolian = false;
           this.introContent = false
         }
         else{
@@ -224,16 +218,16 @@
         console.log(this.$store.state.editData.contentType);
         console.log(this.radio)
       },
-      lianjie (e, num) {
-        this.introContent = false
-        this.chaolian = true
-        this.contentType = num
-      },
-      tuIntroduce (e, num) {
-        this.introContent = true
-        this.chaolian = false
-        this.contentType = num
-      },
+      // lianjie (e, num) {
+      //   this.introContent = false
+      //   this.chaolian = true
+      //   this.contentType = num
+      // },
+      // tuIntroduce (e, num) {
+      //   this.introContent = true
+      //   this.chaolian = false
+      //   this.contentType = num
+      // },
       //保存
       editContentForm (formname) {
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
