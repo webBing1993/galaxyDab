@@ -73,6 +73,7 @@
 <script>
   import { regionData } from "element-china-area-data";
   import {mapActions} from 'vuex'
+  import { CodeToText } from "element-china-area-data";
   export default {
     data() {
       var checksort = (rule, value, callback) => {
@@ -332,7 +333,13 @@
           }
         })
       },
+      getCityCode:function(value){
+
+        return CodeToText[value[0]]+CodeToText[value[1]]+CodeToText[value[2]]
+      },
       handleChange(value) {
+        console.log(this.getCityCode(value))
+        console.log(value)
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){

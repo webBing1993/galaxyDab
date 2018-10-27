@@ -113,19 +113,18 @@ export default {
   methods: {
     ...mapActions([
       'getContent',
-      'deleteClassify'
+      'deleteClassify',
+      'findAllClassify'
 
     ]),
     //总分类列表
     getallclassify() {
-      this.axios
-        .get("http://qa.fortrun.cn:8121/discoveryCatalog/all")
-        .then(res => {
-          // console.log(res.data.data);
-          if (res.status == 200) {
-            this.showClassify = res.data.data;
-          }
-        });
+      this.findAllClassify({
+        onsuccess:(body)=>{
+          // console.log(body.data)
+          this.showClassify = body.data;
+        }
+      })
     },
     // 内容列表
     initList() {

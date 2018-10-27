@@ -238,8 +238,7 @@
       editContentForm (formname) {
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         var that = this;
-        console.log(that.introduceMessage)
-        console.log(that.esAdvertisingForm.superUR)
+        console.log(this.esAdvertisingForm.sort )
         this.$refs[formname].validate(valide => {
           if (valide) {
             if (this.contentType == 1) {

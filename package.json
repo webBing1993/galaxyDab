@@ -80,6 +80,13 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
+  "proxy": {
+    "/place": {
+      "target": "https://apis.map.qq.com",
+      "changeOrigin": true,
+      "ws": true
+    }
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

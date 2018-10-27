@@ -47,11 +47,11 @@
       </el-form-item>
       <el-form-item label="获取定位" prop = "getAddress">
         <div>
-            <div id="allmap"></div>
-            <div>
-              经度<input type="text" v-model="contentForm.getAddress.longitude" disabled>
-              纬度<input type="text" v-model="contentForm.getAddress.latitude" disabled>
-            </div>
+          <div id="allmap"></div>
+          <div>
+            经度<input type="text" v-model="contentForm.getAddress.longitude" disabled>
+            纬度<input type="text" v-model="contentForm.getAddress.latitude" disabled>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="介绍" prop="introduceMsg">
@@ -291,11 +291,11 @@
         if (res.data) {
           this.addEmployeeInfo.picUrl = res.data;
           if(this.contentForm.imgarr.length<5){
-              this.contentForm.imgarr.push({
-                url: this.addEmployeeInfo.picUrl,
-                sort:String(Math.floor(Math.random() * 5 + 1)),
-                isCover: "n"
-              })
+            this.contentForm.imgarr.push({
+              url: this.addEmployeeInfo.picUrl,
+              sort:String(Math.floor(Math.random() * 5 + 1)),
+              isCover: "n"
+            })
             this.contentForm.imgarr[0].isCover='y'
           }
           else{
@@ -313,36 +313,36 @@
         let pictures = this.contentForm.imgarr
         if(that.cityCode == undefined){
           that.$message({
-              type: 'error',
-              message: '省市区不可选全部!'
-            })
+            type: 'error',
+            message: '省市区不可选全部!'
+          })
           return;
         }
         that.$refs[formname].validate(valide => {
-            if (valide) {
+          if (valide) {
 
-              that.estabContent({
-                  catalogId: that.contentForm.viewContent,
-                  name: that.contentForm.contentName,
-                  pictures: JSON.stringify(pictures),
-                  phone: that.contentForm.phone,
-                  address: that.contentForm.address,
-                  description:this.introduceMessage,
-                  sort: that.contentForm.contentSort,
-                  cityCode: that.cityCode,
-                  longitude: that.contentForm.getAddress.longitude,
-                  latitude: that.contentForm.getAddress.latitude,
-                  onsuccess: body => {
-                    // console.log(body)
-                    if (body.errcode === '0') {
-                      that.$message({
-                        type: 'success',
-                        message: '创建成功!'
-                      })
-                      this.$router.push({name: "content"});
-                    }
-                  }
-                })
+            that.estabContent({
+              catalogId: that.contentForm.viewContent,
+              name: that.contentForm.contentName,
+              pictures: JSON.stringify(pictures),
+              phone: that.contentForm.phone,
+              address: that.contentForm.address,
+              description:this.introduceMessage,
+              sort: that.contentForm.contentSort,
+              cityCode: that.cityCode,
+              longitude: that.contentForm.getAddress.longitude,
+              latitude: that.contentForm.getAddress.latitude,
+              onsuccess: body => {
+                // console.log(body)
+                if (body.errcode === '0') {
+                  that.$message({
+                    type: 'success',
+                    message: '创建成功!'
+                  })
+                  this.$router.push({name: "content"});
+                }
+              }
+            })
           }
         })
       },
@@ -468,7 +468,7 @@
     vertical-align: top;
   }
   /deep/ .el-button {
-   margin-top:50px;
+    margin-top:50px;
     margin-left:20px;
   }
 
