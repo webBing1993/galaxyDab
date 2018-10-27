@@ -14,7 +14,13 @@
       </div>
      </el-row>
      <el-table class="margin-20" v-loading="loading" :data="contentList" border style="width: 100%">
-      <el-table-column type="index" :index="typeIndex" label="编号" width="50">
+       <template slot="empty">
+         <div class="tupian">
+           <img src="../../../assets/img/1.png">
+           <div style="text-align: center">暂无内容</div>
+         </div>
+       </template>
+       <el-table-column type="index" :index="typeIndex" label="编号" width="50">
       </el-table-column>
       <el-table-column prop="categoryName" label="类别" width="100">
       </el-table-column>
@@ -51,10 +57,6 @@
       :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
     </div>
-    <div class="tupian" v-if="showTupian">
-    <img src="../../../assets/img/1.png">
-    <div style="text-align: center">暂无内容</div>
-    </div>
   </div>
 </template>
 <script>
@@ -63,7 +65,6 @@
 export default {
   data() {
     return {
-      showTupian:false,
       service:'',
       city:'',
       xian:'',
@@ -141,9 +142,6 @@ export default {
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
-            if(this.contentList.length==0){
-              this.showTupian = true
-            }
             this.total =  body.data.totalNum;
             this.contentList.forEach(item=>{
               item.description2 =item.description
@@ -271,6 +269,8 @@ export default {
 
     }
   }
-
+  /deep/ .el-table__empty-block {
+    min-height: 400px;
+  }
 
 </style>

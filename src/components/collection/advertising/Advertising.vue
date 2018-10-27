@@ -13,6 +13,12 @@
       </div>
     </el-row>
     <el-table :data="AdvertisingTableData" style="width: 100%"  v-loading="loading" ref="advertisForm" prop="adverForm">
+      <template slot="empty">
+        <div class="tupian">
+          <img src="../../../assets/img/1.png">
+          <div style="text-align: center">暂无内容</div>
+        </div>
+      </template>
       <el-table-column type="index" :index="typeIndex" label="编号" width="80">
       </el-table-column>
       <el-table-column prop="typeName" label="类别" width="100">
@@ -51,11 +57,6 @@
         :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
      </div>
-   <div class="tupian" v-if="showTupian">
-     <img src="../../../assets/img/1.png">
-     <div style="text-align: center">暂无内容</div>
-   </div>
-
    </div>
 </template>
 <script>
@@ -63,7 +64,6 @@ import {mapActions} from 'vuex'
 export default {
   data () {
     return {
-      showTupian:false,
       changshi: '',
       total: 0,
       page: 1,
@@ -120,10 +120,7 @@ export default {
           if (body) {
             // console.log(body)
              // console.log(headers["x-total"])
-            this.AdvertisingTableData = body.data
-            if(this.AdvertisingTableData.length==0){
-              this.showTupian = true
-            }
+             this.AdvertisingTableData = body.data
             this.total = Number(headers['x-total'])
             this.loading = false
           } else {
@@ -225,6 +222,9 @@ export default {
       transform:translate(-20%,-50%);
 
     }
+  }
+  /deep/ .el-table__empty-block {
+    min-height: 400px;
   }
 
 </style>

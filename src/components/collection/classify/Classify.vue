@@ -9,6 +9,12 @@
       </div>
     </el-row>
     <el-table class="margin-20" v-loading="loading" :data="classifyList" border style="width: 100%">
+      <template slot="empty">
+        <div class="tupian">
+          <img src="../../../assets/img/1.png">
+          <div style="text-align: center">暂无内容</div>
+        </div>
+      </template>
       <el-table-column type="index" :index="typeIndex" label="编号" width="80">
       </el-table-column>
       <el-table-column prop="name" label="名称" width="400">
@@ -61,10 +67,6 @@
         :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-    <div class="tupian" v-if="showTupian">
-      <img src="../../../assets/img/1.png">
-      <div style="text-align: center">暂无内容</div>
-    </div>
   </div>
 </template>
 <script>
@@ -88,7 +90,6 @@ export default {
 
     }
     return {
-      showTupian:false,
       page: 1,
       total: 0,
       pagesize: 5,
@@ -177,10 +178,8 @@ export default {
           onsuccess: body => {
             // console.log(body)
             if (body.errcode==='0') {
-              this.classifyList = body.data.items
-              if( this.classifyList.length==0){
-                this.showTupian = true
-              }
+              // this.classifyList = body.data.items
+              this.classifyList =  body.data.items
               // console.log(this.classifyList[0].name)
               this.total = body.data.totalNum
               this.$store.commit("getAddclassifyData", body.data.items)
@@ -362,6 +361,9 @@ export default {
       transform:translate(-20%,-50%);
 
     }
+  }
+  /deep/ .el-table__empty-block {
+    min-height: 400px;
   }
 
 </style>
