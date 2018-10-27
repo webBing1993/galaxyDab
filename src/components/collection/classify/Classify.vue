@@ -171,6 +171,7 @@ export default {
     },
     // 列表渲染
     initlist () {
+      this.loading = true;
         this.claList({
           page:this.pagenum,
           pageSize:this.pagesize,
@@ -178,12 +179,10 @@ export default {
           onsuccess: body => {
             // console.log(body)
             if (body.errcode==='0') {
-              // this.classifyList = body.data.items
+              this.loading = false
               this.classifyList =  body.data.items
-              // console.log(this.classifyList[0].name)
               this.total = body.data.totalNum
               this.$store.commit("getAddclassifyData", body.data.items)
-              // console.log(this.$store.state.addClaData)
             } else {
             }
           }
