@@ -15,7 +15,6 @@
         <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
           <img :src="item.url" alt="" width="150px" height="150px">
           <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
-          <!--<p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p>-->
           <div v-if="item.isCover=='y'"><p class="bgf">封面图片</p></div>
           <div v-else><p class="bgf" @click="setCover($event,item.url,item.sort,item.isCover)">设为封面</p></div>
         </div>
@@ -41,8 +40,9 @@
         <el-cascader size="large" :options="options" v-model="contentForm.selectedOptions" @change="handleChange">
         </el-cascader>
       </el-form-item>
-      <el-form-item label="地址" prop="address">
+      <el-form-item label="地址" prop="address" class ='addressDetail'>
         <el-input v-model="contentForm.address" autocomplete="off" id="suggestId" name="address_detail"></el-input>
+        <div class="getAddress" @click="getAddressInfo()">获取位置信息</div>
         <div style="color:#ccc">请输入详细街道地址</div>
       </el-form-item>
       <el-form-item label="获取定位">
@@ -71,9 +71,8 @@
 
 </template>
 <script>
-  import { regionData } from "element-china-area-data";
+  import { regionData,CodeToText } from "element-china-area-data";
   import {mapActions} from 'vuex'
-  import { CodeToText } from "element-china-area-data";
   export default {
     data() {
       var checksort = (rule, value, callback) => {
@@ -116,6 +115,7 @@
         introduceMessage:'',
         longitude: "",
         latitude: "",
+        shengshiqu: "",
         addEmployeeInfo: {
           picUrl: ''
         },
@@ -198,55 +198,61 @@
     },
     mounted() {
       this.myFocus()
-      this.$nextTick(function () {
-        var th = this
-        // 创建Map实例
-        var map = new BMap.Map("allmap");
-        // 初始化地图,设置中心点坐标，
-        var point = new BMap.Point(121.160724,31.173277); // 创建点坐标，汉得公司的经纬度坐标
-        map.centerAndZoom(point, 15);
-        map.enableScrollWheelZoom();
-        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
-          {
-            "input": "suggestId"
-            , "location": map
-          })
-        var myValue
-        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
-          var _value = e.item.value;
-          myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-          th.address_detail = myValue
-          setPlace();
-        });
-
-        function setPlace() {
-          map.clearOverlays();    //清除地图上所有覆盖物
-          function myFun() {
-            th.userlocation = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
-            map.centerAndZoom(th.userlocation, 18);
-            map.addOverlay(new BMap.Marker(th.userlocation));    //添加标注
-          }
-
-          var local = new BMap.LocalSearch(map, { //智能搜索
-            onSearchComplete: myFun
-          });
-          local.search(myValue);
-
-          //测试输出坐标（指的是输入框最后确定地点的经纬度）
-          map.addEventListener("click",function(e){
-            //经度
-            th.longitude = th.userlocation.lng
-            th.latitude = th.userlocation.lat
-
-          })
-        }
-      })
+      this.tencentMap()   //调用腾讯地图
     },
     methods: {
       ...mapActions([
         'editCon',
         'findAllClassify'
       ]),
+      //初始化腾讯地图
+      tencentMap:function () {
+        var center  = new qq.maps.LatLng(this.longitude, this.latitude);
+        var map = new qq.maps.Map(
+          document.getElementById('allmap'), {
+            center: center,
+            zoom: 13,
+            draggable: true,
+            scrollwheel: true,
+            disableDoubleClickZoom: false
+          })
+        //创建一个Marker
+        var marker = new qq.maps.Marker({
+          //设置Marker的位置坐标
+          position: center,
+          //设置显示Marker的地图
+          map: map
+        });
+      },
+      //获取地址的详细信息并更新地图页面
+      getAddressInfo(){
+        // this.longitude = this.$store.state.editContentData.longitude
+        // this.latitude = this.$store.state.editContentData.latitude
+
+        this.axios({
+          method: 'get',
+          url:'https://bird.ioliu.cn/v1/?url=' + "https://apis.map.qq.com/ws/geocoder/v1/?address="+this.shengshiqu+this.contentForm.address+"&key=PZSBZ-4H2RF-YNLJD-NKKE6-2UCI3-OTFT7",
+          dataType: 'JSONP',
+        }).then((res)=>{
+          console.log(res.data)
+          if(res.data.status==0){
+            console.log(res.data.result.location.lng);
+            console.log(res.data.result.location.lat);
+            this.longitude=res.data.result.location.lat;
+            this.latitude=res.data.result.location.lng;
+            this.tencentMap();//更新地图信息
+          }else{
+            this.longitude=0;
+            this.latitude=0;
+          }
+        })
+        return false;
+      },
+
+      getCityCode:function(value){
+        //console.log(CodeToText[value.substring(0,2)+'0000']+CodeToText[value.substring(0,4)+'00']+CodeToText[value]);
+        return CodeToText[value[0]]+CodeToText[value[1]]+CodeToText[value[2]]
+      },
       showmsg(value,render){
         console.log(render)
         this.introduceMessage = render
@@ -290,6 +296,7 @@
         this.latitude = this.$store.state.editContentData.latitude
         this.contentForm.selectedOptions = [service,city,xian]
         this.cityCode = this.$store.state.editContentData.cityCode
+        this.shengshiqu=this.getCityCode([service,city,xian]);
         this.findAllClassify({
           onsuccess:(body)=>{
             // console.log(body.data)
@@ -302,29 +309,43 @@
 
       },
       SaveContentForm(formname) {
+        if((this.contentForm.address !=this.$store.state.editContentData.address2)&&(this.longitude == this.$store.state.editContentData.longitude && this.latitude ==this.$store.state.editContentData.latitude))
+        {
+          this.$message({
+            type: 'error',
+            message: '地址有改动请重新获取位置信息'
+          })
+          return false;
+        }
+        if(this.longitude ==''&& this.latitude ==''){
+          this.$message({
+            type: 'error',
+            message: '请获取位置信息!'
+          })
+        }
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr
         this.$refs[formname].validate(valide => {
           if (valide) {
-        this.editCon({
-          id: this.$store.state.editContentData.id,
-          catalogId: this.contentForm.viewContent,
-          name: this.contentForm.contentName,
-          picture: JSON.stringify(pictures),
-          phone: this.contentForm.phone,
-          address: this.contentForm.address,
-          description: this.introduceMessage,
-          sort: this.contentForm.contentSort,
-          cityCode: this.cityCode,
-          longitude: this.longitude,
-          latitude: this.latitude,
-          onsuccess: body => {
-            console.log(body)
-            if (body.errcode === '0') {
-              this.$router.push({name: "content"});
-            }
-          }
-        })
+            this.editCon({
+              id: this.$store.state.editContentData.id,
+              catalogId: this.contentForm.viewContent,
+              name: this.contentForm.contentName,
+              picture: JSON.stringify(pictures),
+              phone: this.contentForm.phone,
+              address: this.contentForm.address,
+              description: this.introduceMessage,
+              sort: this.contentForm.contentSort,
+              cityCode: this.cityCode,
+              longitude: this.longitude,
+              latitude: this.latitude,
+              onsuccess: body => {
+                console.log(body)
+                if (body.errcode === '0') {
+                  this.$router.push({name: "content"});
+                }
+              }
+            })
           }
         })
       },
@@ -341,6 +362,7 @@
             this.cityCode = value[index-1]
           }
         })
+        this.shengshiqu=this.getCityCode(value);
       },
       setCover(e, img, sort, cover) {
         console.log(img);
@@ -430,6 +452,27 @@
     height: 300px;
     font-family: "微软雅黑";
     border:1px solid green;
+  }
+  .addressDetail{
+    position:relative;
+    .getAddress{
+      position:absolute;
+      top:0;
+      left:430px;
+      height:40px;
+      line-height: 40px;
+      background-color: #eee;
+      width:100px;
+      text-align: center;
+      cursor: pointer;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      &:hover{
+        background-color: #ddd;
+      }
+    }
+
   }
   /deep/ .el-upload--picture-card {
     background-color: #ffffff;
