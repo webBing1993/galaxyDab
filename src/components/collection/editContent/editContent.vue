@@ -76,12 +76,14 @@
   export default {
     data() {
       var checksort = (rule, value, callback) => {
-        var re = new RegExp(/^[1-5]$/)
+        // var re = new RegExp(/^[1-5]$/)
         if(!value){
           callback()
-        }else if(!re.test(value)){
-          callback(new Error('输入的必须是1-5之间的数字'))
-        }else{
+        }
+        // else if(!re.test(value)){
+        //   callback(new Error('输入的必须是1-5之间的数字'))
+        // }
+        else{
           callback()
         }
       }
