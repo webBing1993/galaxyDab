@@ -116,6 +116,7 @@ module.exports = {
       }
     })
   },
+
   //创建内容列表
   estabContent(ctx, params) {
     ctx.dispatch('request', {
@@ -159,6 +160,23 @@ module.exports = {
     ctx.dispatch('request', {
       url: `/discoveryCatalog/all`,
       method: 'get',
+      onSuccess: (body, headers) => {
+        params.onsuccess ? params.onsuccess(body, headers) : null
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+  //上传图片
+  upload(ctx,params){
+    ctx.dispatch('request', {
+      url: `/adv/picture/upload`,
+      method: 'post',
+      body:params.data,
+      headers:{
+        'Content-Type': 'multipart/form-data'
+      },
       onSuccess: (body, headers) => {
         params.onsuccess ? params.onsuccess(body, headers) : null
       },

@@ -56,7 +56,8 @@
       </el-form-item>
       <el-form-item label="介绍" prop="introduceMsg">
         <div>　
-          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg" ref="showm"  :subfield="false" :ishljs="false"/>
+          <!--<mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg"   ref="showm" :toolbars='toolbars'/>-->
+          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg"  @imgAdd="$imgAdd" ref="showm" :ishljs="false" />
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -133,6 +134,10 @@
           // getAddress:[{longitude:''},{latitude:''}]
 
         },
+        // toolbars: {
+        //   bold: false, // 粗体
+        //   italic: false, // 斜体
+        // },
         rules: {
           //现在只是简单的验证后面要改验证
           contentName: [
@@ -215,7 +220,8 @@
     methods: {
       ...mapActions([
         'estabContent',
-        'findAllClassify'
+        'findAllClassify',
+        'upload'
       ]),
       //初始化腾讯地图
       tencentMap:function () {
@@ -273,6 +279,27 @@
         console.log(value)
         this.introduceMessage = render
       },
+      //编辑上传图片
+      $imgAdd(pos, $file){
+        var that = this
+        // 第一步.将图片上传到服务器.
+        var formdata = new FormData();
+        formdata.append('file', $file);
+        console.log(pos)
+        this.upload({
+           data:formdata,
+          onsuccess: body => {
+            console.log(body.data)
+            // let res =
+            console.log(pos)
+            console.log($file._name)
+            that.$refs.showm.$img2Url(pos, body.data);
+             // $vm.$img2Url(pos, body.data);
+
+          }
+
+        })
+      },
       initlist(){
         this.findAllClassify({
           onsuccess:(body)=>{
@@ -303,7 +330,7 @@
         }
       },
       SaveContentForm(formname) {
-
+         console.log(1)
         var that = this
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr

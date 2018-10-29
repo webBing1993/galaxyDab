@@ -56,7 +56,7 @@
       </el-form-item>
       <el-form-item label="介绍" prop="introduceMsg">
         <div>　
-          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg" ref="showm" :subfield="false" :ishljs="false"/>
+          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg" @imgAdd="$imgAdd"  ref="showm" :ishljs="false"/>
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -205,7 +205,8 @@
     methods: {
       ...mapActions([
         'editCon',
-        'findAllClassify'
+        'findAllClassify',
+        'upload'
       ]),
       //初始化腾讯地图
       tencentMap:function () {
@@ -258,6 +259,27 @@
       showmsg(value,render){
         console.log(render)
         this.introduceMessage = render
+      },
+      //编辑上传图片
+      $imgAdd(pos, $file){
+        var that = this
+        // 第一步.将图片上传到服务器.
+        var formdata = new FormData();
+        formdata.append('file', $file);
+        console.log(pos)
+        this.upload({
+          data:formdata,
+          onsuccess: body => {
+            console.log(body.data)
+            // let res =
+            console.log(pos)
+            console.log($file._name)
+            that.$refs.showm.$img2Url(pos, body.data);
+            // $vm.$img2Url(pos, body.data);
+
+          }
+
+        })
       },
       myFocus:function(){
         this.$refs.id.focus();

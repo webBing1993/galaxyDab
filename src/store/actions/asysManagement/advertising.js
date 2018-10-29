@@ -29,21 +29,6 @@ module.exports = {
       }
     })
   },
-  //上传相册图片
-  updateMsg (ctx, params) {
-    ctx.dispatch('request', {
-      url: '/adv/picture/upload',
-      file:params,
-      method: 'post',
-      headers: {'Content-Type': 'multipart/form-data'},
-      onSuccess: (body) => {
-        params.onsuccess && params.onsuccess(body)
-      },
-      onFail: body => {
-        params.onfail && params.onfail(body)
-      }
-    })
-  },
   //编辑广告
   editAdver(ctx,params){
     ctx.dispatch('request', {
