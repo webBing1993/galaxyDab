@@ -11,7 +11,7 @@
       <el-form-item label="名称" prop="advertisingName">
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片" prop="picUrl">
+      <el-form-item label="相册图片" prop="picUrl" ref="uploadImg">
         <div class="tupian" v-show="showTupian">
           <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
@@ -137,20 +137,21 @@
             {
               required: true,
               message: '图片不能为空',
-              trigger: 'blur'
+              trigger: 'change'
             }
           ],
           viewContent:[
             {
               required: true,
               message: "请选择分类",
-              trigger: "blur"
+              trigger: "change"
             }
           ],
           addressId:[{
+            type:'number',
             required: true,
             message: '位置必选不能为空',
-            trigger: 'blur'
+            trigger: 'change'
           }
           ]
         }
@@ -184,6 +185,7 @@
           this.esAdvertisingForm.picUrl = res.data;
           this.showTupian=true
           this.showpicUrl=true
+          this.$refs.uploadImg.clearValidate()
         }
       },
       // 取消
