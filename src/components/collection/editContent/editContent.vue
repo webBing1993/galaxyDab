@@ -30,7 +30,7 @@
             选择文件</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item style="color:#ccc;height:0px;margin-top: 30px;">
+      <el-form-item style="color:#ccc;height:0px;margin-top: 50px;">
         建议图片尺寸750px*600px或4：3，JPG.PNG格式，图片小于2M
       </el-form-item>
       <el-form-item label="电话" prop="phone" style="margin-top:40px">
@@ -486,7 +486,7 @@
     vertical-align: top;
   }
   /deep/ .el-button {
-    margin-top:50px;
+    margin-top:60px;
     margin-left:20px;
   }
 </style>

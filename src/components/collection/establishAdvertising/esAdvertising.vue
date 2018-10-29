@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="相册图片" prop="picUrl" ref="uploadImg">
         <div class="tupian" v-show="showTupian">
-          <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
+          <img :src="esAdvertisingForm.picUrl" alt="" width="150px" height="150px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
         </div>
         <el-upload
@@ -28,7 +28,7 @@
             图片上传</el-button>
         </el-upload>
       </el-form-item>
-      <el-form-item label="位置" prop="addressId">
+      <el-form-item label="位置" prop="addressId" style="margin-top:60px">
         <el-select v-model="esAdvertisingForm.addressId" placeholder="首页">
           <el-option v-for="(address, index) in roleList" :key="index" :label="address.roleName" :value="address.id">
           </el-option>
@@ -279,8 +279,8 @@
     }
   }
   .tupian{
-    width:200px;
-    height:100px;
+    width:150px;
+    height:150px;
     position:relative;
     .cancelImg{
       position:absolute;
@@ -314,6 +314,6 @@
   /deep/ .el-button {
     margin-top:20px;
     margin-left:20px;
-    margin-bottom:20px;
+    /*margin-bottom:20px;*/
   }
 </style>

@@ -12,9 +12,9 @@
       <el-form-item label="名称" prop="advertisingName">
         <el-input v-model="esAdvertisingForm.advertisingName" placeholder="首页Banner"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片" prop="picUrl">
+      <el-form-item label="相册图片" prop="picUrl" ref="uploadImg">
         <div class="tupian">
-          <img :src="esAdvertisingForm.picUrl" alt="" width="200px" height="100px">
+          <img :src="esAdvertisingForm.picUrl" alt="" width="150px" height="150px">
           <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,esAdvertisingForm.picUrl)">X</span>
         </div>
         <el-upload
@@ -190,6 +190,7 @@
         if (res.data) {
           this.esAdvertisingForm.picUrl = res.data;
           this.showpicUrl=true;
+          this.$refs.uploadImg.clearValidate()
         }
       },
       CancelContentForm(){
@@ -309,8 +310,8 @@
     width:700px;
   }
   .tupian{
-    width:200px;
-    height:100px;
+    width:150px;
+    height:150px;
     position:relative;
     .cancelImg{
       position:absolute;
@@ -340,6 +341,6 @@
   /deep/ .el-button {
     margin-top:20px;
     margin-left:20px;
-    margin-bottom:20px;
+    /*margin-bottom:20px;*/
   }
 </style>

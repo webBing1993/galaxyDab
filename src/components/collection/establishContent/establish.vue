@@ -11,7 +11,7 @@
       <el-form-item label="名称" prop="contentName">
         <el-input v-model="contentForm.contentName" ref="id"></el-input>
       </el-form-item>
-      <el-form-item label="相册图片" prop ="imgarr">
+      <el-form-item label="相册图片" prop ="imgarr" ref="uploadImg">
         <div v-for="(item,index) in contentForm.imgarr" :key="index" class="tupian">
           <img :src="item.url" alt="" width="150px" height="150px">
           <span class="cancelImg" @click="deleteImg($event,item.url,item.sort,item.isCover,index)">X</span>
@@ -150,13 +150,13 @@
             {
               required:true,
               message:'请输入内容',
-              trigger:'blur'
+              trigger:'change'
             }
           ],
           selectedOptions:[{
             required:true,
             message:'请选择省市区',
-            trigger:'blur'
+            trigger:'change'
           }
           ],
           imgarr:[{
@@ -177,7 +177,7 @@
             {
               required: true,
               message: "请选择分类",
-              trigger: "blur"
+              trigger: "change"
             }
           ],
           contentSort: [
@@ -268,6 +268,7 @@
       },
       showmsg(value,render){
         // console.log(render)
+        console.log(value)
         this.introduceMessage = render
       },
       initlist(){
@@ -296,6 +297,7 @@
             })
 
           }
+          this.$refs.uploadImg.clearValidate()
         }
       },
       SaveContentForm(formname) {
@@ -481,7 +483,7 @@
     vertical-align: top;
   }
   /deep/ .el-button {
-    margin-top:50px;
+    margin-top:60px;
     margin-left:20px;
   }
 
