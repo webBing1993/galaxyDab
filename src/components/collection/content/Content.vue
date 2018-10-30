@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column prop="name" label="名称" width="100">
       </el-table-column>
-      <el-table-column prop="pictures" label="封面图片"  width="120">
+      <el-table-column prop="pictures" label="封面图片" width="120">
         <template slot-scope="scope">
           <img :src="getCoverImg(scope.row.pictures) || '' " alt="" class="imgsize">
         </template>
@@ -138,14 +138,15 @@ export default {
         name: that.writeName,
         catalogId: that.selectClassify,
         onsuccess: body => {
-          console.log(body)
+          // console.log(body)
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
             this.total =  body.data.totalNum;
             this.contentList.forEach(item=>{
-              item.description2 =item.description
-              item.description = item.description.substr(0,20) + '...'
+              // console.log(item.description)
+              item.description2 =item.description.split('&&&//////////&&&')[0]
+              item.description = item.description.split('&&&//////////&&&')[0].substr(0,20) + '...'
               item.address2 = item.address
               var city= CodeToText[item.cityCode.substring(0,4)+'00']
               if (city=='市辖区'){
@@ -154,7 +155,7 @@ export default {
               item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+city+CodeToText[item.cityCode]+item.address
 
             })
-            console.log(this.contentList)
+            // console.log(this.contentList)
 
           }
         }
@@ -190,7 +191,7 @@ export default {
       });
     },
     editContent(row) {
-      console.log(row.description)
+      // console.log(row.description)
       this.$store.commit("getEditConData", row);
       this.$router.push({
         name: "editContent"

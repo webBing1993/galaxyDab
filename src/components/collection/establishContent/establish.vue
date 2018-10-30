@@ -57,7 +57,7 @@
       <el-form-item label="介绍" prop="introduceMsg">
         <div>　
           <!--<mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg"   ref="showm" :toolbars='toolbars'/>-->
-          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg"  @imgAdd="$imgAdd" ref="showm" :ishljs="false" />
+          <mavon-editor class="mavonEditor" v-model="contentForm.introduceMsg" @save="showmsg"  @imgAdd="$imgAdd" @imgDel="$imgDel" ref="showm" :ishljs="false" />
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="contentSort">
@@ -121,6 +121,7 @@
         addEmployeeInfo: {
           picUrl: ''
         },
+        img_file: {},
         contentForm: {
           viewContent: "",
           contentName: "",
@@ -249,10 +250,10 @@
           url:'https://bird.ioliu.cn/v1/?url=' + "https://apis.map.qq.com/ws/geocoder/v1/?address="+this.shengshiqu+this.contentForm.address+"&key=PZSBZ-4H2RF-YNLJD-NKKE6-2UCI3-OTFT7",
           dataType: 'JSONP',
         }).then((res)=>{
-          console.log(res.data)
+          // console.log(res.data)
           if(res.data.status==0){
-            console.log(res.data.result.location.lng);
-            console.log(res.data.result.location.lat);
+            // console.log(res.data.result.location.lng);
+            // console.log(res.data.result.location.lat);
             this.longitude=res.data.result.location.lat;
             this.latitude=res.data.result.location.lng;
             this.tencentMap();//更新地图信息
@@ -276,8 +277,9 @@
       },
       showmsg(value,render){
         // console.log(render)
-        console.log(value)
-        this.introduceMessage = render
+        // console.log(value)
+        this.introduceMessage = value +'&&&//////////&&&' + render
+        // console.log(this.introduceMessage.split('&&&////')[1])
       },
       //编辑上传图片
       $imgAdd(pos, $file){
@@ -285,20 +287,19 @@
         // 第一步.将图片上传到服务器.
         var formdata = new FormData();
         formdata.append('file', $file);
-        console.log(pos)
+        // console.log(pos)
         this.upload({
-           data:formdata,
+          data:formdata,
           onsuccess: body => {
-            console.log(body.data)
-            // let res =
-            console.log(pos)
-            console.log($file._name)
+            this.img_file[pos] = $file;
             that.$refs.showm.$img2Url(pos, body.data);
-             // $vm.$img2Url(pos, body.data);
 
           }
 
         })
+      },
+      $imgDel(pos){
+        delete this.img_file[pos];
       },
       initlist(){
         this.findAllClassify({
@@ -330,7 +331,7 @@
         }
       },
       SaveContentForm(formname) {
-         console.log(1)
+        // console.log(1)
         var that = this
         document.getElementsByClassName('fa-mavon-floppy-o')[0].click()
         let pictures = this.contentForm.imgarr

@@ -201,6 +201,15 @@
     mounted() {
       this.myFocus()
       this.tencentMap()   //调用腾讯地图
+      // this.decodeHtml=function(description) {
+      //   description = description.replace(/(\n)/g, "");
+      //   description = description.replace(/(\t)/g, "");
+      //   description = description.replace(/(\r)/g, "");
+      //   description = description.replace(/<\/?[^>]*>/g, "");
+      //   description = description.replace(/\s*/g, "");
+      //
+      // };
+
     },
     methods: {
       ...mapActions([
@@ -237,10 +246,10 @@
           url:'https://bird.ioliu.cn/v1/?url=' + "https://apis.map.qq.com/ws/geocoder/v1/?address="+this.shengshiqu+this.contentForm.address+"&key=PZSBZ-4H2RF-YNLJD-NKKE6-2UCI3-OTFT7",
           dataType: 'JSONP',
         }).then((res)=>{
-          console.log(res.data)
+          // console.log(res.data)
           if(res.data.status==0){
-            console.log(res.data.result.location.lng);
-            console.log(res.data.result.location.lat);
+            // console.log(res.data.result.location.lng);
+            // console.log(res.data.result.location.lat);
             this.longitude=res.data.result.location.lat;
             this.latitude=res.data.result.location.lng;
             this.tencentMap();//更新地图信息
@@ -257,8 +266,10 @@
         return CodeToText[value[0]]+CodeToText[value[1]]+CodeToText[value[2]]
       },
       showmsg(value,render){
-        console.log(render)
-        this.introduceMessage = render
+        // console.log(value)
+        // console.log(render)
+        this.introduceMessage = value +'&&&//////////&&&' + render
+
       },
       //编辑上传图片
       $imgAdd(pos, $file){
@@ -266,14 +277,14 @@
         // 第一步.将图片上传到服务器.
         var formdata = new FormData();
         formdata.append('file', $file);
-        console.log(pos)
+        // console.log(pos)
         this.upload({
           data:formdata,
           onsuccess: body => {
-            console.log(body.data)
+            // console.log(body.data)
             // let res =
-            console.log(pos)
-            console.log($file._name)
+            // console.log(pos)
+            // console.log($file._name)
             that.$refs.showm.$img2Url(pos, body.data);
             // $vm.$img2Url(pos, body.data);
 
@@ -305,7 +316,14 @@
         }
       },
       initlist() {
-        console.log(this.$store.state.editContentData.cityCode)
+        var des ='<p>zhangmengjie加油可以成功的<img src="http://img4.imgtn.bdimg.com/it/u=2011641246,1136238184&fm=26&gp=0.jpg"></p><h1>dskfjs</h1><p>今天天气很好</p>'
+        des = des.replace(/(\n)/g, "");
+        des = des.replace(/(\t)/g, "");
+        des = des.replace(/(\r)/g, "");
+        des = des.replace(/<\/?[^>]*>/g, "");
+        des = des.replace(/\s*/g, "");
+        // console.log(des)
+        // console.log(this.$store.state.editContentData.cityCode)
         let service = this.$store.state.editContentData.cityCode.substring(0,2)+'0000'
         let city = this.$store.state.editContentData.cityCode.substring(0,4)+'00'
         let xian = this.$store.state.editContentData.cityCode
@@ -364,7 +382,7 @@
               longitude: this.longitude,
               latitude: this.latitude,
               onsuccess: body => {
-                console.log(body)
+                // console.log(body)
                 if (body.errcode === '0') {
                   this.$router.push({name: "content"});
                 }
@@ -378,8 +396,8 @@
         return CodeToText[value[0]]+CodeToText[value[1]]+CodeToText[value[2]]
       },
       handleChange(value) {
-        console.log(this.getCityCode(value))
-        console.log(value)
+        // console.log(this.getCityCode(value))
+        // console.log(value)
         this.cityCode = value[value.length-1]
         value.forEach((item,index)=>{
           if(value[index] == ''){
@@ -389,7 +407,7 @@
         this.shengshiqu=this.getCityCode(value);
       },
       setCover(e, img, sort, cover) {
-        console.log(img);
+        // console.log(img);
 
         this.$message({
           type: "success",
@@ -398,7 +416,7 @@
         this.contentForm.imgarr.forEach(item => {
           if (item.url == img) {
             item.isCover = "y";
-            console.log(item.url);
+            // console.log(item.url);
           } else {
             item.isCover = "n";
           }
