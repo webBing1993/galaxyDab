@@ -101,12 +101,11 @@
     overflow: scroll;
     nav{
       position:fixed;
-      height: 4.5rem;
+      height: 3.5rem;
       width: 100%;
       background-color: #ffffff;
       margin-bottom: 1rem;
       display: block;
-
       h2{
         display: flex;
         justify-content: space-around;
@@ -114,7 +113,7 @@
         font-size: 15px;
         text-align: left;
         float: left;
-        padding-top: 25px;
+        padding-top: 15px;
         width: 160px;
         height: 100%;
         color: #ffffff;
@@ -127,7 +126,7 @@
       .tab{
         position: relative;
         float: left;
-        top: 1.5rem;
+        top: 0.5rem;
         /*margin-top: 2rem;*/
         margin-left: 30rem;
         .el-tabs{
@@ -145,7 +144,7 @@
       }
     }
     .first_wrap{
-      margin-top: 5.5rem;
+      margin-top:4.5rem;
       width: 100%;
       height: 88%;
       /*overflow: scroll;*/
