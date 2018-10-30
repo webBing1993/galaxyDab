@@ -1,8 +1,8 @@
 <template>
   <div class="buser_app">
     <nav>
-      <h1>生态酒店基础服务平台</h1>
-      <div class="tab">
+      <h2><img src="../assets/img/logo.png" /> 智慧酒店·微前台</h2>
+      <div class="tab ">
         <el-tabs v-model="activeName" @tab-click="handleClick" tab-position="bottom">
           <el-tab-pane label="B端用户管理" name="first"></el-tab-pane>
           <el-tab-pane label="配置管理" name="second"></el-tab-pane>
@@ -103,23 +103,33 @@
       position:fixed;
       height: 4.5rem;
       width: 100%;
-      background-color: #f5f8f8;
+      background-color: #ffffff;
       margin-bottom: 1rem;
       display: block;
 
-      h1{
+      h2{
+        display: flex;
+        justify-content: space-around;
+        background-color: #22d178;
+        font-size: 15px;
         text-align: left;
         float: left;
-        padding-top: 1rem;
-        margin-left: 8rem;
-        width: 25%;
+        padding-top: 25px;
+        width: 160px;
+        height: 100%;
+        color: #ffffff;
+        img{
+          display: inline-block;
+          width: 25px;
+          height: 20px;
+        }
       }
       .tab{
         position: relative;
         float: left;
         top: 1.5rem;
         /*margin-top: 2rem;*/
-        margin-left: 6rem;
+        margin-left: 30rem;
         .el-tabs{
           .el-tabs__content{
             visibility: hidden;
