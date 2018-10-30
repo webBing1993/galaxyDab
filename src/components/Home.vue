@@ -103,7 +103,7 @@
       position:fixed;
       height: 4.5rem;
       width: 100%;
-      background-color: #f5f8f8;
+      background-color: #ffffff;
       margin-bottom: 1rem;
       display: block;
 
