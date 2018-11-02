@@ -50,7 +50,9 @@ module.exports = {
       }
     }).catch(
       error => {
-        console.log(error)
+        if(error){
+          console.log(error)
+        }
         let status = error.response.status;
         if (status === 401) {
           router.push('/login')
