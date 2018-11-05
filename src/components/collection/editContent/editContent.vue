@@ -77,7 +77,6 @@
   import {regionData, CodeToText} from "element-china-area-data";
   import {mapActions} from 'vuex'
   import E from 'wangeditor'
-
   export default {
     data() {
       var checksort = (rule, value, callback) => {
@@ -87,19 +86,6 @@
         } else {
           callback()
         }
-      }
-      var checkphone = (rule, value, callback) => {
-        var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
-        if (value === '') {
-          return true
-        }
-        else if (!myreg.test(value)) {
-          callback(new Error('手机号输入不正确'))
-        }
-        else {
-          callback();
-        }
-
       }
       return {
         address_detail: null, //详细地址
