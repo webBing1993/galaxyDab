@@ -108,19 +108,20 @@
       display: block;
       h2{
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         background-color: #22d178;
         font-size: 15px;
         text-align: left;
         float: left;
         padding-top: 15px;
-        width: 160px;
+        width: 15%;
         height: 100%;
         color: #ffffff;
         img{
           display: inline-block;
           width: 25px;
           height: 20px;
+          margin-right: 10px;
         }
       }
       .tab{
