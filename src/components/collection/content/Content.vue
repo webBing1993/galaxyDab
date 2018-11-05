@@ -129,7 +129,6 @@ export default {
     },
     // 内容列表
     initList() {
-      // console.log(CodeToText['310101'])
       var that = this
       that.loading = true;
       that.getContent({
@@ -138,15 +137,19 @@ export default {
         name: that.writeName,
         catalogId: that.selectClassify,
         onsuccess: body => {
-          // console.log(body)
+           console.log(body)
           if (body) {
             this.loading = false;
             this.contentList = body.data.items;
             this.total =  body.data.totalNum;
             this.contentList.forEach(item=>{
-              // console.log(item.description)
-              item.description2 =item.description.split('&&&//////////&&&')[0]
-              item.description = item.description.split('&&&//////////&&&')[0].substr(0,20) + '...'
+              item.description2 = item.description;
+              item.description = item.description.replace(/(\n)/g, "");
+              item.description =  item.description.replace(/(\t)/g, "");
+              item.description =  item.description.replace(/(\r)/g, "");
+              item.description =  item.description.replace(/<\/?[^>]*>/g, "");
+              item.description =  item.description.replace(/\s*/g, "");
+              item.description = item.description.substr(0,20) + '...'
               item.address2 = item.address
               var city= CodeToText[item.cityCode.substring(0,4)+'00']
               if (city=='市辖区'){
@@ -155,8 +158,6 @@ export default {
               item.address=CodeToText[item.cityCode.substring(0,2)+'0000']+city+CodeToText[item.cityCode]+item.address
 
             })
-            // console.log(this.contentList)
-
           }
         }
       })
@@ -191,7 +192,6 @@ export default {
       });
     },
     editContent(row) {
-      // console.log(row.description)
       this.$store.commit("getEditConData", row);
       this.$router.push({
         name: "editContent"
