@@ -107,7 +107,7 @@ export default {
   font-size: 15px;
 }
 .el-menu-item.is-active {
-  background: #42c640 !important;
+  background: #22d178 !important;
   color: #ffffff;
 }
 </style>
