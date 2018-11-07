@@ -1,6 +1,6 @@
 <template>
   <div class="whome">
-    <el-container>
+    <el-container  v-loading="loadingStatus">
       <el-aside>
         <el-menu :default-openeds="openeds"
                  class="el-menu-vertical-demo">
@@ -57,6 +57,7 @@
       <el-main>
         <router-view></router-view>
       </el-main>
+
     </el-container>
   </div>
 </template>
@@ -67,6 +68,9 @@
     return {
       openeds: ["1", "2"]
     };
+  },
+  computed:{
+    ...mapState(['loadingStatus'])
   },
   methods: {
     ...mapActions(['goto']),

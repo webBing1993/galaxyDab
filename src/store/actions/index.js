@@ -12,4 +12,5 @@ module.exports = {
   ...require('./login'),
   ...require('./asysManagement'),
   ...require('./hotelList'),
+  ...require('./loading'),
 }

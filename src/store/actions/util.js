@@ -20,6 +20,7 @@ module.exports = {
 
 
   request: (ctx, param) => {
+    ctx.dispatch ('showLoading', true);
     let headers = param.headers || {};
     headers.Session = sessionStorage.getItem('session_id');
     axios({
@@ -32,7 +33,7 @@ module.exports = {
       data: param.body || null,
       timeout: param.timeout || 60000
     }).then(response => {
-
+      ctx.dispatch ('showLoading', false);
       if (response.config.url.match('export')) {
         param.onSuccess && param.onSuccess(response)
       }
@@ -50,6 +51,7 @@ module.exports = {
       }
     }).catch(
       error => {
+        ctx.dispatch ('showLoading', false);
         if(error){
           console.log(error)
         }
