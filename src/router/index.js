@@ -44,6 +44,10 @@ import Establish from '@/components/collection/establishContent/establish'
 import esadvertising from '@/components/collection/establishAdvertising/esAdvertising'
 import editAdvertising from '@/components/collection/editAdvertising/editAdvertising'
 import editContent from '@/components/collection/editContent/editContent'
+//酒店列表
+import hotelList from '@/components/collection/hotelList'
+import configure from '@/components/collection/hotelList/configure'
+
 Vue.use(Router)
 
 const main = [
@@ -148,14 +152,26 @@ const main = [
         name: 'Whome',
         component: Whome,
         redirect: {
-          name: 'classify'
+          name: 'hotelList'
         },
         children: [
+          //酒店列表
+          {
+            name: 'hotelList',
+            path: 'hotelList',
+            component: hotelList
+          },
+          //酒店配置
+          {
+            name: 'hotelList',
+            path: 'hotelList',
+            component: hotelList
+          },
           // 添加分类
           {
-            name: 'classify',
-            path: 'classify',
-            component: Classify
+            name: 'configure',
+            path: 'configure',
+            component: configure
           },
           // 内容管理
           {

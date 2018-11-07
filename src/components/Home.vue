@@ -3,7 +3,7 @@
     <nav>
       <h2><img src="../assets/img/logo.png" /> 智慧酒店·微前台</h2>
       <div class="tab ">
-        <el-tabs v-model="activeName" @tab-click="handleClick" tab-position="bottom">
+        <el-tabs v-model="activeName" class="tab_style" @tab-click="handleClick" tab-position="bottom">
           <el-tab-pane label="B端用户管理" name="first"></el-tab-pane>
           <el-tab-pane label="配置管理" name="second"></el-tab-pane>
         </el-tabs>
@@ -73,7 +73,7 @@
           this.$router.push({name:'hotelOrg'})
 
         }else{
-          this.$router.push({name:'classify'})
+          this.$router.push({name:'hotelList'})
         }
 
       }
@@ -141,7 +141,14 @@
             }
           }
 
+
         }
+        .tab_style{
+          .el-tabs__nav-wrap::after{
+            background-color: #F5F8FA;
+          }
+        }
+
       }
     }
     .first_wrap{
@@ -150,9 +157,10 @@
       height: 88%;
       /*overflow: scroll;*/
       /*height:500px ;*/
-      background: #eaedf0;
+      background: #F5F8FA;
 
     }
+
   }
 
 
