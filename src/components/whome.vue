@@ -27,7 +27,9 @@
               <el-menu-item index="2-1"
                             class="classify"
                             @click="classify">
-                <i class="el-icon-menu"></i>
+                 <span>
+                  <img src="../assets/img/fenleiguanli.png" alt="">
+                </span>
                 <span>分类管理</span>
               </el-menu-item>
               <el-menu-item index="2-2"
@@ -44,7 +46,9 @@
             <el-menu-item-group>
               <el-menu-item index="3-1"
                             @click="advertising">
-                <i class="el-icon-view"></i>
+                 <span>
+                  <img src="../assets/img/guanggaoguanli.png" alt="">
+                </span>
                 <span>广告管理</span>
               </el-menu-item>
               <el-menu-item index="3-2"
