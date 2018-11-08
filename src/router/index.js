@@ -161,18 +161,19 @@ const main = [
             path: 'hotelList',
             component: hotelList
           },
-          //酒店配置
-          {
-            name: 'hotelList',
-            path: 'hotelList',
-            component: hotelList
-          },
-          // 添加分类
+          // 酒店配置
           {
             name: 'configure',
             path: 'configure',
             component: configure
           },
+          //添加分类
+          {
+            name: 'classify',
+            path: 'classify',
+            component: Classify
+          },
+
           // 内容管理
           {
             name: 'content',

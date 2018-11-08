@@ -12,7 +12,9 @@
               <el-menu-item index="1-1"
                             class="classify"
                             @click="hotelList">
-                <i class="el-icon-menu"></i>
+                <span>
+                  <img src="../assets/img/jiudianliebiao.png" alt="">
+                </span>
                 <span>酒店列表</span>
               </el-menu-item>
             </el-menu-item-group>
