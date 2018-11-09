@@ -110,7 +110,7 @@
 
           <div class="main_hotel_server_name">客房在住服务</div>
 
-          <div class="main_hotel_server_name_main">
+          <div class="checkButton">
             <div>
               <p class="hotel_server_main_p1">客房服务</p>
               <p class="hotel_server_main_p2">（客房享有的餐券，SPA，迷你吧）</p>
@@ -122,6 +122,18 @@
                     @change="checkedServerType"
                     :min="1">
                     <el-checkbox v-for="list1 in optionList1" :disabled="roomService == false" :label="list1.id" :key="list1.id">{{list1.value}}</el-checkbox>
+                  </el-checkbox-group>
+                </div>
+              </div>
+              <div class="hotel_server_main_checkList">
+                <p class="hotel_server_main_checkList_span2">选择支持在线客服的房型</p>
+                <p class="hotel_server_main_p2">（不选表示不启用该功能）</p>
+                <div style="margin-top: 10px">
+                  <el-checkbox-group
+                    v-model="checkedServer2"
+                    @change="changeTypeRoom"
+                    :min="1">
+                    <el-checkbox v-for="list2 in optionList2" :disabled="roomService == false" :label="list2.id" :key="list2.id">{{list2.value}}</el-checkbox>
                   </el-checkbox-group>
                 </div>
               </div>
@@ -141,17 +153,7 @@
             <div>
               <p class="hotel_server_main_p1">客房权益</p>
               <p class="hotel_server_main_p2">（客房享有的餐券，SPA，迷你吧）</p>
-              <div class="hotel_server_main_checkList">
-                <span class="hotel_server_main_checkList_span">选择服务标签</span>
-                <div>
-                  <el-checkbox-group
-                    v-model="checkedServer2"
-                    @change="changeTypeRoom"
-                    :min="1">
-                    <el-checkbox v-for="list2 in optionList2" :disabled="roomRestricts == false" :label="list2.id" :key="list2.id">{{list2.value}}</el-checkbox>
-                  </el-checkbox-group>
-                </div>
-              </div>
+
             </div>
             <div>
               <el-switch
@@ -407,6 +409,39 @@
         height: 70px;
         line-height: 70px;
       }
+      .checkButton{
+        display: flex;
+        min-height: 80px;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #C9C9C9;
+        .hotel_server_main_p1{
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          color: #000000;
+        }
+        .hotel_server_main_p2{
+          opacity: 0.4;
+          font-family: PingFangSC-Regular;
+          color: #000000;
+        }
+        .hotel_server_main_checkList{
+          padding: 10px 0 10px 0;
+          .hotel_server_main_checkList_span{
+            display: inline-block;
+            margin: 10px 0;
+            font-family: PingFangSC-Medium;
+            font-size: 12px;
+            color: #000000;
+          }
+          .hotel_server_main_checkList_span2{
+            display: inline-block;
+            font-family: PingFangSC-Medium;
+            font-size: 12px;
+            color: #000000;
+          }
+        }
+      }
       .main_hotel_server_name_main{
         display: flex;
         min-height: 80px;
@@ -424,10 +459,16 @@
           color: #000000;
         }
         .hotel_server_main_checkList{
-          padding: 10px 0 20px 0;
+          padding: 10px 0 10px 0;
           .hotel_server_main_checkList_span{
             display: inline-block;
             margin: 10px 0;
+            font-family: PingFangSC-Medium;
+            font-size: 12px;
+            color: #000000;
+          }
+          .hotel_server_main_checkList_span2{
+            display: inline-block;
             font-family: PingFangSC-Medium;
             font-size: 12px;
             color: #000000;
