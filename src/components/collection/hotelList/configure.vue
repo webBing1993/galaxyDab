@@ -168,8 +168,24 @@
 
           <div class="main_hotel_server_name_main">
             <div>
-              <p class="hotel_server_main_p1">申请发票</p>
-              <p class="hotel_server_main_p2">（酒店企业微信发票中心关闭管理权限，C端小程序不可点，提示“当前酒店暂未开通”）</p>
+              <p class="hotel_server_main_p1">车牌登记</p>
+              <p class="hotel_server_main_p2">（开启后住户可在小程序端录入车牌）</p>
+            </div>
+            <div>
+              <el-switch
+                v-model="car"
+                active-color="#13ce66"
+                inactive-color="#E8E8E8"
+                @change="changeTypeCar"
+                :width="40">
+              </el-switch>
+            </div>
+          </div>
+
+          <div class="main_hotel_server_name_main">
+            <div>
+              <p class="hotel_server_main_p1">预约发票</p>
+              <p class="hotel_server_main_p2">（开启后住户可在小程序端预约发票）</p>
             </div>
             <div>
               <el-switch
@@ -211,6 +227,8 @@
             roomServiceId: '',
             roomRestricts: false,
             roomRestrictsId: '',
+            car:false,
+            carId:'',
             invoice: false,
             invoiceId: '',
             checkedServer1: [],
@@ -260,6 +278,9 @@
                       }else if(i.key == 'roomRestricts'){
                         this.roomRestricts = i.value==0?false:true
                         this.roomRestrictsId = i.id
+                      }else if(i.key == 'car'){
+                        this.car = i.value==0?false:true
+                        this.carId = i.id
                       }else if(i.key == 'invoice'){
                         this.invoice = i.value==0?false:true
                         this.invoiceId = i.id
@@ -338,6 +359,10 @@
           //客房权益
           changeTypeRoomRestricts(){
             this.hotelServiceConfigs(this.roomRestrictsId,this.roomRestricts)
+          },
+          //车牌登记
+          changeTypeCar(){
+            this.hotelServiceConfigs(this.carId,this.car)
           },
           //申请发票
           changeTypeInvoice(){
