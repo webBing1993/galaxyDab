@@ -198,6 +198,22 @@
             </div>
           </div>
 
+          <div class="main_hotel_server_name_main">
+            <div>
+              <p class="hotel_server_main_p1">智能客控</p>
+              <p class="hotel_server_main_p2">（关闭后小程序端房卡上该入口消失）</p>
+            </div>
+            <div>
+              <el-switch
+                v-model="guestControl"
+                active-color="#13ce66"
+                inactive-color="#E8E8E8"
+                @change="changeTypeGuestControl"
+                :width="40">
+              </el-switch>
+            </div>
+          </div>
+
 
         </div>
       </main>
@@ -231,6 +247,8 @@
             carId:'',
             invoice: false,
             invoiceId: '',
+            guestControl:false,
+            guestControlId:'',
             checkedServer1: [],
             checkedServer2: [],
             optionList1: [],
@@ -284,6 +302,9 @@
                       }else if(i.key == 'invoice'){
                         this.invoice = i.value==0?false:true
                         this.invoiceId = i.id
+                      }else if(i.key == 'guestControl'){
+                        this.guestControl = i.value==0?false:true
+                        this.guestControlId = i.id
                       }
                     }
                   }
@@ -367,6 +388,10 @@
           //申请发票
           changeTypeInvoice(){
             this.hotelServiceConfigs(this.invoiceId,this.invoice)
+          },
+          //智能客控
+          changeTypeGuestControl(){
+            this.hotelServiceConfigs(this.guestControlId,this.guestControl)
           },
 
           //服务状态切换
