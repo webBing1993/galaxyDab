@@ -201,7 +201,7 @@
           <div class="main_hotel_server_name_main">
             <div>
               <p class="hotel_server_main_p1">智能客控</p>
-              <p class="hotel_server_main_p2">（关闭后小程序端房卡上该入口消失）</p>
+              <p class="hotel_server_main_p2">（开启后住户可在小程序端使用智能客控）</p>
             </div>
             <div>
               <el-switch
