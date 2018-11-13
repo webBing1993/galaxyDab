@@ -67,6 +67,7 @@ module.exports = {
       }
     })
   },
+
 // 修改所属酒店
   computerChange(ctx,params) {
     ctx.dispatch('request',{
