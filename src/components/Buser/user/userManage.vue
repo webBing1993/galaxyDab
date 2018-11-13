@@ -27,6 +27,7 @@
       <div v-if="showNodeDetailForEdit">
         <user-Info
           :currendNode="currendNode"
+          :parentNode="parentNode"
           :NodeId="currentAddNodeParentId"></user-Info>
       </div>
 
@@ -74,6 +75,7 @@
         currentAddNodeParentType: '',
         currentAddNodeParentId: '',
         currendNode: {},
+        parentNode: [],
         showNodeDetailForEdit: false,
       }
     },
@@ -100,7 +102,8 @@
         this.UserManageTree({
           onsuccess: body => {
             if (body.data) {
-              this.userManageTreeDate[0].subOrganizations = body.data
+              this.userManageTreeDate[0].subOrganizations = body.data;
+              this.parentNode = body.data;
             } else {
             }
           }

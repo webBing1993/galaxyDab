@@ -99,6 +99,25 @@ module.exports = {
       }
     })
   },
+  // 修改所属酒店
+  computerChange(ctx,params) {
+    ctx.dispatch('request',{
+      url: `/org/user/updateUserHotel`,
+      method: 'POST',
+      body: {
+        orgId: params.orgId,
+        name: params.name,
+        userId: params.userId
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
+
 // role/getrolesbyorgid/100000000000000136
   // 获取备选角色列表
   readyRoleList(ctx, params) {
