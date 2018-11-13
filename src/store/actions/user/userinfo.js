@@ -67,7 +67,24 @@ module.exports = {
       }
     })
   },
-
+// 修改所属酒店
+  computerChange(ctx,params) {
+    ctx.dispatch('request',{
+      url: `/org/user/updateUserHotel`,
+      method: 'POST',
+      body: {
+        orgId: params.orgId,
+        name: params.name,
+        userId: params.userId
+      },
+      onSuccess: (body) => {
+        params.onsuccess && params.onsuccess(body)
+      },
+      onFail: body => {
+        params.onfail && params.onfail(body)
+      }
+    })
+  },
 
   // 描述:删除  http://qa.fortrun.cn:9201/user/deleteusers/1740cb0adbf547ae96f79a8b77ffd1d7
   // Method :delete

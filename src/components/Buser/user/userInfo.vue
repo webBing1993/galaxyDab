@@ -729,5 +729,4 @@
     display: inline-block;
   }
 
-
 </style>

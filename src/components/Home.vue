@@ -203,6 +203,7 @@
     }
 
   }
+
   .right {
     float: right;
   }
