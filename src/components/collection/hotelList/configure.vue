@@ -28,7 +28,7 @@
 
             <div class="main_hotel_server_name_main">
               <div>
-                <p class="hotel_server_main_p1">常客管理</p>
+                <p class="hotel_server_main_p1">客史记录</p>
                 <p class="hotel_server_main_p2">（酒店企业微信关闭功能，并隐藏栏目）</p>
               </div>
             <div>
