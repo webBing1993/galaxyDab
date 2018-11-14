@@ -108,38 +108,78 @@
     <!--确认按钮-->
     <div>
       <el-button type="success" plain @click="submitModify">保存</el-button>
-      <el-button type="primary" plain :disabled="currentNodeDetail.type!='HOTEL'" @click="changeBrandRelation=true">修改所属关系</el-button>
+      <!--:disabled="currentNodeDetail.type!='HOTEL'"-->
+      <el-button type="primary" plain disabled="" @click="changeBrandRelation=true">修改所属关系</el-button>
     </div>
 
     <!--修改所属关系-->
+    <!--<el-dialog-->
+    <!--title="修改所属关系"-->
+    <!--:visible.sync="changeBrandRelation"-->
+    <!--width="30%">-->
+
+    <!--<div class="dialog_item">-->
+    <!--<span class="left">酒店ID：</span><span>{{orgId}}</span>-->
+    <!--</div>-->
+    <!--<div class="dialog_item">-->
+    <!--<span class="left">酒店名称：</span><span>{{currendNode.name}}</span>-->
+    <!--</div>-->
+    <!--<div class="dialog_item">-->
+    <!--<span class="left">父节点：</span>-->
+    <!--<el-select v-model="toParentId" placeholder="请选择">-->
+    <!--<el-option-->
+    <!--v-for="item in alternativeParentNode"-->
+    <!--:key="item.value"-->
+    <!--:label="item.name"-->
+    <!--:value="item.orgId">-->
+    <!--</el-option>-->
+    <!--</el-select>-->
+    <!--</div>-->
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button @click.native="changeBrandRelation = false">取 消</el-button>-->
+    <!--<el-button type="primary" @click="changebelongRelation">确 定</el-button>-->
+    <!--</span>-->
+
+    <!--</el-dialog>-->
+
+
     <el-dialog
-      title="修改所属关系"
       :visible.sync="changeBrandRelation"
-      width="30%">
+      width="80%"
+      title="修改所属关系"
+    >
 
-      <div class="dialog_item">
-        <span class="left">酒店ID：</span><span>{{orgId}}</span>
+      <div class="clearfix">
+        <!--  酒店列表-->
+        <div class="fl dialog_left">
+
+          <el-tree
+            class="filter-tree"
+            :data="alternativeParentNode"
+            :props="defaultProps"
+            default-expand-all
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            :highlight-current="true"
+            @node-click="handleNodeClick">
+          </el-tree>
+
+        </div>
+
+        <!-- 选中的所属酒店-->
+        <div class="fr dialog_right">
+          <div class="currentList">
+            {{getCurrendNode.name}}
+          </div>
+        </div>
       </div>
-      <div class="dialog_item">
-        <span class="left">酒店名称：</span><span>{{currendNode.name}}</span>
-      </div>
-      <div class="dialog_item">
-        <span class="left">父节点：</span>
-        <el-select v-model="toParentId" placeholder="请选择">
-          <el-option
-            v-for="item in alternativeParentNode"
-            :key="item.value"
-            :label="item.name"
-            :value="item.orgId">
-          </el-option>
-        </el-select>
-      </div>
+
       <span slot="footer" class="dialog-footer">
-            <el-button @click.native="changeBrandRelation = false">取 消</el-button>
-            <el-button type="primary" @click="changebelongRelation">确 定</el-button>
-          </span>
-
+        <el-button @click.native="changeBrandRelation = false">取 消</el-button>
+        <el-button type="primary" @click="changebelongRelation">确 定</el-button>
+      </span>
     </el-dialog>
+
   </div>
 
 </template>
@@ -180,6 +220,24 @@
         input: '',
         area: area,
         shopAdress:[],
+        hotelOrgTreeDate: [
+          {
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "酒店组织",
+            "type": "ROOT",
+            "subOrganizations": [],
+            "parentId": "0",
+            "orgId": "1",
+            "status": null
+          }
+        ],
+        defaultProps: {
+          children: 'subOrganizations',
+          label: 'name',
+          id: 'orgId'
+        },
         AdressProps: {
           value: "label",
           label: "label",
@@ -200,8 +258,8 @@
 
         orgId: '',
         currentNodeDetail: {},
-//        getCurrendNode: {},
-//        disableEditType: '',
+        getCurrendNode: {},
+        disableEditType: '',
         alternativeParentNode: [],//备选父节点
         toParentId: '',
 
@@ -290,7 +348,6 @@
       },
 
       adressChange(value) {
-        console.log(value)
         this.shopAdress = value
 
       },
@@ -308,6 +365,29 @@
         })
 
       },
+
+//    树节点点击
+      handleNodeClick(item) {
+
+        if (item.orgId == "1") {
+          this.$message({
+            message: "顶级组织不可编辑",
+            type: 'error'
+          });
+          return false
+        } else {
+          this.showNodeDetailForEdit = true;
+          this.currentAddNodeParentId = item.orgId;
+          this.getCurrendNode = item;
+        }
+      },
+
+//  节点过滤
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
+
 
 //      修改节点
       submitModify() {
@@ -409,8 +489,12 @@
     },
     mounted() {
       this.orgId = this.NodeId;
-      this.getCurrentDetail()
-      this.alternativeParentNode = this.parentNodeList
+      this.getCurrentDetail();
+      this.alternativeParentNode = JSON.parse(JSON.stringify(this.parentNodeList));
+      this.alternativeParentNode.forEach((item,index) => {
+        item.subOrganizations = [];
+      });
+      this.getCurrendNode = this.currendNode;
       console.log('this.alternativeParentNode', this.alternativeParentNode)
     },
     watch: {
@@ -446,6 +530,37 @@
       width: 100%;
     }
   }
+
+  .fl {
+    float: left;
+  }
+
+  .fr {
+    float: right;
+  }
+
+  .dialog_left {
+    width: 50%;
+    max-height: 300px;
+    overflow-y: scroll;
+    border-right: 1px solid gray;
+    li a {
+      display: block;
+      color: #333;
+    }
+  }
+
+  .dialog_left::-webkit-scrollbar {
+    /*display: none;*/
+  }
+
+  .dialog_right {
+    width: 49.5%;
+    .currentList {
+      padding-left: 30px;
+    }
+  }
+
 
 
 </style>

@@ -350,11 +350,12 @@
                 })
                 temp.map(item => {
                   if (item.type == 'SEGMENT' || item.type == "ROOT"||item.type == "GROUP") {
-                    this.allHotelOrgNode.push(item)
+                    item.showNode = false;
+
+                    this.allHotelOrgNode.push(item);
                   }
                 })
               })
-
 
             } else {
             }

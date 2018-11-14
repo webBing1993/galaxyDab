@@ -8,14 +8,27 @@
           <el-tab-pane label="配置管理" name="second"></el-tab-pane>
         </el-tabs>
       </div>
+      <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
     </nav>
     <div class="first_wrap">
       <router-view></router-view>
     </div>
+
+
+    <el-dialog
+      :visible.sync="logout"
+      title="是否退出?"
+      width="30%"
+    >
+      <el-button @click.native="logout = false">否</el-button>
+      <el-button type="primary" @click="exitOut()" class="right">是</el-button>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex';
   export default {
     name: 'Home',
     data () {
@@ -64,10 +77,14 @@
       return {
         activeName:'first',
         data4: JSON.parse(JSON.stringify(data)),
-        data5: JSON.parse(JSON.stringify(data))
+        data5: JSON.parse(JSON.stringify(data)),
+        logout: false
       }
     },
     methods:{
+      ...mapActions([
+        'goto'
+      ]),
       handleClick(tab){
         if(tab.label=='B端用户管理'){
           this.$router.push({name:'hotelOrg'})
@@ -76,6 +93,25 @@
           this.$router.push({name:'hotelList'})
         }
 
+      },
+
+
+      // 退出事件
+      exit() {
+        this.logout = true;
+      },
+
+      // 退出确定事件
+      exitOut() {
+        this.logout = false;
+        this.$message({
+          type: 'success',
+          message: '退出成功!',
+          duration:1000,
+          showClose: true,
+        });
+        sessionStorage.removeItem('session_id');
+        this.goto('/login');
       }
 
       // renderContent(h, { node, data, store }) {
@@ -150,6 +186,11 @@
         }
 
       }
+      .exit {
+        float: right;
+        margin-top: 10px;
+        margin-right: 30px;
+      }
     }
     .first_wrap{
       margin-top:4.5rem;
@@ -163,5 +204,8 @@
 
   }
 
+  .right {
+    float: right;
+  }
 
 </style>

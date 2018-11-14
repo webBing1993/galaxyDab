@@ -44,6 +44,7 @@
             <span @click="handleView(scope.row)" type="text" class="handel">查看</span>
             <span @click="handleEdit(scope.row)" type="text" class="handel">编辑</span>
             <span @click="handleReset(scope.row)" type="text" class="handel">重置密码</span>
+            <span @click="handleChange(scope.row)" type="text" class="handel">修改所属酒店</span>
           </template>
         </el-table-column>
       </el-table>
@@ -129,6 +130,38 @@
       <el-button type="primary" @click="submitSetRole">确 定</el-button>
     </el-dialog>
 
+    <el-dialog
+      :title="title"
+      :visible.sync="showChangeNode"
+      width="60%"
+    >
+      <div class="clearfix">
+        <div class="fl dialog_left">
+          <el-input
+            placeholder="输入关键字进行筛选"
+            v-model="filterText">
+          </el-input>
+          <el-tree
+            class="filter-tree"
+            :data="parentNode"
+            :props="defaultProps"
+            default-expand-all
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            :highlight-current="true"
+            ref="tree"
+            @node-click="handleNodeClick">
+          </el-tree>
+        </div>
+        <div class="fr dialog_right">
+          {{getCurrendNode.name}}
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showChangeNode = false">取 消</el-button>
+        <el-button type="primary" @click="submitChange">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 </template>
@@ -148,6 +181,10 @@
         default: () => {
         }
       },
+      parentNode: {
+        type: [Object, Array,String],
+        default: () => []
+      }
     },
     data() {
       return {
@@ -161,6 +198,27 @@
         isIndeterminate: true,
         showSetRole: false,
         showAddNew: false,
+        showChangeNode: false,
+        filterText: '',
+        userManageTreeDate: [
+          {
+            "foreignId": "",
+            "creator": null,
+            "deleted": false,
+            "name": "顶级组织",
+            "type": "ROOT",
+            "subOrganizations": [],
+            "parentId": "0",
+            "orgId": "0",
+            "status": null
+          }
+        ],
+        defaultProps: {
+          children: 'subOrganizations',
+          label: 'name',
+          id: 'orgId'
+        },
+        interimList: {}, // 临时数据   点击修改公司
         searchVal: '',
         employeeTableList: [],
         dialogVisible: false,
@@ -205,6 +263,7 @@
         'adduser',
         'delUser',
         'qyWeath',
+        'computerChange',
         'setRoles',
         'modifyuser',
         'resetPwd',
@@ -219,6 +278,61 @@
             this.employeeTableList = body.data
           }
         })
+      },
+
+      // 修改所属公司确定事件  剩下传值
+      submitChange() {
+          console.log(this);
+        this.computerChange({
+          userId: this.interimList.userId,
+          name: this.interimList.name,
+          orgId: this.getCurrendNode.orgId,
+          onsuccess: body => {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            });
+            this.showChangeNode = false;
+            this.orgId = this.getCurrendNode.orgId;
+            this.getEmployeeList()
+
+          },
+          onfail: body => {
+            this.$message({
+              type: 'warning',
+              message: '修改失败!'
+            });
+            this.showChangeNode = false;
+          }
+        })
+      },
+
+      //    树节点点击
+      handleNodeClick(item, node, aaa) {
+        console.log(item);
+        if (item.orgId == "0") {
+          this.$message({
+            message: "顶级组织不可编辑",
+            type: 'error'
+          });
+          return false
+        } else if (item.type == "HOTEL") {
+          this.getCurrendNode = item;
+        }
+      },
+      //  节点过滤
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
+
+      // 修改所属公司
+      handleChange(val) {
+          console.log(val);
+        this.interimList = val;
+        this.title = '修改所属公司';
+        this.showChangeNode = true;
+
       },
 
       getRoleList() {
@@ -514,9 +628,9 @@
       },
 
       handleSelectionChange(val) {
-//        console.log('valvalval',val)
+//        console.log('valvalval',val);
         this.selectItemList = val;
-        this.selectitem_id_list = []
+        this.selectitem_id_list = [];
         this.selectItemList.map(item => {
           this.selectitem_id_list.push(item.userId)
         })
@@ -534,8 +648,7 @@
     mounted() {
       this.orgId = this.NodeId;
       this.getCurrendNode = this.currendNode;
-      this.getEmployeeList()
-
+      this.getEmployeeList();
 
     },
     watch: {
@@ -546,6 +659,9 @@
       currendNode(val) {
         console.log(this.getCurrendNode)
         this.getCurrendNode = val
+      },
+      filterText(val) {
+        this.$refs.tree.filter(val);
       }
     }
   }
@@ -591,5 +707,27 @@
   /deep/ .el-upload {
     display: flex;
   }
+
+  .fl {
+    float: left;
+  }
+
+  .fr {
+    float: right;
+  }
+
+  .dialog_left {
+    width: 50%;
+    overflow: scroll;
+    max-height: 300px;
+    border-right: 1px solid gray;
+  }
+
+  .dialog_right {
+    width: 49.5%;
+    padding-left: 30px;
+    display: inline-block;
+  }
+
 
 </style>
