@@ -431,6 +431,10 @@
 </script>
 
 <style lang="less" scoped>
+  .el-checkbox.el-checkbox{
+    margin-left: 0;
+    margin-right: 30px;
+  }
   .configure_title{
     height: 40px;
     line-height: 30px;
