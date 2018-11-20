@@ -119,8 +119,7 @@
                 <div>
                   <el-checkbox-group
                     v-model="checkedServer1"
-                    @change="checkedServerType"
-                    :min="1">
+                    @change="checkedServerType">
                     <el-checkbox v-for="list1 in optionList1" :disabled="roomService == false" :label="list1.id" :key="list1.id">{{list1.value}}</el-checkbox>
                   </el-checkbox-group>
                 </div>
@@ -131,8 +130,7 @@
                 <div style="margin-top: 10px">
                   <el-checkbox-group
                     v-model="checkedServer2"
-                    @change="changeTypeRoom"
-                    :min="1">
+                    @change="changeTypeRoom">
                     <el-checkbox v-for="list2 in optionList2" :disabled="roomService == false" :label="list2.id" :key="list2.id">{{list2.value}}</el-checkbox>
                   </el-checkbox-group>
                 </div>
