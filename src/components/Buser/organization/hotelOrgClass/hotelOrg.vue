@@ -503,6 +503,7 @@
 //    树节点点击
       handleNodeClick(item, node, aaa) {
         console.log('nodenode', item)
+        item.orgId=item.id;
 //        let temp = []
 //        let temp2=[]
 //        this.getParNode(node, temp)
