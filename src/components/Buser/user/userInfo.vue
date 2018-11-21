@@ -309,7 +309,7 @@
 
       //    树节点点击
       handleNodeClick(item, node, aaa) {
-        console.log(item);
+        item.orgId = item.id;
         if (item.orgId == "0") {
           this.$message({
             message: "顶级组织不可编辑",
