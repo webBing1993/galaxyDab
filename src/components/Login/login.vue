@@ -29,6 +29,9 @@
       return {
         username: '',
         password: '',
+        authorityJudge:[],
+        userPermissionsJudge:{},
+        configPermissionsJudge:{}
       }
     },
     computed: {
@@ -45,6 +48,18 @@
           account: this.username,
           password: this.password,
           onsuccess: body => {
+            console.log('测试所有的权限',body.data)
+            this.authorityJudge = body.data.permissions[0].subPermissions
+            for(var i = 0; i< this.authorityJudge.length;i++){
+              if(this.authorityJudge[i].name=='B端用户管理'){
+                this.userPermissionsJudge = this.authorityJudge[i]
+                this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+              }
+              else if(this.authorityJudge[i].name=='配置管理'){
+                this.configPermissionsJudge =  this.authorityJudge[i]
+                this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+              }
+            }
             this.$message({
               type: 'success',
               message: '登录成功!',

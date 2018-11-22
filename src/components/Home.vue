@@ -4,8 +4,8 @@
       <h2><img src="../assets/img/logo.png" /> 智慧酒店·微前台</h2>
       <div class="tab ">
         <el-tabs v-model="activeName" class="tab_style" @tab-click="handleClick" tab-position="bottom">
-          <el-tab-pane label="B端用户管理" name="first"></el-tab-pane>
-          <el-tab-pane label="配置管理" name="second"></el-tab-pane>
+          <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser!=''"></el-tab-pane>
+          <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage!=''"></el-tab-pane>
         </el-tabs>
       </div>
       <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
@@ -13,8 +13,6 @@
     <div class="first_wrap">
       <router-view></router-view>
     </div>
-
-
     <el-dialog
       :visible.sync="logout"
       title="是否退出?"
@@ -78,7 +76,10 @@
         activeName:'first',
         data4: JSON.parse(JSON.stringify(data)),
         data5: JSON.parse(JSON.stringify(data)),
-        logout: false
+        logout: false,
+        isShowTabUser:'',
+        isShowTabManage:''
+
       }
     },
     methods:{
@@ -125,6 +126,10 @@
       //     </span>);
       // }
 
+    },
+    mounted(){
+      this.isShowTabUser = this.$store.state.userPermissions.name
+      this.isShowTabManage = this.$store.state.configPermissions.name
     }
   }
 </script>
