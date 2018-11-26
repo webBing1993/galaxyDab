@@ -8,14 +8,13 @@
           <el-col :span="24">
             <el-menu
               :router="true"
-              default-active="2"
-              :unique-opened="true"
               @open="handleOpen"
               @close="handleClose"
+              :default-openeds="openeds"
               class="el-menu-admin">
-              <el-submenu :index="item.description" v-for="item in configPermissionsShow.subPermissions" :key="item.id">
+              <el-submenu :index="String(index)" v-for="(item,index) in configPermissionsShow.subPermissions" :key="item.id">
                 <template slot="title">
-                  <i class="el-icon-location"></i>
+                  <i class="el-icon-document"></i>
                   <span>{{item.name}}</span>
                 </template>
                 <el-menu-item :index="tag.description" v-for="tag in item.subPermissions" :key="tag.id">
@@ -41,7 +40,9 @@
     name: 'Buser',
     data () {
       return {
-        configPermissionsShow:{}
+        configPermissionsShow:{},
+        openArray:[],
+        openeds:["0","1","2","3","4"],
 
       }
     },
@@ -50,20 +51,18 @@
         'goto'
       ]),
       handleOpen (key, keyPath) {
-        // console.log(key, keyPath)
+        console.log(key, keyPath)
       },
       handleClose (key, keyPath) {
-        // console.log(key, keyPath)
+        console.log(key, keyPath)
       },
     },
     mounted(){
       this.configPermissionsShow=this.$store.state.configPermissions
-
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style lang="less" scoped>
 </style>

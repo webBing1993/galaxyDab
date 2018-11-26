@@ -8,15 +8,14 @@
 
               <el-menu
                 :router="true"
-                default-active="2"
-                :unique-opened="true"
                 @open="handleOpen"
                 @close="handleClose"
+                :default-openeds="openeds"
                 class="el-menu-admin">
                 <el-col :span="24"  v-for="item in userPermissionsShow.subPermissions" :key="item.id">
-                  <el-submenu :index="item.description" v-if="item.subPermissions != null">
+                  <el-submenu index="1" v-if="item.subPermissions != null">
                     <template slot="title">
-                      <i class="el-icon-location"></i>
+                      <i class="el-icon-document"></i>
                       <span>{{item.name}}</span>
                     </template>
                     <el-menu-item :index="tag.description" v-for="tag in item.subPermissions" :key="tag.id">
@@ -25,7 +24,7 @@
                     </el-menu-item>
                   </el-submenu>
                   <el-menu-item :index="item.description" v-if="item.subPermissions == null">
-                  <i class="el-icon-menu"></i>
+                  <i class="el-icon-document"></i>
                   <span slot="title">{{item.name}}</span>
                   </el-menu-item>
                 </el-col>
@@ -68,16 +67,6 @@
           <router-view></router-view>
         </div>
     </div>
-    <!--<el-row>-->
-     <!---->
-      <!--<el-col :span="4">-->
-           <!---->
-      <!--</el-col>-->
-      <!---->
-      <!--<el-col :span="20">-->
-       <!---->
-      <!--</el-col>-->
-    <!--</el-row>-->
   </div>
 </template>
 
@@ -88,7 +77,8 @@
         data () {
             return {
               userPermissionsShow:{},
-              isShowPermission:true
+              isShowPermission:true,
+              openeds:["1","2","3","4"]
 
             }
         },
@@ -105,7 +95,6 @@
         },
         mounted(){
           this.userPermissionsShow = this.$store.state.userPermissions
-          console.log('ceshi1111',this.userPermissionsShow )
 
         }
     }
