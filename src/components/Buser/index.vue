@@ -94,7 +94,11 @@
           },
         },
         mounted(){
-          this.userPermissionsShow = this.$store.state.userPermissions
+          console.log('ceshi',this.$store.state.userPermissions)
+          if(this.$store.state.userPermissions!=null){
+            this.userPermissionsShow = this.$store.state.userPermissions
+          }
+
 
         }
     }

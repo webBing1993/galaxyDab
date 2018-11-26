@@ -58,7 +58,11 @@
       },
     },
     mounted(){
-      this.configPermissionsShow=this.$store.state.configPermissions
+      console.log('ceshi333333',this.$store.state.configPermissions)
+      if(this.$store.state.configPermissions!=null){
+        this.configPermissionsShow=this.$store.state.configPermissions
+      }
+
     }
   }
 </script>

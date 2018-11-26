@@ -48,25 +48,65 @@
           account: this.username,
           password: this.password,
           onsuccess: body => {
-            console.log('测试所有的权限',body.data)
+            // console.log('测试所有的权限',body.data)
+            console.log('测试得分',body.data.permissions.length)
+            if(body.data.permissions.length == 0){
+              this.$message({
+                type: 'error',
+                message: '没有权限!',
+                duration:1000,
+                showClose: true,
+              });
+              return false;
+            }
             this.authorityJudge = body.data.permissions[0].subPermissions
-            for(var i = 0; i< this.authorityJudge.length;i++){
-              if(this.authorityJudge[i].name=='B端用户管理'){
-                this.userPermissionsJudge = this.authorityJudge[i]
+            if(this.authorityJudge.length == 1){
+              if(this.authorityJudge[0].name=='B端用户管理'){
+                this.userPermissionsJudge = this.authorityJudge[0]
+                this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+                this.goto('/hotelOrg')
+                console.log('测试1',this.userPermissionsJudge)
+              }
+              else{
+                this.userPermissionsJudge = ''
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
               }
-              else if(this.authorityJudge[i].name=='配置管理'){
-                this.configPermissionsJudge =  this.authorityJudge[i]
+              if(this.authorityJudge[0].name=='配置管理'){
+                this.configPermissionsJudge =  this.authorityJudge[0]
+                this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+                this.goto('/hotelList')
+                console.log('测试2',this.configPermissionsJudge)
+              }
+              else{
+                this.configPermissionsJudge =  ''
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
               }
             }
+            if(this.authorityJudge.length == 2){
+              this.goto('/hotelOrg')
+              for(var i = 0; i< this.authorityJudge.length;i++){
+                if(this.authorityJudge[i].name=='B端用户管理'){
+                  this.userPermissionsJudge = this.authorityJudge[i]
+                  this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+
+                }
+                else if(this.authorityJudge[i].name=='配置管理'){
+                  this.configPermissionsJudge =  this.authorityJudge[i]
+                  this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+
+                }
+
+              }
+            }
+
             this.$message({
               type: 'success',
               message: '登录成功!',
               duration:1000,
               showClose: true,
             });
-            this.goto('/hotelOrg')
+            // this.goto('/hotelOrg')
+
           },
           onfail: body => {
             this.$message({

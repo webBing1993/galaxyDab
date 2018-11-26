@@ -4,8 +4,8 @@
       <h2><img src="../assets/img/logo.png" /> 智慧酒店·微前台</h2>
       <div class="tab ">
         <el-tabs v-model="activeName" class="tab_style" @tab-click="handleClick" tab-position="bottom">
-          <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser!=''"></el-tab-pane>
-          <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage!=''"></el-tab-pane>
+          <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser"></el-tab-pane>
+          <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage"></el-tab-pane>
         </el-tabs>
       </div>
       <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
@@ -77,8 +77,8 @@
         data4: JSON.parse(JSON.stringify(data)),
         data5: JSON.parse(JSON.stringify(data)),
         logout: false,
-        isShowTabUser:'',
-        isShowTabManage:''
+        isShowTabUser:false,
+        isShowTabManage:false
 
       }
     },
@@ -112,6 +112,7 @@
           showClose: true,
         });
         sessionStorage.removeItem('session_id');
+        localStorage.clear()
         this.goto('/login');
       }
 
@@ -128,8 +129,23 @@
 
     },
     mounted(){
-      this.isShowTabUser = this.$store.state.userPermissions.name
-      this.isShowTabManage = this.$store.state.configPermissions.name
+
+      console.log('B端',this.$store.state.userPermissions)
+      if(this.$store.state.userPermissions!=''){
+        this.isShowTabUser = true
+      }
+      else{
+        this.isShowTabUser = false
+      }
+      console.log('配置管理1',this.$store.state.configPermissions=='')
+      if(this.$store.state.configPermissions!=''){
+        this.isShowTabManage = true
+      }
+      else{
+        this.isShowTabManage = false
+      }
+      console.log('查看',this.isShowTabManage)
+
     }
   }
 </script>
