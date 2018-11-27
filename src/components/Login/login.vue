@@ -50,6 +50,8 @@
           onsuccess: body => {
             // console.log('测试所有的权限',body.data)
             console.log('测试得分',body.data.permissions.length)
+            this.$store.commit("getUsernamePermissions", this.username);
+            this.$store.commit("getPasswordPermissions", this.password);
             if(body.data.permissions.length == 0){
               this.$message({
                 type: 'error',

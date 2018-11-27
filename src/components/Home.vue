@@ -130,22 +130,52 @@
     },
     mounted(){
 
-      console.log('B端',this.$store.state.userPermissions)
+      // console.log('B端',this.$store.state.userPermissions)
       if(this.$store.state.userPermissions!=''){
         this.isShowTabUser = true
       }
       else{
         this.isShowTabUser = false
       }
-      console.log('配置管理1',this.$store.state.configPermissions=='')
+      // console.log('配置管理1',this.$store.state.configPermissions=='')
       if(this.$store.state.configPermissions!=''){
         this.isShowTabManage = true
       }
       else{
         this.isShowTabManage = false
       }
-      console.log('查看',this.isShowTabManage)
+      // console.log('查看',this.isShowTabManage)
 
+    },
+    computed:{
+      getconfigPermissionsShow(){
+        return this.$store.state.configPermissions;
+      },
+      getuserPermissionsShow(){
+        return this.$store.state.userPermissions
+
+      }
+
+    },
+    watch:{
+      getconfigPermissionsShow(val){
+        if(val!=''){
+          this.isShowTabManage = true
+        }
+        else{
+          this.isShowTabManage = false
+        }
+      },
+      getuserPermissionsShow(val){
+        if(val!=''){
+          this.isShowTabUser = true
+        }
+        else{
+
+          this.isShowTabUser = false
+        }
+
+      }
     }
   }
 </script>

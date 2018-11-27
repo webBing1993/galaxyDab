@@ -198,6 +198,13 @@
           label: 'name',
           id: 'id'
         },
+        usernamePermiss:'',
+        passwordPermiss:'',
+        authorityJudge:'',
+        userPermissionsJudge:'',
+        configPermissionsJudge:''
+
+
       }
     },
     methods: {
@@ -214,6 +221,8 @@
         'setAuth',
         'searchRole',
         'authTree',
+        'loginIN',
+        'goto',
       ]),
       searchRoleList() {
         this.searchRole({
@@ -284,6 +293,64 @@
           })
         }
       },
+      loginShow(){
+        this.loginIN({
+          account: this.usernamePermiss,
+          password: this.passwordPermiss,
+          onsuccess: body => {
+            if(body.data.permissions.length == 0){
+              this.$message({
+                type: 'error',
+                message: '没有权限!',
+                duration:1000,
+                showClose: true,
+              });
+              return false;
+            }
+            this.authorityJudge = body.data.permissions[0].subPermissions
+            if(this.authorityJudge.length == 1){
+              if(this.authorityJudge[0].name=='B端用户管理'){
+                this.userPermissionsJudge = this.authorityJudge[0]
+                this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+                this.goto('/hotelOrg')
+                // console.log('测试1111111',this.userPermissionsJudge)
+              }
+              else{
+                this.userPermissionsJudge = ''
+                this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+              }
+              if(this.authorityJudge[0].name=='配置管理'){
+                this.configPermissionsJudge =  this.authorityJudge[0]
+                this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+                this.goto('/hotelList')
+                // console.log('测试2222222222',this.configPermissionsJudge)
+              }
+              else{
+                this.configPermissionsJudge =  ''
+                this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+              }
+            }
+            if(this.authorityJudge.length == 2){
+              this.goto('/roleManage')
+              for(var i = 0; i< this.authorityJudge.length;i++){
+                if(this.authorityJudge[i].name=='B端用户管理'){
+                  this.userPermissionsJudge = this.authorityJudge[i]
+                  this.$store.commit("getUserPermissions", this.userPermissionsJudge);
+                }
+                else if(this.authorityJudge[i].name=='配置管理'){
+                  this.configPermissionsJudge =  this.authorityJudge[i]
+                  this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+                }
+
+              }
+            }
+
+          },
+          onfail: body => {
+          }
+        })
+
+      },
 
       submitSetAuth() {
         let fields = {
@@ -296,6 +363,8 @@
 //            this.roleTableList = body.data
             this.getTableRoleList()
             this.showSetAuth = false
+            this.loginShow()
+
           },
           onfail: body => {
             this.$message({
@@ -365,7 +434,6 @@
       },
 
       handleChange(parm) {
-        console.log(parm)
         this.title = '编辑角色'
         this.showAddNew = true
         this.editStatus = true
@@ -453,7 +521,6 @@
       },
       handleSelectTemplate(val) {
         this.selectedTemplate = val;
-        console.log('选择的模板', this.selectedTemplate)
         this.selectedTemplateId = []
         this.selectedTemplate.map(item => {
           this.selectedTemplateId.push(item.id)
@@ -474,7 +541,8 @@
       this.orgId = this.NodeId;
       this.getCurrendNode = this.currendNode;
       this.getTableRoleList()
-
+      this.usernamePermiss = this.$store.state.usernamePermissions
+      this.passwordPermiss = this.$store.state.passwordPermissions
 
     },
     watch: {
@@ -483,7 +551,6 @@
         this.getTableRoleList()
       },
       currendNode(val) {
-        console.log(this.getCurrendNode)
         this.getCurrendNode = val
       }
     }

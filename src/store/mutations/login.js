@@ -7,5 +7,13 @@ module.exports = {
     state.configPermissions = configPermissions
     localStorage.setItem('configPermissions', JSON.stringify(configPermissions))
   },
+  getUsernamePermissions: (state, usernamePermissions) => {
+    state.usernamePermissions = usernamePermissions
+    localStorage.setItem('usernamePermissions', JSON.stringify(usernamePermissions))
+  },
+  getPasswordPermissions: (state, passwordPermissions) => {
+    state.passwordPermissions = passwordPermissions
+    localStorage.setItem('passwordPermissions', JSON.stringify(passwordPermissions))
+  },
 
 }

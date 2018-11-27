@@ -51,18 +51,28 @@
         'goto'
       ]),
       handleOpen (key, keyPath) {
-        console.log(key, keyPath)
+        // console.log(key, keyPath)
       },
       handleClose (key, keyPath) {
-        console.log(key, keyPath)
+        // console.log(key, keyPath)
       },
     },
+
     mounted(){
-      console.log('ceshi333333',this.$store.state.configPermissions)
       if(this.$store.state.configPermissions!=null){
         this.configPermissionsShow=this.$store.state.configPermissions
       }
+    },
+    computed:{
+      getconfigPermissionsShow(){
+        return this.$store.state.configPermissions;
+      }
 
+    },
+    watch:{
+      getconfigPermissionsShow(val){
+        this.configPermissionsShow = val
+      }
     }
   }
 </script>
