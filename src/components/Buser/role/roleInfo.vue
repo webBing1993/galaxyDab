@@ -443,20 +443,8 @@
         this.addRoleInfo.alias = parm.alias
         this.addRoleInfo.description = parm.description
       },
-
-      handleSetAuth(parm) {
-        this.authTitle = '设置权限'
-        this.showSetAuth = true
-        this.setAuthStatus = true
-        this.currentRoleItemId = parm.id
-        this.getAuthByAuth({
-          roleId: parm.id,
-          onsuccess: body => {
-            this.authTableDate = body.data
-            this.haveSetedAuth=[]
-
-          }
-        })
+      //所有权限树
+      getAllAuthTree(){
         this.authTree({
           onsuccess: body => {
             if (body.data) {
@@ -473,42 +461,35 @@
           }
         })
       },
-
-      handleViewAuth(parm) {
-        this.authTitle = '查看权限'
+      handleSetAuth(parm) {
+        this.authTitle = '设置权限'
         this.showSetAuth = true
-        this.setAuthStatus = false
-
-//        console.log(parm)
-//        this.getAuthByAuth({
-//          roleId: parm.id,
-//          onsuccess: body => {
-//            this.authTableDate = body.data
-//          }
-//        })
+        this.setAuthStatus = true
+        this.currentRoleItemId = parm.id
         this.getAuthByAuth({
           roleId: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
             this.haveSetedAuth=[]
+            this.getAllAuthTree();
 
           }
         })
-        this.authTree({
+      },
+      handleViewAuth(parm) {
+        this.authTitle = '查看权限'
+        this.showSetAuth = true
+        this.setAuthStatus = false
+        this.getAuthByAuth({
+          roleId: parm.id,
           onsuccess: body => {
-            if (body.data) {
-              this.AuthNodeTree[0].subPermissions = body.data
-              let temp=[]
-              this.authTableDate.map(item=>{
-                temp.push(item.permissionId)
-              })
-              this.$nextTick(function () {
-                this.haveSetedAuth = temp
-              })
-            } else {
-            }
+            this.authTableDate = body.data
+            this.haveSetedAuth=[]
+            this.getAllAuthTree()
+
           }
         })
+
       },
 
       handleSelectionChange(val) {
