@@ -104,7 +104,6 @@
         :check-on-click-node="true"
         :highlight-current="true"
         :default-checked-keys="haveSetedAuth"
-        check-strictly
         ref="tree"
         node-key="id"
         default-expand-all
@@ -190,7 +189,7 @@
             "id": "0",
             "status": null,
             "subPermissions": [],
-            disabled: true
+             disabled: true
           }
         ],
         defaultProps: {
@@ -313,7 +312,6 @@
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
                 this.goto('/hotelOrg')
-                // console.log('测试1111111',this.userPermissionsJudge)
               }
               else{
                 this.userPermissionsJudge = ''
@@ -323,7 +321,6 @@
                 this.configPermissionsJudge =  this.authorityJudge[0]
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
                 this.goto('/hotelList')
-                // console.log('测试2222222222',this.configPermissionsJudge)
               }
               else{
                 this.configPermissionsJudge =  ''
@@ -353,6 +350,7 @@
       },
 
       submitSetAuth() {
+        // console.log('测试77777',this.selectedAuthId)
         let fields = {
           roleId: this.currentRoleItemId,
           pemissionIds: this.selectedAuthId,
@@ -367,6 +365,7 @@
 
           },
           onfail: body => {
+
             this.$message({
               message: body.data.errmsg,
               type: 'error'
@@ -451,7 +450,12 @@
               this.AuthNodeTree[0].subPermissions = body.data
               let temp=[]
               this.authTableDate.map(item=>{
-                temp.push(item.permissionId)
+                // if(item.name!=)
+                let changshi1 = (item.name!='管理后台') && (item.name!='B端用户管理') && (item.name!='组织管理') && (item.name!='配置管理') && (item.name!='酒店配置管理') && (item.name!='发现') && (item.name!='系统配置');
+                let changshi2 = (item.name!='企业微信') && (item.name!='人证通') && (item.name!='E卡通') && (item.name!='酒店服务') && (item.name != '酒店设置')
+                if(changshi1 && changshi2){
+                  temp.push(item.permissionId)
+                }
               })
               this.$nextTick(function () {
                 this.haveSetedAuth = temp
@@ -469,10 +473,10 @@
         this.getAuthByAuth({
           roleId: parm.id,
           onsuccess: body => {
+             // console.log('设置权限列表',body.data)
             this.authTableDate = body.data
             this.haveSetedAuth=[]
             this.getAllAuthTree();
-
           }
         })
       },
@@ -483,6 +487,7 @@
         this.getAuthByAuth({
           roleId: parm.id,
           onsuccess: body => {
+            // console.log('查看权限列表',body.data)
             this.authTableDate = body.data
             this.haveSetedAuth=[]
             this.getAllAuthTree()
@@ -507,14 +512,28 @@
           this.selectedTemplateId.push(item.id)
         })
       },
-//      handleSelectAuth(val) {
-//        this.selectedAuthId = []
-//        val.map(item => {
-//          this.selectedAuthId.push(item.permissionId)
-//        })
-//      },
       handelNodeChecked(parm1,parm2){
-          this.selectedAuthId = parm2.checkedKeys
+          // console.log('测试5555555555',parm2.halfCheckedKeys.length)
+          //  if(parm2.halfCheckedKeys.length ==3){
+          //    parm2.halfCheckedKeys.splice(0,1)
+          //  }
+          //  console.log('测试33333333333',parm2)
+          //  console.log('测试44444444444',parm2.halfCheckedKeys.length)
+           if(parm2.halfCheckedKeys.length != 1){
+             parm2.halfCheckedKeys.splice(0,1)
+             this.selectedAuthId = parm2.halfCheckedKeys.concat(parm2.checkedKeys)
+             // console.log('测试66666',this.selectedAuthId)
+           }
+           else{
+
+             this.selectedAuthId = parm2.checkedKeys
+             // console.log('测试5555555',this.selectedAuthId)
+           }
+
+          // this.selectedAuthId = parm2.halfCheckedKeys.concat(parm2.checkedKeys)
+          //  console.log('测试数组连接',this.selectedAuthId)
+          //  this.selectedAuthId
+          // this.selectedAuthId = parm2.checkedKeys
       },
     },
 
