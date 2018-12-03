@@ -27,7 +27,7 @@
         <el-table-column property="name" label="姓名"></el-table-column>
         <el-table-column property="mobile" label="手机号"></el-table-column>
         <el-table-column property="depart" label="部门"></el-table-column>
-        <el-table-column property="duty" label="职务"></el-table-column>
+        <el-table-column property="position" label="职务"></el-table-column>
         <el-table-column property="certificateQY" label="企业微信凭证">
           <template slot-scope="scope">
             {{scope.row.hasWechatWorkCredential ? '有' : '无'}}
@@ -71,6 +71,9 @@
         <el-form-item label="手机号">
           <el-input v-model="addEmployeeInfo.tel" :disabled="viewStatus" placeholder="输入手机号"></el-input>
         </el-form-item>
+        <el-form-item label="职务">
+          <el-input v-model="addEmployeeInfo.position" :disabled="viewStatus" placeholder="输入职务"></el-input>
+        </el-form-item>
         <!--<el-form-item label="头像">-->
         <!--<el-input v-model="addEmployeeInfo.tel" placeholder="输入头像"></el-input>-->
         <!--</el-form-item>-->
@@ -89,6 +92,7 @@
             <el-button size="small" type="primary" :disabled="viewStatus">头像上传</el-button>
           </el-upload>
         </el-form-item>
+
         <el-form-item v-if="!viewStatus">
           <el-button @click="showAddNew = false">取 消</el-button>
           <el-button type="primary" @click="submitAdd">确 定</el-button>
@@ -233,7 +237,8 @@
           name: "",
           EnglishName: "",
           tel: "",
-          picUrl: ''
+          picUrl: '',
+          position:''
         },
         resetInfo: {
           id: '',
@@ -282,7 +287,6 @@
 
       // 修改所属公司确定事件  剩下传值
       submitChange() {
-          console.log(this);
         this.computerChange({
           userId: this.interimList.userId,
           name: this.interimList.name,
@@ -328,7 +332,6 @@
 
       // 修改所属公司
       handleChange(val) {
-          console.log(val);
         this.interimList = val;
         this.title = '修改所属公司';
         this.showChangeNode = true;
@@ -388,7 +391,8 @@
             account: this.addEmployeeInfo.account,
             mobile: this.addEmployeeInfo.tel,
             englishName: this.addEmployeeInfo.EnglishName,
-            avatar: this.addEmployeeInfo.picUrl
+            avatar: this.addEmployeeInfo.picUrl,
+            position:this.addEmployeeInfo.position
           }
           this.modifyuser({
             fields: fields,
@@ -415,7 +419,8 @@
             account: this.addEmployeeInfo.account,
             mobile: this.addEmployeeInfo.tel,
             englishName: this.addEmployeeInfo.EnglishName,
-            avatar: this.addEmployeeInfo.picUrl
+            avatar: this.addEmployeeInfo.picUrl,
+            position:this.addEmployeeInfo.position
 
           }
           this.adduser({
@@ -514,13 +519,11 @@
       },
 
       handleCheckAllChange(val) {
-        console.log('all', val)
         this.checkedRoles = val ? this.allCheckedId : [];
         this.isIndeterminate = false;
       },
 
       handlecheckedRolesChange(value) {
-        console.log('--->', value)
         this.haveCheckedId = value
 //        this.checkedRoles=value
         let checkedCount = value.length;
@@ -546,7 +549,7 @@
         this.addEmployeeInfo.EnglishName = ''
         this.addEmployeeInfo.tel = ''
         this.addEmployeeInfo.picUrl = ''
-
+        this.addEmployeeInfo.position = ''
         this.editStatus = false
 
       },
@@ -562,7 +565,7 @@
         this.addEmployeeInfo.EnglishName = parm.englishName
         this.addEmployeeInfo.tel = parm.mobile
         this.addEmployeeInfo.picUrl = parm.avatar
-
+        this.addEmployeeInfo.position = parm.position
         this.editStatus = false
       },
 
@@ -578,7 +581,7 @@
         this.addEmployeeInfo.EnglishName = parm.englishName
         this.addEmployeeInfo.tel = parm.mobile
         this.addEmployeeInfo.picUrl = parm.avatar
-
+        this.addEmployeeInfo.position = parm.position
         this.editStatus = true
 
       },
@@ -601,7 +604,6 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(parm)
           this.delUser({
             userId: parm.userId,
             onsuccess: body => {
@@ -628,7 +630,6 @@
       },
 
       handleSelectionChange(val) {
-//        console.log('valvalval',val);
         this.selectItemList = val;
         this.selectitem_id_list = [];
         this.selectItemList.map(item => {
@@ -657,7 +658,6 @@
         this.getEmployeeList()
       },
       currendNode(val) {
-        console.log(this.getCurrendNode)
         this.getCurrendNode = val
       },
       filterText(val) {
