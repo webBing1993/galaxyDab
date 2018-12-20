@@ -87,6 +87,7 @@ export default {
 
     }
     return {
+      editName:'',
       page: 1,
       total: 0,
       pagesize: 5,
@@ -282,18 +283,24 @@ export default {
       this.editClassifyDialog = true
       this.editClassifyForm.editclassifyName = row.name
       this.editClassifyForm.editclassifySort = row.sort
+      this.editName = row.name
     },
     CancelEditClassifyDialog () {
       this.editClassifyDialog = false
     },
     SureEditClassifyDialog (formname) {
-      if(this.allListName.indexOf(this.editClassifyForm.editclassifyName) != -1)
-      {
-        this.editClassifyForm.editclassifyName ='';
-        this.$message({
-          message: '此分类已经存在',
-          type: 'success'
-        })
+       let array = [];
+      if(this.editName != this.editClassifyForm.editclassifyName) {
+        for (let i = 0; i < this.allListName.length; i++) {
+          if (this.allListName[i] == this.editClassifyForm.editclassifyName) {
+            console.log(222222)
+                 this.$message({
+                    message: '此分类已经存在',
+                    type: 'success'
+                  })
+              return false
+          }
+        }
       }
       this.$refs[formname].validate(valide => {
         if (valide) {
