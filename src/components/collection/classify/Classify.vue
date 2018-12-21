@@ -214,7 +214,7 @@ export default {
           this.deleteCla({
             id:row.id,
             onsuccess: body => {
-              console.log(body)
+              // console.log(body)
               if (body.errcode==0) {
                   this.$message({
                     type: 'success',
@@ -280,7 +280,7 @@ export default {
       this.editClassifyForm.editclassifyName = row.name
       this.editClassifyForm.editclassifySort = row.sort
       this.editName = row.name
-      console.log('当前名字',row.name)
+      // console.log('当前名字',row.name)
       this.allListName =[]
       this.allClassifylist()
 
