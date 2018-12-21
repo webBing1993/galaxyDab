@@ -141,12 +141,6 @@ export default {
       }
     }
   },
-  created () {
-    this.initlist()
-  },
-  mounted(){
-    this.allClassifylist()
-  },
   methods: {
     ...mapActions([
       'claList',
@@ -205,6 +199,8 @@ export default {
       this.addClassifyDialog = true;
       this.addClassifyForm.classifyName=''
       this.addClassifyForm.classifySort=''
+      this.allListName =[]
+      this.allClassifylist()
     },
     // 删除分类方法
     deleteClassify (row) {
@@ -284,16 +280,18 @@ export default {
       this.editClassifyForm.editclassifyName = row.name
       this.editClassifyForm.editclassifySort = row.sort
       this.editName = row.name
+      console.log('当前名字',row.name)
+      this.allListName =[]
+      this.allClassifylist()
+
     },
     CancelEditClassifyDialog () {
       this.editClassifyDialog = false
     },
     SureEditClassifyDialog (formname) {
-       let array = [];
       if(this.editName != this.editClassifyForm.editclassifyName) {
         for (let i = 0; i < this.allListName.length; i++) {
           if (this.allListName[i] == this.editClassifyForm.editclassifyName) {
-            console.log(222222)
                  this.$message({
                     message: '此分类已经存在',
                     type: 'success'
@@ -326,7 +324,13 @@ export default {
     typeIndex (index) {
       return index + (this.pagenum - 1) * this.pagesize + 1
     }
-  }
+  },
+  created () {
+    this.initlist()
+  },
+  mounted(){
+    this.allClassifylist()
+  },
 }
 </script>
 <style lang="less" scoped>
