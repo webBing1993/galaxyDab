@@ -52,7 +52,7 @@
             console.log('测试得分',body.data.permissions.length)
             this.$store.commit("getUsernamePermissions", this.username);
             this.$store.commit("getPasswordPermissions", this.password);
-            if(body.data.permissions.length ==0 && body.data.permissions == null){
+            if(body.data.permissions.length ==0 || body.data.permissions == null){
               this.$message({
                 type: 'error',
                 message: '没有权限!',
