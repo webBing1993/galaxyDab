@@ -31,6 +31,21 @@ router.afterEach(function(to, from) {
 
 // import divider from './UIcomponents/divide'
 // Vue.component('divider', divider)
+router.beforeEach((to,from,next)=>{
+  let token = sessionStorage.getItem('session_id');
+  if(token){
+    next();
+  }
+  else{
+    if(to.path!=='/login'){
+      next({path:'/login'})
+    }
+    else{
+      next()
+    }
+
+  }
+})
 new Vue({
   el: '#app',
   router,
