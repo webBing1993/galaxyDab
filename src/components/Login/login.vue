@@ -48,26 +48,25 @@
           account: this.username,
           password: this.password,
           onsuccess: body => {
-            // console.log('测试所有的权限',body.data)
-            console.log('测试得分',body.data.permissions.length)
             this.$store.commit("getUsernamePermissions", this.username);
             this.$store.commit("getPasswordPermissions", this.password);
-            if((body.data.permissions.length ==0) || (body.data.permissions == null)){
-              this.$message({
-                type: 'error',
-                message: '没有权限!',
-                duration:1000,
-                showClose: true,
-              });
-              return false;
-            }
+            if((!body.data.permissions) || (body.data.permissions.length==0)){
+                this.$message({
+                  type: 'error',
+                  message: '没有权限!',
+                  duration:1000,
+                  showClose: true,
+                });
+                return false;
+              }
+
+
             this.authorityJudge = body.data.permissions[0].subPermissions
             if(this.authorityJudge.length == 1){
               if(this.authorityJudge[0].name=='B端用户管理'){
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
                 this.goto('/hotelOrg')
-                console.log('测试1',this.userPermissionsJudge)
               }
               else{
                 this.userPermissionsJudge = ''
@@ -77,7 +76,6 @@
                 this.configPermissionsJudge =  this.authorityJudge[0]
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
                 this.goto('/hotelList')
-                console.log('测试2',this.configPermissionsJudge)
               }
               else{
                 this.configPermissionsJudge =  ''
