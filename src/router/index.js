@@ -1,53 +1,38 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import Home from '@/components/Home'
-import Buser from '@/components/Buser/index'
-
-import Login from '@/components/Login/login'
-
-//////////////////////////组织管理///////////
-/////////酒店组织
-import hotelOrg from '@/components/Buser/organization/hotelOrgClass/hotelOrg'
-//集团/酒店/部门等信息
-import orgDetailedInfo from '@/components/Buser/organization/hotelOrgClass/orgDetailedInfo'
-////////复创组织//////////
-import fortrunOrg from '@/components/Buser/organization/fortrunOrgClass/fortrunOrg'
-import fortrunInfo from '@/components/Buser/organization/fortrunOrgClass/fortrunInfo'
-////////其他组织//////////
-import elseOrg from '@/components/Buser/organization/anotherOrg/elseOrg'
-
-
+const Home = resolve => require(['@/components/Home'], resolve)
+const Buser = resolve => require(['@/components/Buser/index'], resolve)
+const Login = resolve => require(['@/components/Login/login'], resolve)
+const hotelOrg = resolve => require(['@/components/Buser/organization/hotelOrgClass/hotelOrg'], resolve)
+const orgDetailedInfo = resolve => require(['@/components/Buser/organization/hotelOrgClass/orgDetailedInfo'], resolve)
+const fortrunOrg = resolve => require(['@/components/Buser/organization/fortrunOrgClass/fortrunOrg'], resolve)
+const elseOrg = resolve => require(['@/components/Buser/organization/anotherOrg/elseOrg'], resolve)
+const userManage = resolve => require(['@/components/Buser/user/userManage'], resolve)
 /////////////////////////用户管理///////////
-import userManage from '@/components/Buser/user/userManage'
-import userInfo from '@/components/Buser/user/userInfo'
+const userInfo = resolve => require(['@/components/Buser/user/userInfo'], resolve)
 
-
+const authorityManage = resolve => require(['@/components/Buser/authority/authorityManage'], resolve)
 /////////////////////////权限管理///////////
-import authorityManage from '@/components/Buser/authority/authorityManage'
-import authorityInfo from '@/components/Buser/authority/authorityInfo'
-
+const authorityInfo = resolve => require(['@/components/Buser/authority/authorityInfo'], resolve)
+const roleManage = resolve => require(['@/components/Buser/role/roleManage'], resolve)
 /////////////////////////角色管理///////////
-import roleManage from '@/components/Buser/role/roleManage'
-import roleInfo from '@/components/Buser/role/roleInfo'
+const roleInfo = resolve => require(['@/components/Buser/role/roleInfo'], resolve)
 
 /////////////////////////角色模板管理////////
-import roleModuleManage from '@/components/Buser/roleModule/roleModuleManage'
+const roleModuleManage = resolve => require(['@/components/Buser/roleModule/roleModuleManage'], resolve)
 
 //配置管理
-import Whome from '@/components/whome'
-import Classify from '@/components/collection/classify/Classify'
-import Content from '@/components/collection/content/Content'
-import Service from '@/components/collection/service/Service'
-import Advertising from '@/components/collection/advertising/Advertising'
-import Establish from '@/components/collection/establishContent/establish'
-import esadvertising from '@/components/collection/establishAdvertising/esAdvertising'
-import editAdvertising from '@/components/collection/editAdvertising/editAdvertising'
-import editContent from '@/components/collection/editContent/editContent'
-//酒店列表
-import hotelList from '@/components/collection/hotelList'
-import configure from '@/components/collection/hotelList/configure'
-
+const Whome = resolve => require(['@/components/whome'], resolve)
+const Classify = resolve => require(['@/components/collection/classify/Classify'], resolve)
+const Content = resolve => require(['@/components/collection/content/Content'], resolve)
+const Service = resolve => require(['@/components/collection/service/Service'], resolve)
+const Advertising = resolve => require(['@/components/collection/advertising/Advertising'], resolve)
+const Establish = resolve => require(['@/components/collection/establishContent/establish'], resolve)
+const esadvertising = resolve => require(['@/components/collection/establishAdvertising/esAdvertising'], resolve)
+const editAdvertising = resolve => require(['@/components/collection/editAdvertising/editAdvertising'], resolve)
+const editContent = resolve => require(['@/components/collection/editContent/editContent'], resolve)
+const hotelList = resolve => require(['@/components/collection/hotelList'], resolve)
+const configure = resolve => require(['@/components/collection/hotelList/configure'], resolve)
 Vue.use(Router)
 
 const main = [

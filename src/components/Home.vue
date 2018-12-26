@@ -144,8 +144,13 @@
       else{
         this.isShowTabManage = false
       }
-      // console.log('查看',this.isShowTabManage)
-
+      // console.log('刷新查看路由',this.$route.path)
+      if(this.$route.path==('/hotelOrg'||'/fortrunOrg'||'elseOrg'||'userManage'||'authorityManage'||'roleManage'||'roleModuleManage')){
+        this.activeName ='first'
+      }
+      else{
+        this.activeName ='second'
+      }
     },
     computed:{
       getconfigPermissionsShow(){
@@ -175,7 +180,22 @@
           this.isShowTabUser = false
         }
 
-      }
+      },
+      // '$route'(to,from){
+      //   console.log('路由改变',to)
+      //   console.log('路由改变1',from)
+      //   if(to.path==('/hotelOrg'||'/fortrunOrg'||'elseOrg'||'userManage'||'authorityManage'||'roleManage'||'roleModuleManage')){
+      //      console.log(1111)
+      //       this.activeName ='first'
+      //       console.log('测试tab',this.activeName)
+      //   }
+      //   else{
+      //     console.log(2222)
+      //     console.log('测试tab2',this.activeName)
+      //     this.activeName ='second'
+      //   }
+      //
+      // }
     }
   }
 </script>
