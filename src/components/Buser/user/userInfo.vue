@@ -375,7 +375,7 @@
           });
           return false
         }
-        else if (!(/^1[345789]\d{9}$/.test(this.addEmployeeInfo.tel))) {
+        else if (!(/^1[3456789]\d{9}$/.test(this.addEmployeeInfo.tel))) {
           this.$message({
             message: "手机号不合法",
             type: 'error'
