@@ -53,8 +53,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
-      :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagenum"
+      :page-sizes="[5, 10, 15, 20]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="total!=0">
     </el-pagination>
     </div>
   </div>
@@ -62,6 +62,7 @@
 <script>
   import { CodeToText } from "element-china-area-data";
   import {mapActions} from 'vuex'
+  import global from '../../common'
 export default {
   data() {
     return {
@@ -106,10 +107,6 @@ export default {
       value: "",
       writeName: ""
     };
-  },
-  mounted() {
-    this.initList();
-    this.getallclassify();
   },
   methods: {
     ...mapActions([
@@ -175,12 +172,15 @@ export default {
     },
     //分页开始方法
     handleSizeChange(val) {
+
       this.pagesize = val;
+      global.setContextData('conPagesize',this.pagesize)
       this.initList();
     },
     handleCurrentChange(val) {
       this.pagenum = val;
       this.page = val;
+      global.setContextData('conPagenum',this.pagenum)
       this.initList();
     },
     typeIndex(index) {
@@ -226,7 +226,16 @@ export default {
           });
         });
     }
-  }
+  },
+  created(){
+    this.pagenum = global.getContextData('conPagenum') || 1
+    this.pagesize = global.getContextData('conPagesize') || 5
+  },
+  mounted() {
+    this.initList();
+    this.getallclassify();
+  },
+
 };
 </script>
 <style lang="less" scoped>

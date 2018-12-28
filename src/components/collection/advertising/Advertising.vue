@@ -53,14 +53,15 @@
       </el-table-column>
     </el-table>
     <div class="page">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
-        :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagenum"
+        :page-sizes="[5, 10, 15, 20]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="total!=0">
       </el-pagination>
      </div>
    </div>
 </template>
 <script>
 import {mapActions} from 'vuex'
+import global from '../../common'
 export default {
   data () {
     return {
@@ -82,9 +83,6 @@ export default {
       AdvertisingTableData: []
     }
   },
-  mounted() {
-    this.initlist()
-  },
   methods: {
     ...mapActions([
       'advertisinList',
@@ -96,11 +94,13 @@ export default {
     handleSizeChange (val) {
       // console.log(`每页 ${val} 条`);
       this.pagesize = val
+      global.setContextData('adverPagesize',this.pagesize)
       this.initlist()
     },
     handleCurrentChange (val) {
       this.pagenum = val
       this.page = val
+      global.setContextData('adverPagenum',this.pagenum)
       // console.log(`当前页: ${val}`);
       this.initlist()
     },
@@ -170,7 +170,14 @@ export default {
           })
         })
     }
-  }
+  },
+  created(){
+    this.pagenum = global.getContextData('adverPagenum') || 1
+    this.pagesize = global.getContextData('adverPagesize') || 5
+  },
+  mounted() {
+    this.initlist()
+  },
 }
 </script>
 <style lang="less" scoped>

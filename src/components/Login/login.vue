@@ -62,20 +62,33 @@
 
 
             this.authorityJudge = body.data.permissions[0].subPermissions
+            console.log('查看权限22222',this.authorityJudge)
             if(this.authorityJudge.length == 1){
               if(this.authorityJudge[0].name=='B端用户管理'){
+                //动态设置路由
+                let path;
+                if(this.authorityJudge[0].subPermissions[0].description == ''){
+                  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+                }
+                else{
+                  path = this.authorityJudge[0].subPermissions[0].description
+                }
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
-                this.goto('/hotelOrg')
+                // this.goto('/hotelOrg')
+                this.$router.push({path:path})
               }
               else{
                 this.userPermissionsJudge = ''
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
               }
               if(this.authorityJudge[0].name=='配置管理'){
+                //动态路由设置
+                 let path;
+                 path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
                 this.configPermissionsJudge =  this.authorityJudge[0]
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
-                this.goto('/hotelList')
+                this.$router.push({path:path})
               }
               else{
                 this.configPermissionsJudge =  ''
@@ -83,7 +96,15 @@
               }
             }
             if(this.authorityJudge.length == 2){
-              this.goto('/hotelOrg')
+              //动态路由配置
+              let path;
+              if(this.authorityJudge[0].subPermissions[0].description == ''){
+                path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+              }
+              else{
+                path = this.authorityJudge[0].subPermissions[0].description
+              }
+              this.$router.push({path:path})
               for(var i = 0; i< this.authorityJudge.length;i++){
                 if(this.authorityJudge[i].name=='B端用户管理'){
                   this.userPermissionsJudge = this.authorityJudge[i]

@@ -88,10 +88,19 @@
       ]),
       handleClick(tab){
         if(tab.label=='B端用户管理'){
-          this.$router.push({name:'hotelOrg'})
+          let path ;
+          if(this.$store.state.userPermissions.subPermissions[0].description == ''){
+            path = this.$store.state.userPermissions.subPermissions[0].subPermissions[0].description
+          }
+          else{
+            path = this.$store.state.userPermissions.subPermissions[0].description
+          }
+          this.$router.push({path:path})
 
         }else{
-          this.$router.push({name:'hotelList'})
+          // console.log('写进去path',this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description)
+          let path = this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description
+          this.$router.push({path:path})
         }
 
       },
@@ -113,6 +122,7 @@
         });
         sessionStorage.removeItem('session_id');
         localStorage.clear()
+        sessionStorage.clear()
         this.goto('/login');
       }
 
@@ -129,8 +139,6 @@
 
     },
     mounted(){
-
-      // console.log('B端',this.$store.state.userPermissions)
       if(this.$store.state.userPermissions!=''){
         this.isShowTabUser = true
       }
@@ -143,13 +151,6 @@
       }
       else{
         this.isShowTabManage = false
-      }
-      // console.log('刷新查看路由',this.$route.path)
-      if(this.$route.path==('/hotelOrg'||'/fortrunOrg'||'elseOrg'||'userManage'||'authorityManage'||'roleManage'||'roleModuleManage')){
-        this.activeName ='first'
-      }
-      else{
-        this.activeName ='second'
       }
     },
     computed:{
