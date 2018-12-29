@@ -64,7 +64,9 @@
             this.authorityJudge = body.data.permissions[0].subPermissions
             console.log('查看权限22222',this.authorityJudge)
             if(this.authorityJudge.length == 1){
+              console.log('tag',this.authorityJudge[0].tag)
               if(this.authorityJudge[0].tag=='dab_user'){
+                console.log(11111)
                 //动态设置路由
                 let path;
                 if(this.authorityJudge[0].subPermissions[0].description == ''){
@@ -76,18 +78,22 @@
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
                 // this.goto('/hotelOrg')
+                console.log('B端用户管理',path)
                 this.$router.push({path:path})
+
               }
               else{
                 this.userPermissionsJudge = ''
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
               }
               if(this.authorityJudge[0].tag=='dab_config'){
+                console.log(22222222)
                 //动态路由设置
                  let path;
                  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
                 this.configPermissionsJudge =  this.authorityJudge[0]
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
+                 console.log('配置管理',path)
                 this.$router.push({path:path})
               }
               else{
@@ -96,6 +102,7 @@
               }
             }
             if(this.authorityJudge.length == 2){
+              console.log(333333)
               //动态路由配置
               let path;
               if(this.authorityJudge[0].subPermissions[0].description == ''){
@@ -104,14 +111,15 @@
               else{
                 path = this.authorityJudge[0].subPermissions[0].description
               }
+              console.log('全部',path)
               this.$router.push({path:path})
               for(var i = 0; i< this.authorityJudge.length;i++){
-                if(this.authorityJudge[i].name=='B端用户管理'){
+                if(this.authorityJudge[i].name=='dab_user'){
                   this.userPermissionsJudge = this.authorityJudge[i]
                   this.$store.commit("getUserPermissions", this.userPermissionsJudge);
 
                 }
-                else if(this.authorityJudge[i].name=='配置管理'){
+                else if(this.authorityJudge[i].name=='dab_config'){
                   this.configPermissionsJudge =  this.authorityJudge[i]
                   this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
 
