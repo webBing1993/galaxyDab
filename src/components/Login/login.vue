@@ -64,7 +64,7 @@
             this.authorityJudge = body.data.permissions[0].subPermissions
             console.log('查看权限22222',this.authorityJudge)
             if(this.authorityJudge.length == 1){
-              if(this.authorityJudge[0].name=='B端用户管理'){
+              if(this.authorityJudge[0].tag=='dab_user'){
                 //动态设置路由
                 let path;
                 if(this.authorityJudge[0].subPermissions[0].description == ''){
@@ -82,7 +82,7 @@
                 this.userPermissionsJudge = ''
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
               }
-              if(this.authorityJudge[0].name=='配置管理'){
+              if(this.authorityJudge[0].tag=='dab_config'){
                 //动态路由设置
                  let path;
                  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
