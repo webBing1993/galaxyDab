@@ -69,7 +69,7 @@
                 console.log(11111)
                 //动态设置路由
                 let path;
-                if(this.authorityJudge[0].subPermissions[0].description == ''){
+                if((this.authorityJudge[0].subPermissions[0].description == '')||(this.authorityJudge[0].subPermissions[0].description == null)){
                   path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
                 }
                 else{
@@ -105,7 +105,7 @@
               console.log(333333)
               //动态路由配置
               let path;
-              if(this.authorityJudge[0].subPermissions[0].description == ''){
+              if((this.authorityJudge[0].subPermissions[0].description == '') || (this.authorityJudge[0].subPermissions[0].description == null)){
                 path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
               }
               else{
