@@ -114,12 +114,12 @@
               console.log('全部',path)
               this.$router.push({path:path})
               for(var i = 0; i< this.authorityJudge.length;i++){
-                if(this.authorityJudge[i].name=='dab_user'){
+                if(this.authorityJudge[i].tag=='dab_user'){
                   this.userPermissionsJudge = this.authorityJudge[i]
                   this.$store.commit("getUserPermissions", this.userPermissionsJudge);
 
                 }
-                else if(this.authorityJudge[i].name=='dab_config'){
+                else if(this.authorityJudge[i].tag=='dab_config'){
                   this.configPermissionsJudge =  this.authorityJudge[i]
                   this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
 
