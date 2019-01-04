@@ -87,9 +87,11 @@
         'goto'
       ]),
       handleClick(tab){
+        console.log('tab名字',tab)
         if(tab.label=='B端用户管理'){
           let path ;
-          if(this.$store.state.userPermissions.subPermissions[0].description == ''){
+          console.log('测试tab栏',this.$store.state.userPermissions)
+          if((this.$store.state.userPermissions.subPermissions[0].description == '') || (this.$store.state.userPermissions.subPermissions[0].description == null) ){
             path = this.$store.state.userPermissions.subPermissions[0].subPermissions[0].description
           }
           else{
@@ -98,6 +100,7 @@
           this.$router.push({path:path})
 
         }else{
+          console.log('测试tab栏1',this.$store.state.configPermissions)
           // console.log('写进去path',this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description)
           let path = this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description
           this.$router.push({path:path})

@@ -311,7 +311,15 @@
               if(this.authorityJudge[0].name=='B端用户管理'){
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
-                this.goto('/hotelOrg')
+                //动态路由
+                let path;
+                if((this.authorityJudge[0].subPermissions[0].description == '')||(this.authorityJudge[0].subPermissions[0].description == null)){
+                  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+                }
+                else{
+                  path = this.authorityJudge[0].subPermissions[0].description
+                }
+                this.$router.push({path:path})
               }
               else{
                 this.userPermissionsJudge = ''
@@ -320,7 +328,10 @@
               if(this.authorityJudge[0].name=='配置管理'){
                 this.configPermissionsJudge =  this.authorityJudge[0]
                 this.$store.commit("getConfigPermissions", this.configPermissionsJudge);
-                this.goto('/hotelList')
+                let path;
+                path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+
+                this.$router.push({path:path})
               }
               else{
                 this.configPermissionsJudge =  ''
@@ -328,7 +339,14 @@
               }
             }
             if(this.authorityJudge.length == 2){
-              this.goto('/roleManage')
+              let path;
+              if((this.authorityJudge[0].subPermissions[0].description == '') || (this.authorityJudge[0].subPermissions[0].description == null)){
+                path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+              }
+              else{
+                path = this.authorityJudge[0].subPermissions[0].description
+              }
+              this.$router.push({path:path})
               for(var i = 0; i< this.authorityJudge.length;i++){
                 if(this.authorityJudge[i].name=='B端用户管理'){
                   this.userPermissionsJudge = this.authorityJudge[i]
