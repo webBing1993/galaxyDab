@@ -211,7 +211,38 @@
               </el-switch>
             </div>
           </div>
-
+          <!--是否开启续住-->
+          <div class="main_hotel_server_name_main">
+            <div>
+              <p class="hotel_server_main_p1">续住</p>
+              <p class="hotel_server_main_p2">（开启后住户可在小程序端使用续住）</p>
+            </div>
+            <div>
+              <el-switch
+                v-model="guestContinue"
+                active-color="#13ce66"
+                inactive-color="#E8E8E8"
+                @change="changeTypeGuestContinue"
+                :width="40">
+              </el-switch>
+            </div>
+          </div>
+          <!--是否开启退房-->
+          <div class="main_hotel_server_name_main">
+            <div>
+              <p class="hotel_server_main_p1">退房</p>
+              <p class="hotel_server_main_p2">（开启后住户可在小程序端使用退房）</p>
+            </div>
+            <div>
+              <el-switch
+                v-model="guestCheckout"
+                active-color="#13ce66"
+                inactive-color="#E8E8E8"
+                @change="changeTypeGuestCheckout"
+                :width="40">
+              </el-switch>
+            </div>
+          </div>
 
         </div>
       </main>
@@ -251,6 +282,10 @@
             checkedServer2: [],
             optionList1: [],
             optionList2: [],
+            guestContinue:false,  //续住
+            guestContinueId:'',
+            guestCheckout:false,   //退房
+            guestCheckoutId:'',
           }
         },
         computed:{
@@ -303,6 +338,13 @@
                       }else if(i.key == 'guestControl'){
                         this.guestControl = i.value==0?false:true
                         this.guestControlId = i.id
+                      }else if(i.key == 'is_support_stay'){
+                        this.guestContinue = i.value==0?false:true
+                        this.guestContinueId = i.id
+                      }
+                      else if(i.key == 'is_support_checkout'){
+                         this.guestCheckout = i.value==0?false:true
+                         this.guestCheckoutId = i.id
                       }
                     }
                   }
@@ -390,6 +432,14 @@
           //智能客控
           changeTypeGuestControl(){
             this.hotelServiceConfigs(this.guestControlId,this.guestControl)
+          },
+          //续住
+          changeTypeGuestContinue(){
+            this.hotelServiceConfigs(this.guestContinueId,this.guestContinue)
+          },
+          //退房
+          changeTypeGuestCheckout(){
+            this.hotelServiceConfigs(this.guestCheckoutId,this.guestCheckout)
           },
 
           //服务状态切换
