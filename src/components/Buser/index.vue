@@ -11,7 +11,8 @@
                 @open="handleOpen"
                 @close="handleClose"
                 :default-openeds="openeds"
-                class="el-menu-admin">
+                :default-active="onRoutes"
+                class="el-menu-admin" router>
                 <el-col :span="24"  v-for="item in userPermissionsShow.subPermissions" :key="item.id">
                   <el-submenu index="1" v-if="item.subPermissions != null">
                     <template slot="title">
@@ -99,11 +100,36 @@
             this.userPermissionsShow = this.$store.state.userPermissions
           }
         },
-        computed:{
-          getuserPermissions(){
+        computed: {
+          getuserPermissions () {
             return this.$store.state.userPermissions;
-          }
+          },
+          onRoutes () {
+            if (this.$route.path.replace('/', '') == 'hotelOrg') {
+              return 'hotelOrg';
+            }
+            else if (this.$route.path.replace('/', '') == 'fortrunOrg') {
+              return 'fortrunOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'elseOrg') {
+              return 'elseOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'userManage') {
+              return 'elseOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'authorityManage') {
+              return 'elseOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'roleManage') {
+              return 'elseOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'roleModuleManage') {
+              return 'elseOrg'
+            }
+            else {
 
+            }
+          }
         },
         watch:{
           getuserPermissions(val){

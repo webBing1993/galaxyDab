@@ -11,7 +11,8 @@
               @open="handleOpen"
               @close="handleClose"
               :default-openeds="openeds"
-              class="el-menu-admin">
+              :default-active="onRoutes"
+              class="el-menu-admin" router>
               <el-submenu :index="String(index)" v-for="(item,index) in configPermissionsShow.subPermissions" :key="item.id">
                 <template slot="title">
                   <i class="el-icon-document"></i>
@@ -66,6 +67,23 @@
     computed:{
       getconfigPermissionsShow(){
         return this.$store.state.configPermissions;
+      },
+      onRoutes () {
+        if (this.$route.path.replace('/', '') == 'hotelList') {
+          return 'hotelList';
+        }
+        else if (this.$route.path.replace('/', '') == 'classify') {
+          return 'classify'
+        }
+        else if (this.$route.path.replace('/', '') == 'content') {
+          return 'content'
+        }
+        else if (this.$route.path.replace('/', '') == 'advertising') {
+          return 'advertising'
+        }
+        else {
+
+        }
       }
 
     },
