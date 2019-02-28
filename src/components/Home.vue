@@ -73,7 +73,7 @@
         }]
       }];
       return {
-        activeName:'first',
+        activeName:'',
         data4: JSON.parse(JSON.stringify(data)),
         data5: JSON.parse(JSON.stringify(data)),
         logout: false,
@@ -185,21 +185,16 @@
         }
 
       },
-      // '$route'(to,from){
-      //   console.log('路由改变',to)
-      //   console.log('路由改变1',from)
-      //   if(to.path==('/hotelOrg'||'/fortrunOrg'||'elseOrg'||'userManage'||'authorityManage'||'roleManage'||'roleModuleManage')){
-      //      console.log(1111)
-      //       this.activeName ='first'
-      //       console.log('测试tab',this.activeName)
-      //   }
-      //   else{
-      //     console.log(2222)
-      //     console.log('测试tab2',this.activeName)
-      //     this.activeName ='second'
-      //   }
-      //
-      // }
+      activeName(val){
+        let activeRoute = "hotelList" || "classify" || "content" || "advertising"
+           if (this.$route.path.replace('/', '') == activeRoute){
+             this.activeName = 'second'
+           }
+           else{
+             this.activeName = 'first'
+           }
+
+      },
     }
   }
 </script>
