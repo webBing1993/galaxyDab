@@ -99,6 +99,7 @@
           if(this.$store.state.userPermissions!=null){
             this.userPermissionsShow = this.$store.state.userPermissions
           }
+          console.log('测试当前路由路径',this.$route.path.replace('/', ''))
         },
         computed: {
           getuserPermissions () {
@@ -115,16 +116,16 @@
               return 'elseOrg'
             }
             else if (this.$route.path.replace('/', '') == 'userManage') {
-              return 'elseOrg'
+              return 'userManage'
             }
             else if (this.$route.path.replace('/', '') == 'authorityManage') {
-              return 'elseOrg'
+              return 'authorityManage'
             }
             else if (this.$route.path.replace('/', '') == 'roleManage') {
-              return 'elseOrg'
+              return 'roleManage'
             }
             else if (this.$route.path.replace('/', '') == 'roleModuleManage') {
-              return 'elseOrg'
+              return 'roleModuleManage'
             }
             else {
 
