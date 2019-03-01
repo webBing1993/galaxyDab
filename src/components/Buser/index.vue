@@ -13,6 +13,10 @@
                 :default-openeds="openeds"
                 :default-active="onRoutes"
                 class="el-menu-admin" router>
+                <el-menu-item index="/userListDetail">
+                  <i class="el-icon-document"></i>
+                  <span slot="title">用户列表</span>
+                </el-menu-item>
                 <el-col :span="24"  v-for="item in userPermissionsShow.subPermissions" :key="item.id">
                   <el-submenu index="1" v-if="item.subPermissions != null">
                     <template slot="title">
@@ -28,37 +32,9 @@
                   <i class="el-icon-document"></i>
                   <span slot="title">{{item.name}}</span>
                   </el-menu-item>
+                  <!--用户列表详情-->
                 </el-col>
 
-                <!--<el-menu-item index="1" @click="goto('./hotelOrg')">-->
-                  <!--<i class="el-icon-menu"></i>-->
-                  <!--<span slot="title">组织管理</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="2" @click="goto('./hotelOrg')">-->
-                  <!--<span slot="title" class="noIcon">酒店组织</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="3" @click="goto('./fortrunOrg')">-->
-                  <!--<span slot="title" class="noIcon" >复创组织</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="4" @click="goto('./elseOrg')">-->
-                  <!--<span slot="title" class="noIcon">其他组织</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="5" @click="goto('./userManage')">-->
-                  <!--<i class="el-icon-menu"></i>-->
-                  <!--<span slot="title">用户管理</span>-->
-                <!--</el-menu-item >-->
-                <!--<el-menu-item index="6" @click="goto('./authorityManage')">-->
-                  <!--<i class="el-icon-document"></i>-->
-                  <!--<span slot="title">权限管理</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="7" @click="goto('./roleManage')">-->
-                  <!--<i class="el-icon-setting"></i>-->
-                  <!--<span slot="title">角色管理</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="8" @click="goto('./roleModuleManage')">-->
-                  <!--<i class="el-icon-setting"></i>-->
-                  <!--<span slot="title">角色模板管理</span>-->
-                <!--</el-menu-item>-->
               </el-menu>
 
           </el-row>

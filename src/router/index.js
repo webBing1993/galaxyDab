@@ -33,6 +33,7 @@ const editAdvertising = resolve => require(['@/components/collection/editAdverti
 const editContent = resolve => require(['@/components/collection/editContent/editContent'], resolve)
 const hotelList = resolve => require(['@/components/collection/hotelList'], resolve)
 const configure = resolve => require(['@/components/collection/hotelList/configure'], resolve)
+const userListDetail =  resolve => require(['@/components/Buser/userListDetails/index'], resolve)
 Vue.use(Router)
 
 const main = [
@@ -128,6 +129,12 @@ const main = [
             path: 'roleModuleManage',
             name: 'roleModuleManage',
             component: roleModuleManage,
+          },
+          //用户列表详情
+          {
+            path:'userListDetail',
+            name:'userListDetail',
+            component:userListDetail
           }
         ]
       },
