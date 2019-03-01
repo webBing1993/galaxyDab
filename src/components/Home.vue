@@ -186,10 +186,19 @@
 
       },
       activeName(val){
-        let activeRoute = "hotelList" || "classify" || "content" || "advertising"
-           if (this.$route.path.replace('/', '') == activeRoute){
+           if (this.$route.path.replace('/', '') == "hotelList"){
              this.activeName = 'second'
            }
+           else if(this.$route.path.replace('/', '') == "classify"){
+             this.activeName = 'second'
+           }
+           else if(this.$route.path.replace('/', '') == "content"){
+             this.activeName = 'second'
+           }
+           else if(this.$route.path.replace('/', '') == "advertising"){
+             this.activeName = 'second'
+           }
+
            else{
              this.activeName = 'first'
            }
