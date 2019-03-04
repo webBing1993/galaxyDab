@@ -12,11 +12,11 @@
      <el-table
       :data="tableData"
       border>
-      <el-table-column
+      <el-xtable-column
         prop="date"
-        label="日期"
+        label="账号"
         width="180">
-      </el-table-column>
+      </el-xtable-column>
       <el-table-column
         prop="name"
         label="姓名"
@@ -24,8 +24,24 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        label="地址">
+        label="手机号">
       </el-table-column>
+       <el-table-column
+         prop="address"
+         label="部门">
+       </el-table-column>
+       <el-table-column
+         prop="address"
+         label="职务">
+       </el-table-column>
+       <el-table-column
+         prop="address"
+         label="企业微信凭证">
+       </el-table-column>
+       <el-table-column
+         prop="address"
+         label="角色">
+       </el-table-column>
     </el-table>
     </div>
   </div>
@@ -66,6 +82,7 @@
       }
       .searchButton{
         width:100px;
+        margin-left:50px;
       }
     }
     .userListDetails_bottom{
