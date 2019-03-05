@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+  import {mapActions} from 'vuex'
   export default {
     data(){
       return{
@@ -69,6 +70,21 @@
         }],
         inputUser:''
       }
+    },
+    methods:{
+      ...mapActions([
+        'searchUserListDetails',
+      ]),
+      initList(){
+        this.searchUserListDetails({
+          onsuccess: (body,headers) => {
+            console.log('测试成功数据',body)
+          }
+        })
+      }
+    },
+    mounted(){
+      this.initList()
     }
   }
 </script>
