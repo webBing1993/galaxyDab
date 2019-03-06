@@ -27,6 +27,10 @@
         label="手机号">
       </el-table-column>
        <el-table-column
+         prop="orgName"
+         label="所属酒店">
+       </el-table-column>
+       <el-table-column
          prop="position"
          label="职务">
        </el-table-column>
