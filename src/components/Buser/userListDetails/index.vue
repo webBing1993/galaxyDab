@@ -2,47 +2,48 @@
   <div class="userListDetails">
     <div class="userListDetails_top">
       <div class="userListDetails_top_child">
-       <el-input v-model="inputUser" placeholder="请输入员工名" class="searchInput"></el-input>
+       <el-input v-model="inputUser" placeholder="请输入员工名" class="searchInput" @keyup.enter.native="initList"></el-input>
       </div>
       <div class="userListDetails_top_child">
-       <el-button type="success" class="searchButton">搜索</el-button>
+       <el-button type="success" class="searchButton" @click="initList">搜索</el-button>
       </div>
     </div>
     <div class="userListDetails_bottom">
      <el-table
       :data="tableData"
       border>
-      <el-xtable-column
-        prop="date"
-        label="账号"
-        width="180">
-      </el-xtable-column>
+       <el-table-column
+         prop="account"
+         label="账号"
+         width="180">
+       </el-table-column>
       <el-table-column
         prop="name"
         label="姓名"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="mobile"
         label="手机号">
       </el-table-column>
        <el-table-column
-         prop="address"
-         label="部门">
-       </el-table-column>
-       <el-table-column
-         prop="address"
+         prop="position"
          label="职务">
        </el-table-column>
        <el-table-column
-         prop="address"
+         prop="hasWechatWorkCredential"
          label="企业微信凭证">
        </el-table-column>
        <el-table-column
-         prop="address"
+         prop="roleNames"
          label="角色">
        </el-table-column>
     </el-table>
+      <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagenum"
+                       :page-sizes="[5, 10, 15, 20]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="total!=0">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -51,43 +52,54 @@
   export default {
     data(){
       return{
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        inputUser:''
+        tableData:[],
+        inputUser:'',
+        pagesize:10,
+        pagenum:1,
+        total: 0,
+
       }
     },
     methods:{
       ...mapActions([
         'searchUserListDetails',
       ]),
+      handleSizeChange (val) {
+        // console.log(`每页 ${val} 条`);
+        this.pagesize = val
+        this.initList()
+      },
+      handleCurrentChange (val) {
+        this.pagenum = val
+        // console.log(`当前页: ${val}`);
+        this.initList()
+      },
       initList(){
+      this.inputUser = this.inputUser.replace(/\s*/g,"")
         this.searchUserListDetails({
+          "page":this.pagenum,
+          "pagesize":this.pagesize,
           "name":this.inputUser,
-          "page":'1',
-          "pagesize":'10',
           onsuccess: (body,headers) => {
-            console.log('测试成功数据',body)
+            if(body.errcode == "0"){
+                this.tableData = body.data.list
+                this.total = body.data.total
+            }
           }
         })
       }
     },
     mounted(){
       this.initList()
+    },
+    watch:{
+      inputUser(newval){
+        if(newval.length == 0){
+           this.initList()
+        }
+
+
+      }
     }
   }
 </script>
