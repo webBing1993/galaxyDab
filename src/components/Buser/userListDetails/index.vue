@@ -77,6 +77,9 @@
       ]),
       initList(){
         this.searchUserListDetails({
+          "name":this.inputUser,
+          "page":'1',
+          "pagesize":'10',
           onsuccess: (body,headers) => {
             console.log('测试成功数据',body)
           }
