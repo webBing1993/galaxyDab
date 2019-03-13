@@ -86,6 +86,9 @@
           "name":this.inputUser,
           onsuccess: (body,headers) => {
             if(body.errcode == "0"){
+                body.data.list.forEach(item=>{
+                  item.hasWechatWorkCredential =  (item.hasWechatWorkCredential == true)?'有':'无'
+                })
                 this.tableData = body.data.list
                 this.total = body.data.total
             }
