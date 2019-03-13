@@ -185,25 +185,60 @@
         }
 
       },
-      activeName(val){
-           if (this.$route.path.replace('/', '') == "hotelList"){
-             this.activeName = 'second'
-           }
-           else if(this.$route.path.replace('/', '') == "classify"){
-             this.activeName = 'second'
-           }
-           else if(this.$route.path.replace('/', '') == "content"){
-             this.activeName = 'second'
-           }
-           else if(this.$route.path.replace('/', '') == "advertising"){
-             this.activeName = 'second'
-           }
+      $route(to,from){
+        console.log('下一步路由',to.path.replace('/', ''));
+        if (to.path.replace('/', '') == "hotelList"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "classify"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "content"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "advertising"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "configure"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "editContent"){
+          this.activeName = 'second'
+        }
+        else if(to.path.replace('/', '') == "editAdvertising"){
+          this.activeName = 'second'
+        }
 
-           else{
-             this.activeName = 'first'
-           }
-
+        else{
+          this.activeName = 'first'
+        }
       },
+      activeName(val) {
+        if (this.$route.path.replace('/', '') == "hotelList") {
+          this.activeName = 'second'
+        }
+        else if (this.$route.path.replace('/', '') == "classify") {
+          this.activeName = 'second'
+        }
+        else if (this.$route.path.replace('/', '') == "content") {
+          this.activeName = 'second'
+        }
+        else if (this.$route.path.replace('/', '') == "advertising") {
+          this.activeName = 'second'
+        }
+        else if(this.$route.path.replace('/', '') == "configure"){
+          this.activeName = 'second'
+        }
+        else if(this.$route.path.replace('/', '') == "editContent"){
+          this.activeName = 'second'
+        }
+        else if(this.$route.path.replace('/', '') == "editAdvertising"){
+          this.activeName = 'second'
+        }
+        else {
+          this.activeName = 'first'
+        }
+      }
     }
   }
 </script>
