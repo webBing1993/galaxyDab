@@ -312,14 +312,15 @@
                 this.userPermissionsJudge = this.authorityJudge[0]
                 this.$store.commit("getUserPermissions", this.userPermissionsJudge);
                 //动态路由
-                let path;
-                if((this.authorityJudge[0].subPermissions[0].description == '')||(this.authorityJudge[0].subPermissions[0].description == null)){
-                  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
-                }
-                else{
-                  path = this.authorityJudge[0].subPermissions[0].description
-                }
-                this.$router.push({path:path})
+                //let path;
+                //if((this.authorityJudge[0].subPermissions[0].description == '')||(this.authorityJudge[0].subPermissions[0].description == null)){
+                 // path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+               // }
+                //else{
+               //   path = this.authorityJudge[0].subPermissions[0].description
+                //}
+               // this.$router.push({path:path})roleManage
+                this.$router.push({path:'roleManage'})
               }
               else{
                 this.userPermissionsJudge = ''
@@ -339,14 +340,15 @@
               }
             }
             if(this.authorityJudge.length == 2){
-              let path;
-              if((this.authorityJudge[0].subPermissions[0].description == '') || (this.authorityJudge[0].subPermissions[0].description == null)){
-                path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
-              }
-              else{
-                path = this.authorityJudge[0].subPermissions[0].description
-              }
-              this.$router.push({path:path})
+              //let path;
+              //if((this.authorityJudge[0].subPermissions[0].description == '') || (this.authorityJudge[0].subPermissions[0].description == null)){
+              //  path = this.authorityJudge[0].subPermissions[0].subPermissions[0].description
+             // }
+             // else{
+               // path = this.authorityJudge[0].subPermissions[0].description
+              //}
+            //  this.$router.push({path:path})
+              this.$router.push({path:'roleManage'})
               for(var i = 0; i< this.authorityJudge.length;i++){
                 if(this.authorityJudge[i].name=='B端用户管理'){
                   this.userPermissionsJudge = this.authorityJudge[i]
