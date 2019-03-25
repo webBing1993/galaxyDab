@@ -52,7 +52,7 @@
       <!--</el-aside>-->
       <!--<router-view></router-view>-->
     <!--</el-container>-->
-    <router-view></router-view>
+    <!--<router-view></router-view>-->
   </el-container>
 </template>
 
@@ -67,139 +67,139 @@
     },
     methods: {
 
-      select: function (index,indexPath) {
-        return { "backgroundColor": "#16D032","text-color":"#fff"}
-
-      },
-      signout: function () {
-        localStorage.removeItem('mydata')
-        this.$router.push({ path: '/login' })
-      },
-      quyu(){
-        //  window.location.reload()
-        this.$router.push({ name: 'datapanel'})
-
-      }
-      ,rundevice(){
-        // window.location.reload()
-        this.$router.push({ name: 'run'})
-      }
-      ,notRundevice(){
-        // window.location.reload()
-        this.$router.push({ name: 'notrun'})
-      }
+      // select: function (index,indexPath) {
+      //   return { "backgroundColor": "#16D032","text-color":"#fff"}
+      //
+      // },
+      // signout: function () {
+      //   localStorage.removeItem('mydata')
+      //   this.$router.push({ path: '/login' })
+      // },
+      // quyu(){
+      //   //  window.location.reload()
+      //   this.$router.push({ name: 'datapanel'})
+      //
+      // }
+      // ,rundevice(){
+      //   // window.location.reload()
+      //   this.$router.push({ name: 'run'})
+      // }
+      // ,notRundevice(){
+      //   // window.location.reload()
+      //   this.$router.push({ name: 'notrun'})
+      // }
     },
     mounted: function () {
-      this.name=JSON.parse(localStorage.mydata)
-
-      if (this.$route.path=="/device/notrun" || this.$route.path=='/addDevMessage'||this.$route.name=='seedetails') {
-        this.thisurl='6'
-      }else if (this.$route.path=="/device/firmwarelist" || this.$route.path=='/firmwareup') {
-        this.thisurl='7'
-      }else if (this.$route.path=="/device/remoteTask" || this.$route.path=='/newRemoteTask') {
-        this.thisurl='8'
-      }else if (this.$route.path=="/odevicene/role" || this.$route.path=='/newrole') {
-        this.thisurl='9'
-      }else if (this.$route.path=="/device/userlist" || this.$route.path=='/newuser'|| this.$route.name=='updatauser') {
-        this.thisurl='10'
-      }else if(this.$route.path=="/device/datapanel" || this.$route.name=='gotoentranceguardPoint'){
-        this.thisurl='11'
-      }else if(this.$route.name=="constructors"){
-        this.thisurl='12'
-      }else if(this.$route.name=='constructionlist'||this.$route.name=='constructionTask'||this.$route.name=='construnctionEdit'){
-        this.thisurl='13'
-      }
+      // this.name=JSON.parse(localStorage.mydata)
+      //
+      // if (this.$route.path=="/device/notrun" || this.$route.path=='/addDevMessage'||this.$route.name=='seedetails') {
+      //   this.thisurl='6'
+      // }else if (this.$route.path=="/device/firmwarelist" || this.$route.path=='/firmwareup') {
+      //   this.thisurl='7'
+      // }else if (this.$route.path=="/device/remoteTask" || this.$route.path=='/newRemoteTask') {
+      //   this.thisurl='8'
+      // }else if (this.$route.path=="/odevicene/role" || this.$route.path=='/newrole') {
+      //   this.thisurl='9'
+      // }else if (this.$route.path=="/device/userlist" || this.$route.path=='/newuser'|| this.$route.name=='updatauser') {
+      //   this.thisurl='10'
+      // }else if(this.$route.path=="/device/datapanel" || this.$route.name=='gotoentranceguardPoint'){
+      //   this.thisurl='11'
+      // }else if(this.$route.name=="constructors"){
+      //   this.thisurl='12'
+      // }else if(this.$route.name=='constructionlist'||this.$route.name=='constructionTask'||this.$route.name=='construnctionEdit'){
+      //   this.thisurl='13'
+      // }
     }
   }
 </script>
 
 <style>
-  body,html{
-    margin: 0px;
-  }
-  .el-container{
-    padding: 15px;
-    padding-bottom: 0px;
-    background-color: #eee;
-  }
+  /*body,html{*/
+    /*margin: 0px;*/
+  /*}*/
+  /*.el-container{*/
+    /*padding: 15px;*/
+    /*padding-bottom: 0px;*/
+    /*background-color: #eee;*/
+  /*}*/
 
-  h1, h2 {
-    font-weight: normal;
-  }
-
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  ul li{
-    list-style:none
-  }
-
-  a {
-    color: #16D032;
-  }
-  .el-container{
-    padding: 15px;
-    padding-bottom:0px;
-    background-color: #eee;
-  }
-
-  h1, h2 {
-    font-weight: normal;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
+  /*h1, h2 {*/
+    /*font-weight: normal;*/
+  /*}*/
 
 
-  a {
-    color: #16D032;
-  }
-  .headerone{display: flex;width: 100%;text-align: center}
-  #app{
-    height:100%
-  }
-  .el-menu-item.is-active {
-    color: #fff;
-    background-color: #16D032;
-  }
-  .container_header{
-    padding:0px;
-    height:100%
-  }
-  .container_header1{
-    line-height: 60px;
-    background-color:#fff
-  }
-  .headerone_span{
-    margin-left:15px;
-    font-weight:600;
-    font-size:21px
-  }
-  .headerone_img{
-    width:86px;
-    height:23px;
-    vertical-align: middle;
-  }
-  .headerone_span{
-    flex:1;
-    right:0px;
-    text-align: right;
-    padding-right:50px
-  }
-  .signout{
-    cursor: pointer;
-    font-style: normal;
-    color: #16d032;
-  }
-  .container_body{
-    height: 100%;
-    border: 1px solid #eee
-  }
-  .container_body_aside{
-    background-color: rgb(238, 241, 246)
-  }
+  /*ul {*/
+    /*list-style-type: none;*/
+    /*padding: 0;*/
+  /*}*/
+  /*ul li{*/
+    /*list-style:none*/
+  /*}*/
+
+  /*a {*/
+    /*color: #16D032;*/
+  /*}*/
+  /*.el-container{*/
+    /*padding: 15px;*/
+    /*padding-bottom:0px;*/
+    /*background-color: #eee;*/
+  /*}*/
+
+  /*h1, h2 {*/
+    /*font-weight: normal;*/
+  /*}*/
+
+  /*ul {*/
+    /*list-style-type: none;*/
+    /*padding: 0;*/
+  /*}*/
+
+
+  /*a {*/
+    /*color: #16D032;*/
+  /*}*/
+  /*.headerone{display: flex;width: 100%;text-align: center}*/
+  /*#app{*/
+    /*height:100%*/
+  /*}*/
+  /*.el-menu-item.is-active {*/
+    /*color: #fff;*/
+    /*background-color: #16D032;*/
+  /*}*/
+  /*.container_header{*/
+    /*padding:0px;*/
+    /*height:100%*/
+  /*}*/
+  /*.container_header1{*/
+    /*line-height: 60px;*/
+    /*background-color:#fff*/
+  /*}*/
+  /*.headerone_span{*/
+    /*margin-left:15px;*/
+    /*font-weight:600;*/
+    /*font-size:21px*/
+  /*}*/
+  /*.headerone_img{*/
+    /*width:86px;*/
+    /*height:23px;*/
+    /*vertical-align: middle;*/
+  /*}*/
+  /*.headerone_span{*/
+    /*flex:1;*/
+    /*right:0px;*/
+    /*text-align: right;*/
+    /*padding-right:50px*/
+  /*}*/
+  /*.signout{*/
+    /*cursor: pointer;*/
+    /*font-style: normal;*/
+    /*color: #16d032;*/
+  /*}*/
+  /*.container_body{*/
+    /*height: 100%;*/
+    /*border: 1px solid #eee*/
+  /*}*/
+  /*.container_body_aside{*/
+    /*background-color: rgb(238, 241, 246)*/
+  /*}*/
 </style>

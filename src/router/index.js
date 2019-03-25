@@ -168,11 +168,11 @@ const main = [
             component:userListDetail
           },
           //------合并ecard路由开始----------
-          {
-            path: 'device',
-            name:'index',
-            component: App,
-            children: [
+          // {
+          //   path: 'device',
+          //   name:'index',
+          //   component: App,
+          //   children: [
               {
                 path: 'run',
                 name:'run',
@@ -271,8 +271,8 @@ const main = [
                 name:'zoneAndDevice',
                 component: zoneAndDevice
               }
-            ]
-          }
+            // ]
+          // }
           //------合并ecard路由结束----------
         ]
       },

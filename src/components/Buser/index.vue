@@ -17,55 +17,55 @@
                   <i class="el-icon-document"></i>
                   <span slot="title">用户列表</span>
                 </el-menu-item>
+                <!--合并ecard-dashboard开始-->
+                <el-submenu index="12">
+                  <template slot="title">
+                    <i class="el-icon-document"></i>
+                    <span>设备管理</span>
+                  </template>
+                  <el-menu-item index="/run">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">运行设备</span>
+                  </el-menu-item>
+                  <el-menu-item>
+                    <i class="el-icon-menu" index="/notrun"></i>
+                    <span slot="title">在库设备</span>
+                  </el-menu-item>
+                </el-submenu>
+                <el-submenu index="12">
+                  <template slot="title">
+                    <i class="el-icon-document"></i>
+                    <span>施工管理</span>
+                  </template>
+                  <el-menu-item index="/firmwarelist">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">固件列表</span>
+                  </el-menu-item>
+                  <el-menu-item index="/constructionlist">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">施工任务</span>
+                  </el-menu-item>
+                  <el-menu-item index="/constructors">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">施工人员</span>
+                  </el-menu-item>
+                </el-submenu>
+                <el-submenu index="12">
+                  <template slot="title">
+                    <i class="el-icon-document"></i>
+                    <span>空间管理</span>
+                  </template>
+                  <el-menu-item index="/hotelConfig">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">酒店配置</span>
+                  </el-menu-item>
+                  <el-menu-item index="/zoneAndDevice">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">空间和设备点配置</span>
+                  </el-menu-item>
+                </el-submenu>
+                <!--合并ecard-dashboard结束-->
                 <el-col :span="24"  v-for="item in userPermissionsShow.subPermissions" :key="item.id">
-                  <!--合并ecard-dashboard开始-->
-                  <el-submenu index="12">
-                    <template slot="title">
-                      <i class="el-icon-document"></i>
-                      <span>设备管理</span>
-                    </template>
-                    <el-menu-item index="/device/run">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">运行设备</span>
-                    </el-menu-item>
-                    <el-menu-item>
-                      <i class="el-icon-menu" index="/device/notrun"></i>
-                      <span slot="title">在库设备</span>
-                    </el-menu-item>
-                  </el-submenu>
-                  <el-submenu index="12">
-                    <template slot="title">
-                      <i class="el-icon-document"></i>
-                      <span>施工管理</span>
-                    </template>
-                    <el-menu-item index="/device/firmwarelist">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">固件列表</span>
-                    </el-menu-item>
-                    <el-menu-item index="/device/constructionlist">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">施工任务</span>
-                    </el-menu-item>
-                    <el-menu-item index="/device/constructors">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">施工人员</span>
-                    </el-menu-item>
-                  </el-submenu>
-                  <el-submenu index="12">
-                    <template slot="title">
-                      <i class="el-icon-document"></i>
-                      <span>空间管理</span>
-                    </template>
-                    <el-menu-item index="/device/hotelConfig">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">酒店配置</span>
-                    </el-menu-item>
-                    <el-menu-item index="/device/zoneAndDevice">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">空间和设备点配置</span>
-                    </el-menu-item>
-                  </el-submenu>
-                  <!--合并ecard-dashboard结束-->
                   <el-submenu index="1" v-if="item.subPermissions != null">
                     <template slot="title">
                       <i class="el-icon-document"></i>
