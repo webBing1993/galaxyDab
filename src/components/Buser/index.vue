@@ -5,7 +5,6 @@
       <!--aside-->
         <div class="aside">
           <el-row class="tac">
-
               <el-menu
                 :router="true"
                 @open="handleOpen"
@@ -18,7 +17,7 @@
                   <span slot="title">用户列表</span>
                 </el-menu-item>
                 <!--合并ecard-dashboard开始-->
-                <el-submenu index="12">
+                <el-submenu index="2-1">
                   <template slot="title">
                     <i class="el-icon-document"></i>
                     <span>设备管理</span>
@@ -32,7 +31,7 @@
                     <span slot="title">在库设备</span>
                   </el-menu-item>
                 </el-submenu>
-                <el-submenu index="12">
+                <el-submenu index="2-2">
                   <template slot="title">
                     <i class="el-icon-document"></i>
                     <span>施工管理</span>
@@ -50,7 +49,7 @@
                     <span slot="title">施工人员</span>
                   </el-menu-item>
                 </el-submenu>
-                <el-submenu index="12">
+                <el-submenu index="2-3">
                   <template slot="title">
                     <i class="el-icon-document"></i>
                     <span>空间管理</span>
