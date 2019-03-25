@@ -1,58 +1,58 @@
 <template>
   <el-container class="container_header">
-    <el-header class="container_header1">
-      <div class="headerone">
-         <span class="headerone_span" style="text-align: left;">
-          <img class="headerone_img" src="https://iotdev.fortrun.cn/static/img/LOGO.1937726.png">
-          <span style="margin-left:10px;" >E卡通管理平台</span>
-         </span>
-        <span>
-         </span>
-        <span class="headerone_span1">您好！{{name}}， <i class="signout" @click='signout'>退出</i></span>
-      </div>
-    </el-header>
+    <!--<el-header class="container_header1">-->
+      <!--<div class="headerone">-->
+         <!--<span class="headerone_span" style="text-align: left;">-->
+          <!--<img class="headerone_img" src="https://iotdev.fortrun.cn/static/img/LOGO.1937726.png">-->
+          <!--<span style="margin-left:10px;" >E卡通管理平台</span>-->
+         <!--</span>-->
+        <!--<span>-->
+         <!--</span>-->
+        <!--<span class="headerone_span1">您好！{{name}}， <i class="signout" @click='signout'>退出</i></span>-->
+      <!--</div>-->
+    <!--</el-header>-->
     <!-- <el-header style='line-height: 60px'>首页</el-header> -->
-    <el-container class="container_body">
-      <el-aside style="overflow:hidden;width:200px;border-right: 1px solid #eee;" class="container_body_aside">
-        <el-menu :default-openeds="['1','2', '3','4','5']" :default-active="thisurl"   style="height:100%;width:215px;overflow-y: auto;overflow-x: hidden;" >
+    <!--<el-container class="container_body">-->
+      <!--<el-aside style="overflow:hidden;width:200px;border-right: 1px solid #eee;" class="container_body_aside">-->
+        <!--<el-menu :default-openeds="['1','2', '3','4','5']" :default-active="thisurl"   style="height:100%;width:215px;overflow-y: auto;overflow-x: hidden;" >-->
 
-          <el-submenu index="1">
-            <template slot="title">设备管理</template>
-            <span @click="rundevice"><el-menu-item index="5">运行设备</el-menu-item></span>
-            <span @click="notRundevice"><el-menu-item index="6">在库设备</el-menu-item></span>
-            <!--<router-link to="/device/run"><el-menu-item index="5" >运行设备</el-menu-item></router-link>
-            <router-link to="/device/notrun"><el-menu-item index="6">在库设备</el-menu-item></router-link>-->
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">施工管理</template>
-            <router-link to="/device/firmwarelist"><el-menu-item index="7">固件列表</el-menu-item></router-link>
-            <!--<router-link to="/device/remoteTask"><el-menu-item index="8">远程任务</el-menu-item></router-link>-->
-            <router-link to="/device/constructionlist"><el-menu-item index="13">施工任务</el-menu-item></router-link>
-            <router-link to="/device/constructors"><el-menu-item index="12">施工人员</el-menu-item></router-link>
-          </el-submenu>
-
-          <!--<el-submenu index="3">-->
-          <!--<template slot="title">权限管理</template>-->
-          <!--<router-link to="/device/role"><el-menu-item index="9">角色列表</el-menu-item></router-link>-->
-          <!--<router-link to="/device/userlist"><el-menu-item index="10">用户列表</el-menu-item></router-link>-->
+          <!--<el-submenu index="1">-->
+            <!--<template slot="title">设备管理</template>-->
+            <!--<span @click="rundevice"><el-menu-item index="5">运行设备</el-menu-item></span>-->
+            <!--<span @click="notRundevice"><el-menu-item index="6">在库设备</el-menu-item></span>-->
+            <!--&lt;!&ndash;<router-link to="/device/run"><el-menu-item index="5" >运行设备</el-menu-item></router-link>-->
+            <!--<router-link to="/device/notrun"><el-menu-item index="6">在库设备</el-menu-item></router-link>&ndash;&gt;-->
           <!--</el-submenu>-->
 
-          <!--<el-submenu index="4">-->
-          <!--<template slot="title">区域管理</template>-->
-          <!--&lt;!&ndash;<router-link to="/device/datapanel"><el-menu-item index="11">区域管理</el-menu-item></router-link>&ndash;&gt;-->
-          <!--<span @click="quyu"><el-menu-item index="11">区域管理</el-menu-item></span>-->
+          <!--<el-submenu index="2">-->
+            <!--<template slot="title">施工管理</template>-->
+            <!--<router-link to="/device/firmwarelist"><el-menu-item index="7">固件列表</el-menu-item></router-link>-->
+            <!--&lt;!&ndash;<router-link to="/device/remoteTask"><el-menu-item index="8">远程任务</el-menu-item></router-link>&ndash;&gt;-->
+            <!--<router-link to="/device/constructionlist"><el-menu-item index="13">施工任务</el-menu-item></router-link>-->
+            <!--<router-link to="/device/constructors"><el-menu-item index="12">施工人员</el-menu-item></router-link>-->
           <!--</el-submenu>-->
-          <el-submenu index="5">
-            <template slot="title">空间管理</template>
-            <span @click="goto({name:'hotelConfig'})"><el-menu-item index="14">酒店配置</el-menu-item></span>
-            <span @click="goto({name:'zoneAndDevice'})"><el-menu-item index="15">空间和设备点配置</el-menu-item></span>
-          </el-submenu>
-        </el-menu>
-      </el-aside>
-      <router-view></router-view>
-    </el-container>
 
+          <!--&lt;!&ndash;<el-submenu index="3">&ndash;&gt;-->
+          <!--&lt;!&ndash;<template slot="title">权限管理</template>&ndash;&gt;-->
+          <!--&lt;!&ndash;<router-link to="/device/role"><el-menu-item index="9">角色列表</el-menu-item></router-link>&ndash;&gt;-->
+          <!--&lt;!&ndash;<router-link to="/device/userlist"><el-menu-item index="10">用户列表</el-menu-item></router-link>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-submenu>&ndash;&gt;-->
+
+          <!--&lt;!&ndash;<el-submenu index="4">&ndash;&gt;-->
+          <!--&lt;!&ndash;<template slot="title">区域管理</template>&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash;<router-link to="/device/datapanel"><el-menu-item index="11">区域管理</el-menu-item></router-link>&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<span @click="quyu"><el-menu-item index="11">区域管理</el-menu-item></span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-submenu>&ndash;&gt;-->
+          <!--<el-submenu index="5">-->
+            <!--<template slot="title">空间管理</template>-->
+            <!--<span @click="goto({name:'hotelConfig'})"><el-menu-item index="14">酒店配置</el-menu-item></span>-->
+            <!--<span @click="goto({name:'zoneAndDevice'})"><el-menu-item index="15">空间和设备点配置</el-menu-item></span>-->
+          <!--</el-submenu>-->
+        <!--</el-menu>-->
+      <!--</el-aside>-->
+      <!--<router-view></router-view>-->
+    <!--</el-container>-->
+    <router-view></router-view>
   </el-container>
 </template>
 
