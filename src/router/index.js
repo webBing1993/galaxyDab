@@ -34,6 +34,37 @@ const editContent = resolve => require(['@/components/collection/editContent/edi
 const hotelList = resolve => require(['@/components/collection/hotelList'], resolve)
 const configure = resolve => require(['@/components/collection/hotelList/configure'], resolve)
 const userListDetail =  resolve => require(['@/components/Buser/userListDetails/index'], resolve)
+
+//合并路由添加
+import App from '@/components/App'
+import List1 from '@/components/list1'
+import List2 from '@/components/list2.vue'
+import List21 from '@/components/list21.vue'
+import details from '@/components/details.vue'
+import role from '@/components/role.vue'
+import userlist from '@/components/userlist.vue'
+import newuser from '@/components/newuser.vue'
+import newrole from '@/components/newrole.vue'
+import firmwarelist from '@/components/firmwarelist.vue'
+import remoteTask from '@/components/remoteTask.vue'
+import datapanel from '@/components/datapanel.vue'
+import updatauser from '@/components/updatauser.vue'
+import firmwareup from '@/components/firmwareup.vue'
+import newRemoteTask from '@/components/newRemoteTask.vue'
+import remoteTaskdatails from '@/components/remoteTaskdatails.vue'
+import deviceparam from '@/components/deviceparam.vue'
+import deviceRssiList from '@/components/deviceRssiList.vue'
+import todeviceRssiList from '@/components/todeviceRssiList.vue'
+import updateRssiData from '@/components/updateRssiData.vue'
+import gotoentranceguardPoint from '@/components/gotoentranceguardPoint.vue'
+import constructors from '@/components/constructors.vue'
+import constructionTask from '@/components/constructionTask.vue'
+import construnctionEdit from '@/components/construnctionEdit.vue'
+import constructionlist from '@/components/constructionlist.vue'
+import hotelConfig from '@/components/zoneManage/hotelConfig.vue'
+import zoneAndDevice from '@/components/zoneManage/zoneAndDevice.vue'
+import addHotelConfig from '@/components/zoneManage/addHotelConfig.vue'
+
 Vue.use(Router)
 
 const main = [
@@ -135,7 +166,118 @@ const main = [
             path:'userListDetail',
             name:'userListDetail',
             component:userListDetail
+          },
+          //------合并ecard路由开始----------
+          {
+            path: '/device',
+            name:'index',
+            component: App,
+            children: [
+              {
+                path: '',
+                redirect: 'run'
+              },
+              {
+                path: 'run',
+                name:'run',
+                component: List1,
+                // children:[
+                //   {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam}
+                // ]
+              },
+              {
+                // 当 /user/:id/posts 匹配成功
+                // UserPosts 会被渲染在 User 的 <router-view> 中
+                path: 'notrun',
+                name:'notrun',
+                component: List2
+              },
+              {
+                path: 'role',
+                component: role
+              },
+              {
+                path: 'userlist',
+                component: userlist
+              },
+              {
+                path: '/newuser',
+                component: newuser
+              },
+              {
+                path: '/newrole',
+                component: newrole
+              },
+              {
+                path: 'firmwarelist',
+                component: firmwarelist
+              },
+              {
+                path: 'remoteTask',
+                component: remoteTask
+              },
+              {
+                path: 'datapanel',
+                name:'datapanel',
+                component: datapanel
+              },
+              {
+                path: 'constructors',
+                name:'constructors',
+                component: constructors
+              },
+              {
+                path: '/constructionTask',
+                name:'constructionTask',
+                component: constructionTask
+              },
+              {
+                path: '/construnctionEdit',
+                name:'construnctionEdit',
+                component: construnctionEdit
+                // children:[
+                //   {
+                //     path: ':rowId',
+                //     component: construnctionEdit
+                //   }
+                // ]
+              },
+              {
+                path: 'constructionlist',
+                name:'constructionlist',
+                component: constructionlist
+              },
+              {path: '/firmwareup', component: firmwareup},
+              {path: 'remoteTaskdatails/:val', name:'remoteTaskdatails', component: remoteTaskdatails},
+              {path: '/newRemoteTask', component: newRemoteTask},
+              {name:'updatauser',path: '/updatauser/:val/:id', component: updatauser},
+              {path: '/addDevMessage', component: List21},
+              {name:'seedetails',path: '/details/:val', component: details},
+              {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam},
+              {name:'deviceRssiList',path: '/deviceRssiList/:val/:name', component: deviceRssiList},
+              {name:'todeviceRssiList',path: '/todeviceRssiList/:val/:name', component: todeviceRssiList},
+              {name:'updateRssiData',path: '/updateRssiData/:val/:id/:name', component: updateRssiData},
+              // {name:'gotoentranceguardPoint',path: '/gotoentranceguardPoint/:val/:id/:thehotelCode/:name', component: gotoentranceguardPoint}
+              {name:'gotoentranceguardPoint',path: '/gotoentranceguardPoint', component: gotoentranceguardPoint},
+
+              {
+                path: 'hotelConfig',
+                name:'hotelConfig',
+                component: hotelConfig
+              },
+              {
+                path: 'addHotelConfig/:id',
+                name:'addHotelConfig',
+                component: addHotelConfig,
+              },
+              {
+                path: 'zoneAndDevice',
+                name:'zoneAndDevice',
+                component: zoneAndDevice
+              }
+            ]
           }
+          //------合并ecard路由结束----------
         ]
       },
       ///////--------------配置管理开始------------
