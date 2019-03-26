@@ -82,6 +82,7 @@
       ...mapActions([
         'getHotelConfigList'
       ]),
+      ...mapMutations(['SELECTMODULE']),
 
       handleSizeChange(val) {
         console.log(val)
@@ -114,6 +115,7 @@
       }
     },
     mounted(){
+      this.SELECTMODULE('ecard');
       this.getList()
     }
 

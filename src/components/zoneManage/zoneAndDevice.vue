@@ -355,6 +355,7 @@
         'getDoorLockOption',
         'getLvyeRoomNo'
       ]),
+      ...mapMutations(['SELECTMODULE']),
       handleNodeClick(data,node,comp){
         console.log('data:',data)
         console.log('node:',node)
@@ -683,6 +684,7 @@
       }
     },
     mounted () {
+      this.SELECTMODULE('ecard');
       this.getList();
     }
 

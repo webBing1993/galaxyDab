@@ -21,7 +21,46 @@ module.exports = {
 
   request: (ctx, param) => {
     if(ctx.state.moduleName == 'ecard'){
+      ctx.dispatch ('showLoading', true);
+      let headers = param.headers || {};
+      headers.Session = sessionStorage.getItem('session_id');
+      axios({
+        url: "http://qa.fortrun.cn:9052",
+        method: param.method || 'GET',
+        // baseURL: ':9201',
+        headers: headers,
+        params: param.params || null,
+        data: param.body || null,
+        timeout: param.timeout || 60000
+      }).then(response => {
+        ctx.dispatch ('showLoading', false);
+        if (response.config.url.match('export')) {
+          param.onSuccess && param.onSuccess(response)
+        }
+        else if (+response.data.errcode === 0 || +response.status === 204) {
+          param.onSuccess && param.onSuccess(response.data, response.headers)
+        } else if(response.data.errcode ==2){
+          param.onSuccess && param.onSuccess(response.data, response.headers)
 
+        }
+        else if (response.data.errcode !== 0) {
+          param.onFail && param.onFail(response)
+        }
+        else {
+          param.onFail && param.onFail(response)
+        }
+      }).catch(
+        error => {
+          ctx.dispatch ('showLoading', false);
+          if(error){
+            console.log(error)
+          }
+          let status = error.response.status;
+          if (status === 401) {
+            router.push('/login')
+          }
+        }
+      )
 
     }
     else{
