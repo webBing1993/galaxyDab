@@ -3,6 +3,7 @@ module.exports = {
     ...require('./interface'),
     ...require('./hotelListId'),
     ...require('./loading'),
-    ...require('./login')
+    ...require('./login'),
+    ...require('./util')
 }
 
