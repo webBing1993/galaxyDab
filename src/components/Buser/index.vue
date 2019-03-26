@@ -26,8 +26,8 @@
                     <i class="el-icon-menu"></i>
                     <span slot="title">运行设备</span>
                   </el-menu-item>
-                  <el-menu-item>
-                    <i class="el-icon-menu" index="/notrun"></i>
+                  <el-menu-item index="/notrun">
+                    <i class="el-icon-menu"></i>
                     <span slot="title">在库设备</span>
                   </el-menu-item>
                 </el-submenu>
