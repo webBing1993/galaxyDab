@@ -6,6 +6,7 @@
         <el-tabs v-model="activeName" class="tab_style" @tab-click="handleClick" tab-position="bottom">
           <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser"></el-tab-pane>
           <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage"></el-tab-pane>
+          <el-tab-pane label="E卡通dashboard" name="third"></el-tab-pane>
         </el-tabs>
       </div>
       <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
@@ -99,11 +100,14 @@
           }
           this.$router.push({path:path})
 
-        }else{
+        }else if(tab.label=='配置管理'){
           console.log('测试tab栏1',this.$store.state.configPermissions)
           // console.log('写进去path',this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description)
           let path = this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description
           this.$router.push({path:path})
+        }
+        else if(tab.label=='E卡通dashboard'){
+          this.$router.push({path:'run'})
         }
 
       },
