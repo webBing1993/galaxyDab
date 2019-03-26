@@ -46,6 +46,37 @@ router.beforeEach((to,from,next)=>{
 
   }
 })
+Vue.http.interceptors.push((request, next)  =>{
+  // 登录成功后将后台返回的TOKEN在本地存下来,每次请求从sessionStorage中拿到存储的TOKEN值
+  let TOKEN=sessionStorage.getItem('token')
+  console.log('tocken',TOKEN)
+  if(TOKEN){
+    // 如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行
+
+    request.headers.set('token',TOKEN);
+  }
+  next((response) => {
+    // console.log(response.body.code)
+    if(response.body.code==10010){//与后台约定登录失效的返回码
+      var data=response.body.data
+      // console.log('000')
+      window.location.href = "/#/login"
+    }
+    if(response.status!=200){
+      console.log(response.status)
+      Vue.prototype.$message('服务器暂时无法响应')
+      return response;
+    }else{
+      if(response.body.code!=0){
+        if(response.body.msg){
+          Vue.prototype.$message(response.body.msg)
+        }
+        return response;
+      }
+    }
+    return response;
+  })
+})
 new Vue({
   el: '#app',
   router,
