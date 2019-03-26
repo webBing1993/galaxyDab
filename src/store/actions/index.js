@@ -13,5 +13,7 @@ module.exports = {
   ...require('./asysManagement'),
   ...require('./hotelList'),
   ...require('./loading'),
-  ...require('./userListDetails')
+  ...require('./userListDetails'),
+    ...require('./hotelConfig'),
+  ...require('./zoneManage')
 }
