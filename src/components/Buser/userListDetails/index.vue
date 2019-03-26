@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="userListDetails_bottom">
-     <el-table
+     <el-table  v-loading="loading"
       :data="tableData"
       border>
        <el-table-column
@@ -61,6 +61,7 @@
         pagesize:10,
         pagenum:1,
         total: 0,
+        loading: true
 
       }
     },
@@ -79,6 +80,7 @@
         this.initList()
       },
       initList(){
+        this.loading = true
       this.inputUser = this.inputUser.replace(/\s*/g,"")
         this.searchUserListDetails({
           "page":this.pagenum,
@@ -86,6 +88,7 @@
           "name":this.inputUser,
           onsuccess: (body,headers) => {
             if(body.errcode == "0"){
+              this.loading = false
                 body.data.list.forEach(item=>{
                   item.hasWechatWorkCredential =  (item.hasWechatWorkCredential == true)?'有':'无'
                 })
