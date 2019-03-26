@@ -625,7 +625,7 @@
       }
     },
     mounted(){
-      this.SELECTMODULE('ecard');
+      // this.SELECTMODULE('ecard');
       let id=this.$route.params.id;
       if(id!=='new'){
         console.log('编辑')

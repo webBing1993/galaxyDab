@@ -115,7 +115,7 @@
       }
     },
     mounted(){
-      this.SELECTMODULE('ecard');
+      // this.SELECTMODULE('ecard');
       this.getList()
     }
 

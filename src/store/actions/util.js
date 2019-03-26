@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import router from '../../router/index.js'
 import axios from 'axios'
-
+import base_api from './../../apiurl.js';
 Vue.use(VueResource)
 
 module.exports = {
@@ -17,53 +17,104 @@ module.exports = {
     router.replace(param)
     // console.log('router:',router)
   },
+  resource: (ctx, param) => {
+    let baseurl = base_api.baseurl;
+    console.log ('baseurl:', baseurl);
+    let headers = param.headers || {};
+    // if (!param.url.match(/register/) && !param.url.match(/login/) ) {
+    //     headers.Session = sessionStorage.getItem('session_id');
+    // }
+    // ctx.commit('LOADING', 1)
 
-
+    Vue.http ({
+      // url: './gemini'+param.url,//wqtenv/wqtversion
+      url: baseurl + param.url,//wqtenv/wqtversion
+      body: param.body || null,
+      headers: headers,
+      params: param.params || null,
+      method: param.method || "GET",
+      timeout: param.timeout || 60000,
+      credentials: false,
+      emulateHTTP: false,
+      emulateJSON: true,
+      // emulateJSON: false,
+    }).then (
+      response => {
+        if (response.body.code === 0) {
+          param.onSuccess ? param.onSuccess (response.body, response.headers) : null
+        } else if (response.body.code === 10005) {
+          param.onSuccess ? param.onSuccess (response.body, response.headers) : null
+        } else {
+          let toastParam = {text: response.body.msg, time: 1000};
+          // ctx.dispatch('showToast',toastParam);
+          param.onFail ? param.onFail (response.body) : null
+        }
+      }
+    ).catch (
+      error => {
+        //ErrorCallback
+        console.log ('error:', error);
+        let hint = '';
+        if (error.status === 401) {
+          hint = '登录失效!'
+        } else if (error.status === 1) {
+          hint = '请求超时!';
+        } else {
+          hint = '请求失败'
+        }
+        // ctx.dispatch('showToast', hint);
+      }
+    ).finally (
+      final => {
+        // isRefresh ? ctx.dispatch('showprogress', {show: false, isOk: true}) : ctx.commit('LOADING');
+      }
+    )
+  },
   request: (ctx, param) => {
-    if(ctx.state.moduleName == 'ecard'){
-      ctx.dispatch ('showLoading', true);
-      let headers = param.headers || {};
-      headers.Session = sessionStorage.getItem('session_id');
-      axios({
-        url: "http://qa.fortrun.cn:9052",
-        method: param.method || 'GET',
-        // baseURL: ':9201',
-        headers: headers,
-        params: param.params || null,
-        data: param.body || null,
-        timeout: param.timeout || 60000
-      }).then(response => {
-        ctx.dispatch ('showLoading', false);
-        if (response.config.url.match('export')) {
-          param.onSuccess && param.onSuccess(response)
-        }
-        else if (+response.data.errcode === 0 || +response.status === 204) {
-          param.onSuccess && param.onSuccess(response.data, response.headers)
-        } else if(response.data.errcode ==2){
-          param.onSuccess && param.onSuccess(response.data, response.headers)
+    // if(ctx.state.moduleName == 'ecard'){
+      // ctx.dispatch ('showLoading', true);
+      // let headers = param.headers || {};
+      // headers.Session = sessionStorage.getItem('session_id');
+      // axios({
+      //   url: "http://qa.fortrun.cn:9052",
+      //   method: param.method || 'GET',
+      //   // baseURL: ':9201',
+      //   headers: headers,
+      //   params: param.params || null,
+      //   data: param.body || null,
+      //   timeout: param.timeout || 60000
+      // }).then(response => {
+      //   ctx.dispatch ('showLoading', false);
+      //   if (response.config.url.match('export')) {
+      //     param.onSuccess && param.onSuccess(response)
+      //   }
+      //   else if (+response.data.errcode === 0 || +response.status === 204) {
+      //     param.onSuccess && param.onSuccess(response.data, response.headers)
+      //   } else if(response.data.errcode ==2){
+      //     param.onSuccess && param.onSuccess(response.data, response.headers)
+      //
+      //   }
+      //   else if (response.data.errcode !== 0) {
+      //     param.onFail && param.onFail(response)
+      //   }
+      //   else {
+      //     param.onFail && param.onFail(response)
+      //   }
+      // }).catch(
+      //   error => {
+      //     ctx.dispatch ('showLoading', false);
+      //     if(error){
+      //       console.log(error)
+      //     }
+      //     let status = error.response.status;
+      //     if (status === 401) {
+      //       router.push('/login')
+      //     }
+      //   }
+      // )
 
-        }
-        else if (response.data.errcode !== 0) {
-          param.onFail && param.onFail(response)
-        }
-        else {
-          param.onFail && param.onFail(response)
-        }
-      }).catch(
-        error => {
-          ctx.dispatch ('showLoading', false);
-          if(error){
-            console.log(error)
-          }
-          let status = error.response.status;
-          if (status === 401) {
-            router.push('/login')
-          }
-        }
-      )
-
-    }
-    else{
+    // }
+    // else{
       ctx.dispatch ('showLoading', true);
       let headers = param.headers || {};
       headers.Session = sessionStorage.getItem('session_id');
@@ -105,7 +156,7 @@ module.exports = {
           }
         }
       )
-    }
+    // }
 
   }
 
