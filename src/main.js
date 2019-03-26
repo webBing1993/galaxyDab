@@ -48,12 +48,18 @@ router.beforeEach((to,from,next)=>{
 })
 Vue.http.interceptors.push((request, next)  =>{
   // 登录成功后将后台返回的TOKEN在本地存下来,每次请求从sessionStorage中拿到存储的TOKEN值
-  let TOKEN= sessionStorage.getItem('session_id');
+  let TOKEN= sessionStorage.getItem('token');
   console.log('tocken',TOKEN)
   if(TOKEN){
     // 如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行
 
     request.headers.set('token',TOKEN);
+  }
+  else{
+    this.$message({
+      message: 'token为空',
+      type: 'warning'
+    });
   }
   next((response) => {
     // console.log(response.body.code)

@@ -69,6 +69,7 @@ module.exports = {
       ctx.dispatch ('showLoading', true);
       let headers = param.headers || {};
       headers.Session = sessionStorage.getItem('session_id');
+      headers.token = sessionStorage.getItem('token');
       axios({
         url: param.url,
         method: param.method || 'GET',
