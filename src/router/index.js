@@ -36,33 +36,33 @@ const configure = resolve => require(['@/components/collection/hotelList/configu
 const userListDetail =  resolve => require(['@/components/Buser/userListDetails/index'], resolve)
 
 //合并路由添加
-import List1 from '@/components/ecardDashboard/list1'
-import List2 from '@/components/ecardDashboard/list2.vue'
-import List21 from '@/components/ecardDashboard/list21.vue'
-import details from '@/components/ecardDashboard/details.vue'
-import role from '@/components/ecardDashboard/role.vue'
-import userlist from '@/components/ecardDashboard/userlist.vue'
-import newuser from '@/components/ecardDashboard/newuser.vue'
-import newrole from '@/components/ecardDashboard/newrole.vue'
-import firmwarelist from '@/components/ecardDashboard/firmwarelist.vue'
-import remoteTask from '@/components/ecardDashboard/remoteTask.vue'
-import datapanel from '@/components/ecardDashboard/datapanel.vue'
-import updatauser from '@/components/ecardDashboard/updatauser.vue'
-import firmwareup from '@/components/ecardDashboard/firmwareup.vue'
-import newRemoteTask from '@/components/ecardDashboard/newRemoteTask.vue'
-import remoteTaskdatails from '@/components/ecardDashboard/remoteTaskdatails.vue'
-import deviceparam from '@/components/ecardDashboard/deviceparam.vue'
-import deviceRssiList from '@/components/ecardDashboard/deviceRssiList.vue'
-import todeviceRssiList from '@/components/ecardDashboard/todeviceRssiList.vue'
-import updateRssiData from '@/components/ecardDashboard/updateRssiData.vue'
-import gotoentranceguardPoint from '@/components/ecardDashboard/gotoentranceguardPoint.vue'
-import constructors from '@/components/ecardDashboard/constructors.vue'
-import constructionTask from '@/components/ecardDashboard/constructionTask.vue'
-import construnctionEdit from '@/components/ecardDashboard/construnctionEdit.vue'
-import constructionlist from '@/components/ecardDashboard/constructionlist.vue'
-import hotelConfig from '@/components/ecardDashboard/zoneManage/hotelConfig.vue'
-import zoneAndDevice from '@/components/ecardDashboard/zoneManage/zoneAndDevice.vue'
-import addHotelConfig from '@/components/ecardDashboard/zoneManage/addHotelConfig.vue'
+const List1 =  resolve => require(['@/components/ecardDashboard/list1'], resolve)
+const List2 =  resolve => require(['@/components/ecardDashboard/list2'], resolve)
+const List21 =  resolve => require(['@/components/ecardDashboard/list21'], resolve)
+const details =  resolve => require(['@/components/ecardDashboard/details'], resolve)
+const role =  resolve => require(['@/components/ecardDashboard/role'], resolve)
+const userlist =  resolve => require(['@/components/ecardDashboard/userlist'], resolve)
+const newuser =  resolve => require(['@/components/ecardDashboard/newuser'], resolve)
+const newrole =  resolve => require(['@/components/ecardDashboard/newrole'], resolve)
+const firmwarelist =  resolve => require(['@/components/ecardDashboard/firmwarelist'], resolve)
+const remoteTask =  resolve => require(['@/components/ecardDashboard/remoteTask'], resolve)
+const datapanel =  resolve => require(['@/components/ecardDashboard/datapanel'], resolve)
+const updatauser =  resolve => require(['@/components/ecardDashboard/updatauser'], resolve)
+const firmwareup =  resolve => require(['@/components/ecardDashboard/firmwareup'], resolve)
+const newRemoteTask =  resolve => require(['@/components/ecardDashboard/newRemoteTask'], resolve)
+const remoteTaskdatails =  resolve => require(['@/components/ecardDashboard/remoteTaskdatails'], resolve)
+const deviceparam =  resolve => require(['@/components/ecardDashboard/deviceparam'], resolve)
+const deviceRssiList =  resolve => require(['@/components/ecardDashboard/deviceRssiList'], resolve)
+const todeviceRssiList =  resolve => require(['@/components/ecardDashboard/todeviceRssiList'], resolve)
+const updateRssiData =  resolve => require(['@/components/ecardDashboard/updateRssiData'], resolve)
+const gotoentranceguardPoint =  resolve => require(['@/components/ecardDashboard/gotoentranceguardPoint'], resolve)
+const constructors =  resolve => require(['@/components/ecardDashboard/constructors'], resolve)
+const constructionTask =  resolve => require(['@/components/ecardDashboard/constructionTask'], resolve)
+const construnctionEdit =  resolve => require(['@/components/ecardDashboard/construnctionEdit'], resolve)
+const constructionlist =  resolve => require(['@/components/ecardDashboard/constructionlist'], resolve)
+const hotelConfig =  resolve => require(['@/components/ecardDashboard/zoneManage/hotelConfig'], resolve)
+const zoneAndDevice =  resolve => require(['@/components/ecardDashboard/zoneManage/zoneAndDevice'], resolve)
+const addHotelConfig =  resolve => require(['@/components/ecardDashboard/zoneManage/addHotelConfig'], resolve)
 
 
 
