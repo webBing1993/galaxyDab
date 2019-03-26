@@ -64,7 +64,7 @@ const hotelConfig =  resolve => require(['@/components/ecardDashboard/zoneManage
 const zoneAndDevice =  resolve => require(['@/components/ecardDashboard/zoneManage/zoneAndDevice'], resolve)
 const addHotelConfig =  resolve => require(['@/components/ecardDashboard/zoneManage/addHotelConfig'], resolve)
 
-
+const ecardDashboard =  resolve => require(['@/components/ecardDashboard/aside'], resolve)
 
 Vue.use(Router)
 
@@ -168,113 +168,6 @@ const main = [
             name:'userListDetail',
             component:userListDetail
           },
-          //------合并ecard路由开始----------
-          // {
-          //   path: 'device',
-          //   name:'index',
-          //   component: App,
-          //   children: [
-              {
-                path: 'run',
-                name:'run',
-                component: List1,
-                // children:[
-                //   {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam}
-                // ]
-              },
-              {
-                // 当 /user/:id/posts 匹配成功
-                // UserPosts 会被渲染在 User 的 <router-view> 中
-                path: 'notrun',
-                name:'notrun',
-                component: List2
-              },
-              {
-                path: 'role',
-                component: role
-              },
-              {
-                path: 'userlist',
-                component: userlist
-              },
-              {
-                path: 'newuser',
-                component: newuser
-              },
-              {
-                path: 'newrole',
-                component: newrole
-              },
-              {
-                path: 'firmwarelist',
-                component: firmwarelist
-              },
-              {
-                path: 'remoteTask',
-                component: remoteTask
-              },
-              {
-                path: 'datapanel',
-                name:'datapanel',
-                component: datapanel
-              },
-              {
-                path: 'constructors',
-                name:'constructors',
-                component: constructors
-              },
-              {
-                path: 'constructionTask',
-                name:'constructionTask',
-                component: constructionTask
-              },
-              {
-                path: 'construnctionEdit',
-                name:'construnctionEdit',
-                component: construnctionEdit
-                // children:[
-                //   {
-                //     path: ':rowId',
-                //     component: construnctionEdit
-                //   }
-                // ]
-              },
-              {
-                path: 'constructionlist',
-                name:'constructionlist',
-                component: constructionlist
-              },
-              {path: 'firmwareup', component: firmwareup},
-              {path: 'remoteTaskdatails/:val', name:'remoteTaskdatails', component: remoteTaskdatails},
-              {path: 'newRemoteTask', component: newRemoteTask},
-              {name:'updatauser',path: 'updatauser/:val/:id', component: updatauser},
-              {path: 'addDevMessage', component: List21},
-              {name:'seedetails',path: 'details/:val', component: details},
-              {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam},
-              {name:'deviceRssiList',path: 'deviceRssiList/:val/:name', component: deviceRssiList},
-              {name:'todeviceRssiList',path: 'todeviceRssiList/:val/:name', component: todeviceRssiList},
-              {name:'updateRssiData',path: 'updateRssiData/:val/:id/:name', component: updateRssiData},
-              // {name:'gotoentranceguardPoint',path: '/gotoentranceguardPoint/:val/:id/:thehotelCode/:name', component: gotoentranceguardPoint}
-              {name:'gotoentranceguardPoint',path: 'gotoentranceguardPoint', component: gotoentranceguardPoint},
-
-              {
-                path: 'hotelConfig',
-                name:'hotelConfig',
-                component: hotelConfig
-              },
-              {
-                path: 'addHotelConfig/:id',
-                name:'addHotelConfig',
-                component: addHotelConfig,
-              },
-              {
-                path: 'zoneAndDevice',
-                name:'zoneAndDevice',
-                component: zoneAndDevice
-              }
-            // ]
-          // }
-          //------合并ecard路由结束----------
         ]
       },
       ///////--------------配置管理开始------------
@@ -351,6 +244,124 @@ const main = [
           }
 
         ],
+
+      },
+      //------合并ecard路由开始----------
+      // {
+      //   path: 'device',
+      //   name:'index',
+      //   component: App,
+      //   children: [
+      {
+        path: '/',
+        name: 'ecardDashboard',
+        component: ecardDashboard,
+        redirect: {
+          path: 'run'
+        },
+        children: [
+          {
+            path: 'run',
+            name:'run',
+            component: List1,
+            // children:[
+            //   {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam}
+            // ]
+          },
+          {
+            // 当 /user/:id/posts 匹配成功
+            // UserPosts 会被渲染在 User 的 <router-view> 中
+            path: 'notrun',
+            name:'notrun',
+            component: List2
+          },
+          {
+            path: 'role',
+            component: role
+          },
+          {
+            path: 'userlist',
+            component: userlist
+          },
+          {
+            path: 'newuser',
+            component: newuser
+          },
+          {
+            path: 'newrole',
+            component: newrole
+          },
+          {
+            path: 'firmwarelist',
+            component: firmwarelist
+          },
+          {
+            path: 'remoteTask',
+            component: remoteTask
+          },
+          {
+            path: 'datapanel',
+            name:'datapanel',
+            component: datapanel
+          },
+          {
+            path: 'constructors',
+            name:'constructors',
+            component: constructors
+          },
+          {
+            path: 'constructionTask',
+            name:'constructionTask',
+            component: constructionTask
+          },
+          {
+            path: 'construnctionEdit',
+            name:'construnctionEdit',
+            component: construnctionEdit
+            // children:[
+            //   {
+            //     path: ':rowId',
+            //     component: construnctionEdit
+            //   }
+            // ]
+          },
+          {
+            path: 'constructionlist',
+            name:'constructionlist',
+            component: constructionlist
+          },
+          {path: 'firmwareup', component: firmwareup},
+          {path: 'remoteTaskdatails/:val', name:'remoteTaskdatails', component: remoteTaskdatails},
+          {path: 'newRemoteTask', component: newRemoteTask},
+          {name:'updatauser',path: 'updatauser/:val/:id', component: updatauser},
+          {path: 'addDevMessage', component: List21},
+          {name:'seedetails',path: 'details/:val', component: details},
+          {name:'deviceparam',path: 'deviceparam/:val/:name', component: deviceparam},
+          {name:'deviceRssiList',path: 'deviceRssiList/:val/:name', component: deviceRssiList},
+          {name:'todeviceRssiList',path: 'todeviceRssiList/:val/:name', component: todeviceRssiList},
+          {name:'updateRssiData',path: 'updateRssiData/:val/:id/:name', component: updateRssiData},
+          // {name:'gotoentranceguardPoint',path: '/gotoentranceguardPoint/:val/:id/:thehotelCode/:name', component: gotoentranceguardPoint}
+          {name:'gotoentranceguardPoint',path: 'gotoentranceguardPoint', component: gotoentranceguardPoint},
+
+          {
+            path: 'hotelConfig',
+            name:'hotelConfig',
+            component: hotelConfig
+          },
+          {
+            path: 'addHotelConfig/:id',
+            name:'addHotelConfig',
+            component: addHotelConfig,
+          },
+          {
+            path: 'zoneAndDevice',
+            name:'zoneAndDevice',
+            component: zoneAndDevice
+          }
+          // ]
+          // }
+          //------合并ecard路由结束----------
+        ]
 
       }
     ]
