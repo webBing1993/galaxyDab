@@ -65,6 +65,8 @@ import hotelConfig from '@/components/zoneManage/hotelConfig.vue'
 import zoneAndDevice from '@/components/zoneManage/zoneAndDevice.vue'
 import addHotelConfig from '@/components/zoneManage/addHotelConfig.vue'
 
+
+
 Vue.use(Router)
 
 const main = [
