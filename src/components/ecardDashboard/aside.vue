@@ -11,7 +11,7 @@
             @open="handleOpen"
             @close="handleClose"
             :default-openeds="openeds"
-            :default-active="onRoutes"
+            :default-active="$route.path"
             class="el-menu-admin" router>
             <!--合并ecard-dashboard开始-->
             <el-submenu index="1">
