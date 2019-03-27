@@ -135,114 +135,34 @@
 
       },
       $route(to,from){
-        console.log('下一步路由',to.path.replace('/', ''));
-        if (to.path.replace('/', '') == "hotelList"){
+        //尝试看
+        let nextPath = to.path.replace('/', '')
+        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
+        if(routePath.indexOf(nextPath) != -1){
           this.activeName = 'second'
         }
-        else if(to.path.replace('/', '') == "classify"){
-          this.activeName = 'second'
-        }
-        else if(to.path.replace('/', '') == "content"){
-          this.activeName = 'second'
-        }
-        else if(to.path.replace('/', '') == "advertising"){
-          this.activeName = 'second'
-        }
-        else if(to.path.replace('/', '') == "configure"){
-          this.activeName = 'second'
-        }
-        else if(to.path.replace('/', '') == "editContent"){
-          this.activeName = 'second'
-        }
-        else if(to.path.replace('/', '') == "editAdvertising"){
-          this.activeName = 'second'
-        }
-        //b端用户判断tab跳转
-        else if(to.path.replace('/', '') == "userListDetail"){
+        let routePath1 = ["userListDetail","hotelOrg","fortrunOrg","elseOrg","userManage","authorityManage","roleManage","roleModuleManage"]
+        if(routePath1.indexOf(nextPath) != -1){
           this.activeName = 'first'
         }
-        else if(to.path.replace('/', '') == "hotelOrg"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "fortrunOrg"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "elseOrg"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "userManage"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "authorityManage"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "roleManage"){
-          this.activeName = 'first'
-        }
-        else if(to.path.replace('/', '') == "roleModuleManage"){
-          this.activeName = 'first'
-        }
-        else{
+        if((routePath.indexOf(nextPath) == -1)&& (routePath1.indexOf(nextPath) == -1)){
           this.activeName = 'third'
         }
 
       },
       activeName(val) {
-        if (this.$route.path.replace('/', '') == "hotelList") {
+        let nowPath = this.$route.path.replace('/', '')
+        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
+        if(routePath.indexOf(nowPath) != -1){
           this.activeName = 'second'
         }
-        else if (this.$route.path.replace('/', '') == "classify") {
-          this.activeName = 'second'
-        }
-        else if (this.$route.path.replace('/', '') == "content") {
-          this.activeName = 'second'
-        }
-        else if (this.$route.path.replace('/', '') == "advertising") {
-          this.activeName = 'second'
-        }
-        else if(this.$route.path.replace('/', '') == "configure"){
-          this.activeName = 'second'
-        }
-        else if(this.$route.path.replace('/', '') == "editContent"){
-          this.activeName = 'second'
-        }
-        else if(this.$route.path.replace('/', '') == "editAdvertising"){
-          this.activeName = 'second'
-        }
-
-
-        else if(this.$route.path.replace('/', '') == "userListDetail"){
+        let routePath1 = ["userListDetail","hotelOrg","fortrunOrg","elseOrg","userManage","authorityManage","roleManage","roleModuleManage"]
+        if(routePath1.indexOf(nowPath) != -1){
           this.activeName = 'first'
         }
-        else if(this.$route.path.replace('/', '') == "hotelOrg"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "fortrunOrg"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "elseOrg"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "userManage"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "authorityManage"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "roleManage"){
-          this.activeName = 'first'
-        }
-        else if(this.$route.path.replace('/', '') == "roleModuleManage"){
-          this.activeName = 'first'
-        }
-        else{
+        if((routePath.indexOf(nowPath) == -1)&& (routePath1.indexOf(nowPath) == -1)){
           this.activeName = 'third'
         }
-
-
-
-
-
       }
     }
   }
