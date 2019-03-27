@@ -1,4 +1,4 @@
-<!--B端用户tab页面-->
+<!--dashboard用户tab页面-->
 <template>
   <div class="second_wrap">
     <div class="row">
