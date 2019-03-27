@@ -5,7 +5,8 @@
       <!--aside-->
       <div class="aside">
         <el-row class="tac">
-          <el-menu
+          <el-col :span="24">
+           <el-menu
             :router="true"
             @open="handleOpen"
             @close="handleClose"
@@ -61,7 +62,7 @@
             </el-submenu>
             <!--合并ecard-dashboard结束-->
           </el-menu>
-
+          </el-col>
         </el-row>
       </div>
       <!--右边内容-->
@@ -133,6 +134,6 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="less" scoped>
 
 </style>
