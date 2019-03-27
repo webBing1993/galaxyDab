@@ -31,52 +31,8 @@
   export default {
     name: 'Home',
     data () {
-      const data = [{
-        id: 1,
-        label: '集团一',
-        children: [{
-          id: 4,
-          label: '酒店一',
-          children: [{
-            id: 9,
-            label: '部门一'
-          }, {
-            id: 10,
-            label: '部门二'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '集团二',
-        children: [{
-          id: 5,
-          label: '城市一',
-          children: [{
-            id: 9,
-            label: '酒店一'
-          }, {
-            id: 10,
-            label: '酒店二'
-          }]
-        }, {
-          id: 6,
-          label: '酒店'
-        }]
-      }, {
-        id: 3,
-        label: '集团三',
-        children: [{
-          id: 7,
-          label: '酒店一'
-        }, {
-          id: 8,
-          label: '酒店二'
-        }]
-      }];
       return {
         activeName:'',
-        data4: JSON.parse(JSON.stringify(data)),
-        data5: JSON.parse(JSON.stringify(data)),
         logout: false,
         isShowTabUser:false,
         isShowTabManage:false
@@ -132,17 +88,6 @@
         sessionStorage.clear()
         this.goto('/login');
       }
-
-      // renderContent(h, { node, data, store }) {
-      //     return (
-      //         <span class="custom-tree-node">
-      //         <span>{node.label}</span>
-      //     <span>
-      //     <el-button size="mini" type="text" on-click={ () => this.append(data) }>Append</el-button>
-      //     <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-      //     </span>
-      //     </span>);
-      // }
 
     },
     computed:{
@@ -212,10 +157,35 @@
         else if(to.path.replace('/', '') == "editAdvertising"){
           this.activeName = 'second'
         }
-
-        else{
+        //b端用户判断tab跳转
+        else if(to.path.replace('/', '') == "userListDetail"){
           this.activeName = 'first'
         }
+        else if(to.path.replace('/', '') == "hotelOrg"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "fortrunOrg"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "elseOrg"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "userManage"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "authorityManage"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "roleManage"){
+          this.activeName = 'first'
+        }
+        else if(to.path.replace('/', '') == "roleModuleManage"){
+          this.activeName = 'first'
+        }
+        else{
+          this.activeName = 'third'
+        }
+
       },
       activeName(val) {
         if (this.$route.path.replace('/', '') == "hotelList") {
@@ -239,9 +209,40 @@
         else if(this.$route.path.replace('/', '') == "editAdvertising"){
           this.activeName = 'second'
         }
-        else {
+
+
+        else if(this.$route.path.replace('/', '') == "userListDetail"){
           this.activeName = 'first'
         }
+        else if(this.$route.path.replace('/', '') == "hotelOrg"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "fortrunOrg"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "elseOrg"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "userManage"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "authorityManage"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "roleManage"){
+          this.activeName = 'first'
+        }
+        else if(this.$route.path.replace('/', '') == "roleModuleManage"){
+          this.activeName = 'first'
+        }
+        else{
+          this.activeName = 'third'
+        }
+
+
+
+
+
       }
     }
   }
