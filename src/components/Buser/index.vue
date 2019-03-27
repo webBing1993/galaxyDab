@@ -81,10 +81,29 @@
             return this.$store.state.userPermissions;
           },
           onRoutes () {
-            let nowPath = this.$route.path.replace('/', '')
-            let routePath = ["userListDetail","hotelOrg","fortrunOrg","elseOrg","userManage","authorityManage","roleManage","roleModuleManage"]
-            if(routePath.indexOf(nowPath) == -1){
-             return nowPath
+            if (this.$route.path.replace('/', '') == 'hotelOrg') {
+              return 'hotelOrg';
+            }
+            else if (this.$route.path.replace('/', '') == 'fortrunOrg') {
+              return 'fortrunOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'elseOrg') {
+              return 'elseOrg'
+            }
+            else if (this.$route.path.replace('/', '') == 'userManage') {
+              return 'userManage'
+            }
+            else if (this.$route.path.replace('/', '') == 'authorityManage') {
+              return 'authorityManage'
+            }
+            else if (this.$route.path.replace('/', '') == 'roleManage') {
+              return 'roleManage'
+            }
+            else if (this.$route.path.replace('/', '') == 'roleModuleManage') {
+              return 'roleModuleManage'
+            }
+            else {
+
             }
           }
         },

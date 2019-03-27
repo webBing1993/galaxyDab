@@ -95,32 +95,31 @@
     },
     computed: {
       onRoutes () {
+        if (this.$route.path.replace('/', '') == 'run') {
+          return 'run';
+        }
+        else if (this.$route.path.replace('/', '') == 'notrun') {
+          return 'notrun'
+        }
+        else if (this.$route.path.replace('/', '') == 'firmwarelist') {
+          return 'firmwarelist'
+        }
+        else if (this.$route.path.replace('/', '') == 'constructionlist') {
+          return 'constructionlist'
+        }
+        else if (this.$route.path.replace('/', '') == 'constructors') {
+          return 'constructors'
+        }
+        else if (this.$route.path.replace('/', '') == 'hotelConfig') {
+          return 'constructors'
+        }
+        else if (this.$route.path.replace('/', '') == 'zoneAndDevice') {
+          return 'constructors'
+        }
 
-        // if (this.$route.path.replace('/', '') == 'run') {
-        //   return 'run';
-        // }
-        // else if (this.$route.path.replace('/', '') == 'notrun') {
-        //   return 'notrun'
-        // }
-        // else if (this.$route.path.replace('/', '') == 'firmwarelist') {
-        //   return 'firmwarelist'
-        // }
-        // else if (this.$route.path.replace('/', '') == 'constructionlist') {
-        //   return 'constructionlist'
-        // }
-        // else if (this.$route.path.replace('/', '') == 'constructors') {
-        //   return 'constructors'
-        // }
-        // else if (this.$route.path.replace('/', '') == 'hotelConfig') {
-        //   return 'constructors'
-        // }
-        // else if (this.$route.path.replace('/', '') == 'zoneAndDevice') {
-        //   return 'constructors'
-        // }
-        //
-        // else {
-        //
-        // }
+        else {
+
+        }
       }
 
     },

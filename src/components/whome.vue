@@ -69,10 +69,26 @@
         return this.$store.state.configPermissions;
       },
       onRoutes () {
-        let nowPath = this.$route.path.replace('/', '')
-        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
-        if(routePath.indexOf(nowPath) == -1){
-           return nowPath
+        if (this.$route.path.replace('/', '') == 'hotelList') {
+          return 'hotelList';
+        }
+        else if (this.$route.path.replace('/', '') == 'classify') {
+          return 'classify'
+        }
+        else if (this.$route.path.replace('/', '') == 'content') {
+          return 'content'
+        }
+        else if (this.$route.path.replace('/', '') == 'advertising') {
+          return 'advertising'
+        }
+        else if (this.$route.path.replace('/', '') == 'configure') {
+          return 'configure'
+        }
+        else if (this.$route.path.replace('/', '') == 'editContent') {
+          return 'content'
+        }
+        else if (this.$route.path.replace('/', '') == 'editAdvertising') {
+          return 'advertising'
         }
       }
 
