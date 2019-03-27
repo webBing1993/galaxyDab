@@ -112,10 +112,10 @@
           return 'constructors'
         }
         else if (this.$route.path.replace('/', '') == 'hotelConfig') {
-          return 'constructors'
+          return 'hotelConfig'
         }
         else if (this.$route.path.replace('/', '') == 'zoneAndDevice') {
-          return 'constructors'
+          return 'zoneAndDevice'
         }
 
         else {
