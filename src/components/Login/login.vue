@@ -43,11 +43,16 @@
         'loginIN',
         'goto',
       ]),
+      ...mapMutations ([
+        'geteUserId',
+      ]),
       loginToSystem() {
         this.loginIN({
           account: this.username,
           password: this.password,
           onsuccess: body => {
+            // console.log('ceshizhang',body.data.eUserId)
+            this.geteUserId(body.data.eUserId)
             this.$store.commit("getUsernamePermissions", this.username);
             this.$store.commit("getPasswordPermissions", this.password);
             if((!body.data.permissions) || (body.data.permissions.length==0)){

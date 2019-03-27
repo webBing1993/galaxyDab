@@ -15,5 +15,9 @@ module.exports = {
     state.passwordPermissions = passwordPermissions
     localStorage.setItem('passwordPermissions', JSON.stringify(passwordPermissions))
   },
+  geteUserId: (state, eUserId) => {
+    state.eUserId = eUserId
+    localStorage.setItem('eUserId', JSON.stringify(eUserId))
+  },
 
 }

@@ -6,7 +6,7 @@
         <el-tabs v-model="activeName" class="tab_style" @tab-click="handleClick" tab-position="bottom">
           <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser"></el-tab-pane>
           <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage"></el-tab-pane>
-          <el-tab-pane label="E卡通dashboard" name="third"></el-tab-pane>
+          <el-tab-pane label="E卡通dashboard" name="third" v-if="eUserId!=0"></el-tab-pane>
         </el-tabs>
       </div>
       <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
@@ -145,7 +145,17 @@
       // }
 
     },
+    computed:{
+      getconfigPermissionsShow(){
+        return this.$store.state.configPermissions;
+      },
+      getuserPermissionsShow(){
+        return this.$store.state.userPermissions
+      },
+      ...mapState(['eUserId'])
+    },
     mounted(){
+      console.log('chakanZHANGMENGJIE',this.eUserId)
       if(this.$store.state.userPermissions!=''){
         this.isShowTabUser = true
       }
@@ -159,16 +169,6 @@
       else{
         this.isShowTabManage = false
       }
-    },
-    computed:{
-      getconfigPermissionsShow(){
-        return this.$store.state.configPermissions;
-      },
-      getuserPermissionsShow(){
-        return this.$store.state.userPermissions
-
-      }
-
     },
     watch:{
       getconfigPermissionsShow(val){

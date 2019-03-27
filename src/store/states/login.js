@@ -3,5 +3,6 @@ module.exports = {
   configPermissions:JSON.parse(localStorage.getItem('configPermissions')),
   usernamePermissions:JSON.parse(localStorage.getItem('usernamePermissions')),
   passwordPermissions:JSON.parse(localStorage.getItem('passwordPermissions')),
+  eUserId:JSON.parse(localStorage.getItem('eUserId')),
 
 }
