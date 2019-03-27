@@ -69,20 +69,10 @@
         return this.$store.state.configPermissions;
       },
       onRoutes () {
-        if (this.$route.path.replace('/', '') == 'hotelList') {
-          return 'hotelList';
-        }
-        else if (this.$route.path.replace('/', '') == 'classify') {
-          return 'classify'
-        }
-        else if (this.$route.path.replace('/', '') == 'content') {
-          return 'content'
-        }
-        else if (this.$route.path.replace('/', '') == 'advertising') {
-          return 'advertising'
-        }
-        else {
-
+        let nowPath = this.$route.path.replace('/', '')
+        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
+        if(routePath.indexOf(nowPath) == -1){
+           return nowPath
         }
       }
 

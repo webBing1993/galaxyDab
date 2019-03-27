@@ -9,9 +9,11 @@
             :router="true"
             @open="handleOpen"
             @close="handleClose"
+            :default-openeds="openeds"
+            :default-active="onRoutes"
             class="el-menu-admin" router>
             <!--合并ecard-dashboard开始-->
-            <el-submenu index="2-1">
+            <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>设备管理</span>
@@ -25,7 +27,7 @@
                 <span slot="title">在库设备</span>
               </el-menu-item>
             </el-submenu>
-            <el-submenu index="2-2">
+            <el-submenu index="2">
               <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>施工管理</span>
@@ -43,7 +45,7 @@
                 <span slot="title">施工人员</span>
               </el-menu-item>
             </el-submenu>
-            <el-submenu index="2-3">
+            <el-submenu index="3">
               <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>空间管理</span>
@@ -76,6 +78,7 @@
     name: 'Buser',
     data () {
       return {
+        openeds:["0","1","2","3","4"],
 
       }
     },
@@ -91,6 +94,34 @@
       },
     },
     computed: {
+      onRoutes () {
+
+        // if (this.$route.path.replace('/', '') == 'run') {
+        //   return 'run';
+        // }
+        // else if (this.$route.path.replace('/', '') == 'notrun') {
+        //   return 'notrun'
+        // }
+        // else if (this.$route.path.replace('/', '') == 'firmwarelist') {
+        //   return 'firmwarelist'
+        // }
+        // else if (this.$route.path.replace('/', '') == 'constructionlist') {
+        //   return 'constructionlist'
+        // }
+        // else if (this.$route.path.replace('/', '') == 'constructors') {
+        //   return 'constructors'
+        // }
+        // else if (this.$route.path.replace('/', '') == 'hotelConfig') {
+        //   return 'constructors'
+        // }
+        // else if (this.$route.path.replace('/', '') == 'zoneAndDevice') {
+        //   return 'constructors'
+        // }
+        //
+        // else {
+        //
+        // }
+      }
 
     },
     mounted(){
