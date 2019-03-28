@@ -62,7 +62,7 @@
           let path = this.$store.state.configPermissions.subPermissions[0].subPermissions[0].description
           this.$router.push({path:path})
         }
-        else if(tab.label=='E卡通dashboard'){
+        else if(tab.label=='E卡通'){
           this.$router.push({path:'run'})
         }
 
