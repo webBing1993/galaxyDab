@@ -7,6 +7,7 @@
           <el-tab-pane label="B端用户管理" name="first" v-if="isShowTabUser"></el-tab-pane>
           <el-tab-pane label="配置管理" name="second" v-if="isShowTabManage"></el-tab-pane>
           <el-tab-pane label="E卡通" name="third" v-if="eUserId!=0"></el-tab-pane>
+          <el-tab-pane label="运营中心" name="four"></el-tab-pane>
         </el-tabs>
       </div>
       <el-button class="exit" type="danger" round="" @click="exit()">退出</el-button>
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex';
+  import {mapActions, mapState} from 'vuex'
   export default {
     name: 'Home',
     data () {
@@ -35,8 +36,7 @@
         activeName:'',
         logout: false,
         isShowTabUser:false,
-        isShowTabManage:false
-
+        isShowTabManage:false,
       }
     },
     methods:{
@@ -64,6 +64,8 @@
         }
         else if(tab.label=='E卡通'){
           this.$router.push({path:'run'})
+        }else if(tab.label=='运营中心'){
+          this.$router.push({path:'OperateAllStatistics'})
         }
 
       },
@@ -152,6 +154,7 @@
       },
       activeName(val) {
         let nowPath = this.$route.path.replace('/', '')
+        console.log('===========')
         let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
         if(routePath.indexOf(nowPath) != -1){
           this.activeName = 'second'
@@ -160,9 +163,14 @@
         if(routePath1.indexOf(nowPath) != -1){
           this.activeName = 'first'
         }
-        if((routePath.indexOf(nowPath) == -1)&& (routePath1.indexOf(nowPath) == -1)){
+        let routePath2 = ["OperateAllStatistics","CertificateStatistics","UndocumentedStatistics","InterfaceStatistics"]
+        if((routePath2.indexOf(nowPath) != -1)){
+          this.activeName = 'four'
+        }
+        if((routePath.indexOf(nowPath) == -1)&& (routePath1.indexOf(nowPath) == -1) && (routePath2.indexOf(nowPath) == -1)){
           this.activeName = 'third'
         }
+
       }
     }
   }

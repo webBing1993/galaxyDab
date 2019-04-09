@@ -23,6 +23,8 @@ Vue.use(mavonEditor)
 Vue.config.productionTip = false
 Vue.use(iView);
 /* eslint-disable no-new */
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 router.afterEach(function(to, from) {
   // console.log('成功浏览到to: ', to.path)

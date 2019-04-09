@@ -65,6 +65,16 @@ const zoneAndDevice =  resolve => require(['@/components/ecardDashboard/zoneMana
 const addHotelConfig =  resolve => require(['@/components/ecardDashboard/zoneManage/addHotelConfig'], resolve)
 
 const ecardDashboard =  resolve => require(['@/components/ecardDashboard/aside'], resolve)
+const Operate  =  resolve => require(['@/components/Operate/index'], resolve)
+//有证无证统计
+import OperateAllStatistics from '@/components/Operate/Index/OperateMenu/AllStatistics.vue'
+//有证使用统计
+import CertificateStatistics from '@/components/Operate/Index/OperateMenu/certificateStatistics.vue'
+//无证使用统计
+import UndocumentedStatistics from '@/components/Operate/Index/OperateMenu/UndocumentedStatistics.vue'
+//设备无证接口统计
+import InterfaceStatistics from '@/components/Operate/Index/OperateMenu/InterfaceStatistics.vue'
+
 
 Vue.use(Router)
 
@@ -170,6 +180,49 @@ const main = [
           },
         ]
       },
+
+      {
+        path: '/',
+        name: 'operate',
+        component: Operate,
+        redirect: {
+          name: 'OperateAllStatistics'
+        },
+        children: [
+          {
+            path: 'OperateAllStatistics',
+            name: 'OperateAllStatistics',
+            component: OperateAllStatistics
+          },
+          {
+            path: 'CertificateStatistics',
+            name: 'CertificateStatistics',
+            component: CertificateStatistics
+          },
+
+          {
+            path: 'UndocumentedStatistics',
+            name: 'UndocumentedStatistics',
+            component: UndocumentedStatistics
+          },
+          {
+            path: 'InterfaceStatistics',
+            name: 'InterfaceStatistics',
+            component: InterfaceStatistics
+          }
+          // {
+          //   path: 'OperateLinkList',
+          //   name: 'OperateLinkList',
+          //   component: OperateLinkList
+          // },
+          // {
+          //   path: 'hotel',
+          //   name: 'GroupHotel',
+          //   component: GroupHotel
+          // }
+        ]
+
+      } ,
       ///////--------------配置管理开始------------
       {
         path: '/',
@@ -363,7 +416,7 @@ const main = [
           //------合并ecard路由结束----------
         ]
 
-      }
+      },
     ]
   },
   {

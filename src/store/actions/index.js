@@ -14,6 +14,7 @@ module.exports = {
   ...require('./hotelList'),
   ...require('./loading'),
   ...require('./userListDetails'),
-    ...require('./hotelConfig'),
-  ...require('./zoneManage')
+  ...require('./hotelConfig'),
+  ...require('./zoneManage'),
+  ...require('./operate')
 }
