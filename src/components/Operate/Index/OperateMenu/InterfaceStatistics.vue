@@ -36,7 +36,7 @@
           所有酒店
         </div>
         <tableInterfaceStatistics :list="list"></tableInterfaceStatistics>
-        <div class="page_box" v-if="list.length>1">
+        <div class="page_box" v-if="list.length>0">
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -74,71 +74,70 @@ export default {
   components: {
     tableInterfaceStatistics
   },
-    data(){
-      return{
-        dateTimeArray:[qianDate1,nowDate1],
-        nowDate:nowDate1,
-        qianDate:qianDate1,
-        chart:'',
-        xdataArr:[],
-        list:[],
-        lineList:[],
-        page:1,
-        nums:10,
-        total:10,
-        pageSizeNum:10,
-        currentPage4: 4,
+  data () {
+    return {
+      dateTimeArray: [qianDate1, nowDate1],
+      nowDate: nowDate1,
+      qianDate: qianDate1,
+      chart: '',
+      xdataArr: [],
+      list: [],
+      lineList: [],
+      page: 1,
+      nums: 10,
+      total: 10,
+      pageSizeNum: 10,
+      currentPage4: 4
+    }
+  },
+  methods: {
+    ...mapActions([
+      'goto', 'getInterfaceStatistics', 'getNoLicensePage'
+    ]),
+    formatdate (param, status) {
+      if (param) {
+        var date = new Date(param)
+        var Y = date.getFullYear() + '-'
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+        var D = date.getDate()
+        D = D < 10 ? ('0' + D) : D
+        var h = date.getHours() + ':'
+        var m = date.getMinutes() + ':'
+        var s = date.getSeconds()
+        if (status == 'YYYY-MM-DD') {
+          return Y + M + D
+        } else {
+          return Y + M + D + h + m + s
+        }
       }
     },
-    methods:{
-      ...mapActions([
-        'goto','getInterfaceStatistics','getNoLicensePage'
-      ]),
-      formatdate(param, status) {
-        if (param) {
-          var date = new Date(param);
-          var Y = date.getFullYear() + '-';
-          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-          var D = date.getDate();
-          D = D < 10 ? ('0' + D) : D;
-          var h = date.getHours() + ':';
-          var m = date.getMinutes() + ':';
-          var s = date.getSeconds();
-          if (status == 'YYYY-MM-DD') {
-            return Y + M + D
-          } else {
-            return Y + M + D + h + m + s;
-          }
-        }
-      },
-      searchData(){
-         this.qianDate=this.formatdate(this.dateTimeArray[0],'YYYY-MM-DD')
-         this.nowDate=this.formatdate(this.dateTimeArray[1],'YYYY-MM-DD')
-         var time1 = Date.parse(new Date(this.dateTimeArray[0]));
-         var time2 = Date.parse(new Date(this.dateTimeArray[1]));
-         var nDays = Math.abs(parseInt((time2 - time1)/1000/3600/24));
-         console.log(nDays);
-         if(nDays>60){
-          this.$message({
-            message: '日期仅限60天内，请重新选择',
-            center: true,
-            type: 'error'
-          })
-          return
-        }
-        this.initInterfaceStatistics();
-        this.initNoLicensePage();
-      },
-      //分页
-      handleSizeChange(val) {
-        //每页多少条
-        console.log(`每页 ${val} 条`);
-        this.pageSizeNum = val
-        this.nums = val
-        this.initNoLicensePage();
-      },
-      //当前页
-      handleCurrentChange(val) {
+    searchData () {
+      this.qianDate = this.formatdate(this.dateTimeArray[0], 'YYYY-MM-DD')
+      this.nowDate = this.formatdate(this.dateTimeArray[1], 'YYYY-MM-DD')
+      var time1 = Date.parse(new Date(this.dateTimeArray[0]))
+      var time2 = Date.parse(new Date(this.dateTimeArray[1]))
+      var nDays = Math.abs(parseInt((time2 - time1) / 1000 / 3600 / 24))
+      console.log(nDays)
+      if (nDays > 59) {
+        this.$message({
+          message: '日期仅限60天内，请重新选择',
+          center: true,
+          type: 'error'
+        })
+        return
+      }
+      this.initInterfaceStatistics()
+      this.initNoLicensePage()
+    },// 分页
+    handleSizeChange (val) {
+      // 每页多少条
+      console.log(`每页 ${val} 条`)
+      this.pageSizeNum = val
+      this.nums = val
+      this.initNoLicensePage()
+    },
+    // 当前页
+    handleCurrentChange (val) {
         console.log(`当前页: ${val}`);
         this.page = val
         this.initNoLicensePage();
@@ -157,7 +156,9 @@ export default {
           },
            onsuccess:body=> {
              if (body.data != null) {
-               this.list=body.data.items;
+               if(body.data.items !=null){
+                 this.list=body.data.items;
+               }
                this.total=body.data.total;
              }
            }

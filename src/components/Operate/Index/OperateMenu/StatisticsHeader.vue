@@ -44,7 +44,7 @@
       <el-col :span="2" style="display: flex;align-items: center">
         <div>
           <el-select class="el-right-address"  v-model="hotelGroupId" name="hotelGroupId"
-                      placeholder='请选择' @change="groupChange(hotelGroupId)">
+                      placeholder='酒店集团' @change="groupChange(hotelGroupId)">
             <el-option
               v-for="(obj, index) of hotelGroupsList"
               :key="index"
