@@ -1,3 +1,4 @@
+<!--设备无证接口统计页面-->
 <template>
   <div>
     <div class="all">
@@ -35,31 +36,44 @@
           所有酒店
         </div>
         <tableInterfaceStatistics :list="list"></tableInterfaceStatistics>
+        <div class="page_box" v-if="list.length>1">
+          <div class="block">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage4"
+              background
+              :page-sizes="[10, 20, 30, 40]"
+              :page-size="pageSizeNum"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+            </el-pagination>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import {mapActions,mapState} from 'vuex'
-  import tableInterfaceStatistics from './tables/table-interfaceStatistics.vue'
-  let now = new Date();
-  let cmonth = now.getMonth() + 1;
-  let day = now.getDate();
-  if (cmonth < 10) cmonth = '0' + cmonth;
-  if (day < 10) day = '0' + day;
-  const nowDate1 = now.getFullYear() + '-' + cmonth + '-' + day;//获取当前的日期
-
-  now.setDate(now.getDate() - 6 );
-  var y = now.getFullYear();
-  var m = now.getMonth() + 1;
-  m = m < 10 ? '0' + m : m;
-  var d = now.getDate();
-  d = d < 10 ? ('0' + d) : d;
-  const qianDate1 = y + "-" + m + "-" + d; //获取前七天的日期
-  export default {
-    components:{
-      tableInterfaceStatistics
-    },
+import {mapActions, mapState} from 'vuex'
+import tableInterfaceStatistics from './tables/table-interfaceStatistics.vue'
+let now = new Date()
+let cmonth = now.getMonth() + 1
+let day = now.getDate()
+if (cmonth < 10) cmonth = '0' + cmonth
+if (day < 10) day = '0' + day
+const nowDate1 = now.getFullYear() + '-' + cmonth + '-' + day// 获取当前的日期
+now.setDate(now.getDate() - 6)
+var y = now.getFullYear()
+var m = now.getMonth() + 1
+m = m < 10 ? '0' + m : m
+var d = now.getDate()
+d = d < 10 ? ('0' + d) : d
+const qianDate1 = y + '-' + m + '-' + d// 获取前七天的日期
+export default {
+  components: {
+    tableInterfaceStatistics
+  },
     data(){
       return{
         dateTimeArray:[qianDate1,nowDate1],
@@ -67,15 +81,18 @@
         qianDate:qianDate1,
         chart:'',
         xdataArr:[],
-        list:[
-
-        ],
+        list:[],
         lineList:[],
+        page:1,
+        nums:10,
+        total:10,
+        pageSizeNum:10,
+        currentPage4: 4,
       }
     },
     methods:{
       ...mapActions([
-        'goto','getInterfaceStatistics'
+        'goto','getInterfaceStatistics','getNoLicensePage'
       ]),
       formatdate(param, status) {
         if (param) {
@@ -105,15 +122,50 @@
           this.$message({
             message: '日期仅限60天内，请重新选择',
             center: true,
-            type: 'error',
-          });
-          return;
+            type: 'error'
+          })
+          return
         }
-         this.initInterfaceStatistics();
+        this.initInterfaceStatistics();
+        this.initNoLicensePage();
+      },
+      //分页
+      handleSizeChange(val) {
+        //每页多少条
+        console.log(`每页 ${val} 条`);
+        this.pageSizeNum = val
+        this.nums = val
+        this.initNoLicensePage();
+      },
+      //当前页
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.page = val
+        this.initNoLicensePage();
+      },
+      initNoLicensePage(){
+         this.getNoLicensePage({
+          data: {
+            "startDay":this.qianDate,     // 起始日期，必需
+            "endDay":this.nowDate,       // 结束日期，必需
+            "groupId": "",                // 集团ID
+            "hotelId": "",                // 酒店ID
+            "lvyeId": "",                  // 旅业ID
+            "city": "",                   // 城市
+            "pageNo": 1,                  // 分页查询参数，当前页数
+            "pageSize": this.pageSizeNum                // 分页查询参数，每页大小
+          },
+           onsuccess:body=> {
+             if (body.data != null) {
+               this.list=body.data.items;
+               this.total=body.data.total;
+             }
+           }
+         })
       },
       initInterfaceStatistics(){
-         this.getInterfaceStatistics({
-            data:{
+      this.getInterfaceStatistics({
+            data: {
               "startDay":this.qianDate,     // 起始日期，必需
               "endDay":this.nowDate,       // 结束日期，必需
               "groupId":"",                // 集团ID
@@ -122,10 +174,9 @@
                'city':'',
             },
             onsuccess:body=>{
-              if(body.data.items!=null){
-                this.list=body.data.items;
-                this.lineList=[];
-                for(let item of this.list){
+              if(body.data!=null){
+                this.list =body.data
+                for(let item of body.data){
                   this.lineList.push(item.total);
                 }
               }
@@ -192,6 +243,7 @@
     },
     mounted(){
       this.initInterfaceStatistics();
+      this.initNoLicensePage();
     }
   }
 </script>

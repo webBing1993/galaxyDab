@@ -1,3 +1,4 @@
+<!--有证无证搜索头部组件-->
 <template>
   <div>
     <el-row class="firstRowData">
@@ -161,6 +162,7 @@ export default {
         })
       },
       groupChange(id){
+         this.hotelId='';
          this.getHotelsByGroupId({
            group_id:id,
            onsuccess:body=>{

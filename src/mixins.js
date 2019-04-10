@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import strTool from './tool/strTool.js'
 import router from './router'
+import  axios from 'axios'
 function getDate (datestr) {
   var temp = datestr.split("-");
   if (temp[1] === '01') {
@@ -20,6 +21,50 @@ Vue.mixin({
     }
   },
   methods: {
+    exportExcel(obj,urlExcel){
+      console.log(obj);
+      let data={
+        "startDay":obj.startDay,             // 起始日期，必需
+        "endDay":obj.endDay,                // 结束日期，必需
+        "groupId":obj.groupId,                // 集团ID
+        "hotelId":obj.hotelId,                // 酒店ID
+        "lvyeId":obj.lvyeId,                  // 旅业ID
+        'city':obj.cityCode,
+        "type":obj.type    //导出数据类型：license-有证 nolicense-无证 summary-汇总
+      }
+      axios({
+        method: 'post',
+        url: urlExcel,
+        baseURL: '/galaxy-front',
+        data: data,
+        headers: {
+          Session: sessionStorage.session_id,
+          token: sessionStorage.session_id
+        },
+        responseType: 'blob',
+        timeout:  60000,
+      }).then(res=>{
+        var csvData = new Blob([res.data],{type: "application/vnd.ms-excel"});
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          console.log(7777)
+          window.navigator.msSaveOrOpenBlob(csvData, 'excel.xls');
+        }else{
+          console.log(883388)
+          var url = window.URL.createObjectURL(csvData);
+          var link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = url;
+          link.download = 'excel.xls';
+          // link.setAttribute('download', 'excel.xls');
+          document.body.appendChild(link);
+          link.click();
+          window.URL.revokeObjectURL(url);
+        }
+
+      }).catch(err=>{
+        console.log(err)
+      });
+    },
     //获取两个时间段的日期数组
     getDiffDate(start, end) {
       var startTime = getDate(start);

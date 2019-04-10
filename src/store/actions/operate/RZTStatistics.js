@@ -86,11 +86,11 @@ module.exports = {
     })
   },
   // 无证接口开通数据统计
-  getInterfaceStatistics(ctx, param) {
+  getInterfaceStatistics (ctx, param) {
     ctx.dispatch('request', {
-      url:'/data/nolicense/hotel',
+      url: '/data/nolicense/hotel/summary',
       method: 'POST',
-      body:param.data,
+      body: param.data,
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       },
@@ -99,4 +99,17 @@ module.exports = {
       }
     })
   },
+  getNoLicensePage (ctx, param) {
+    ctx.dispatch('request', {
+      url: '/data/nolicense/hotel/page',
+      method: 'POST',
+      body: param.data,
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      },
+      onFail: (body) => {
+        param.onfail && param.onfail(body)
+      }
+    })
+  }
 }

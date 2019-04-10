@@ -1,4 +1,4 @@
-<!--dashboard用户tab页面-->
+<!--人证通数据统计tab页面-->
 <template>
   <div class="second_wrap">
     <div class="row">

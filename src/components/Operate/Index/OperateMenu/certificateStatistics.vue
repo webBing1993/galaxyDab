@@ -1,3 +1,4 @@
+<!--有证使用统计页面-->
 <template>
   <div>
     <div class="all">
@@ -36,7 +37,7 @@
           </div>
           <div id="myChart2" :style="{width: '1500px', height: '300px'}"></div>
         </div>
-        <div class="importExcel">
+        <div class="importExcel" @click="exportExcelClick">
           <p><img src="../../../../assets/img/xiazai.png">导出xls</p>
         </div>
         <tableStatistics :list="list"></tableStatistics>
@@ -48,20 +49,20 @@
   import {mapActions,mapState} from 'vuex'
   import tableStatistics from './tables/table-statistics.vue'
   import  StatisticsHeader from './StatisticsHeader.vue'
-  let now = new Date();
-  let cmonth = now.getMonth() + 1;
-  let day = now.getDate();
-  if (cmonth < 10) cmonth = '0' + cmonth;
-  if (day < 10) day = '0' + day;
-  const nowDate1 = now.getFullYear() + '-' + cmonth + '-' + day;//获取当前的日期
-
-  now.setDate(now.getDate() - 6 );
-  var y = now.getFullYear();
-  var m = now.getMonth() + 1;
-  m = m < 10 ? '0' + m : m;
-  var d = now.getDate();
-  d = d < 10 ? ('0' + d) : d;
-  const qianDate1 = y + "-" + m + "-" + d; //获取前七天的日期
+  import  axios from 'axios'
+  let now = new Date()
+  let cmonth = now.getMonth() + 1
+  let day = now.getDate()
+  if (cmonth < 10) cmonth = '0' + cmonth
+  if (day < 10) day = '0' + day
+  const endDay1 = now.getFullYear() + '-' + cmonth + '-' + day// 获取当前的日期
+  now.setDate(now.getDate() - 6)
+  var y = now.getFullYear()
+  var m = now.getMonth() + 1
+  m = m < 10 ? '0' + m : m
+  var d = now.getDate()
+  d = d < 10 ? ('0' + d) : d
+  const startDay1 = y + '-' + m + '-' + d // 获取前七天的日期
   export default {
     components:{
       tableStatistics,
@@ -73,14 +74,25 @@
         },
         list:[
         ],
-        nowDate:nowDate1,
-        qianDate:qianDate1,
+        startDay:startDay1,
+        endDay:endDay1,
+        allObj:[],
       }
     },
     methods:{
       ...mapActions([
         'goto','getCertificateStatistics'
       ]),
+      exportExcelClick(){
+        console.log("this.allObj",this.allObj);
+          let data={
+            ...this.allObj,
+            "startDay":this.startDay,             // 起始日期，必需
+            "endDay":this.endDay,                // 结束日期，必需
+            'type':'license',
+          }
+          this.exportExcel(data,'/data/IdentityCheckData/download');
+      },
       searchData(obj){
         var time1 = Date.parse(new Date(obj.dateTimeArray[0]));
         var time2 = Date.parse(new Date(obj.dateTimeArray[1]));
@@ -97,25 +109,24 @@
        this.initCertificateStatistics(obj);
       },
       initCertificateStatistics(obj){
-        let allObj={}
         if(obj==undefined){
-          allObj.groupId='';
-          allObj.hotelId='';
-          allObj.lvyeId='';
-          allObj.cityCode='';
+          this.allObj.groupId='';
+          this.allObj.hotelId='';
+          this.allObj.lvyeId='';
+          this.allObj.cityCode='';
         }else{
-          allObj=obj;
-          this.qianDate=obj.dateTimeArray[0];
-          this.nowDate=obj.dateTimeArray[1];
+          this.allObj={...obj};
+          this.startDay=obj.dateTimeArray[0];
+          this.endDay=obj.dateTimeArray[1];
         }
         this.getCertificateStatistics({
           data:{
-            "startDay":this.qianDate,             // 起始日期，必需
-            "endDay":this.nowDate,                // 结束日期，必需
-            "groupId":allObj.groupId,                // 集团ID
-            "hotelId":allObj.hotelId,                // 酒店ID
-            "lvyeId":allObj.lvyeId ,                  // 旅业ID
-            'city':allObj.cityCode
+            "startDay":this.startDay,             // 起始日期，必需
+            "endDay":this.endDay,                // 结束日期，必需
+            "groupId":this.allObj.groupId,                // 集团ID
+            "hotelId":this.allObj.hotelId,                // 酒店ID
+            "lvyeId":this.allObj.lvyeId,                  // 旅业ID
+            'city':this.allObj.cityCode
           },
           onsuccess:body=>{
             this.list=body.data.items;
@@ -163,7 +174,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.getDiffDate(this.qianDate,this.nowDate),
+            data: this.getDiffDate(this.startDay,this.endDay),
           },
           yAxis: {
             type: 'value',
