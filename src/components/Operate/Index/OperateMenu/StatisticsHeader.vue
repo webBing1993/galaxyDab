@@ -209,6 +209,9 @@ export default {
     align-items: center;
     padding-bottom: 15px;
   }
+  /deep/ .el-row{
+     margin:0px;
+  }
   /deep/ .el-button{
     padding:12px 18px;
     background:#35C13D;
