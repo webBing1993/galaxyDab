@@ -72,8 +72,8 @@ export default {
     return {
       startDay: startDay1,
       endDay: endDay1,
-      countObj: {},          //数据汇总
-      list: [],              //数据明细
+      countObj: {}, // 数据汇总
+      list: [], // 数据明细
       licenseData: [],
       noLicenseData: [],
       allObj: []
@@ -86,145 +86,141 @@ export default {
     exportExcelClick () {
       console.log('this.allObj', this.allObj)
       let data = {
-          ...this.allObj,
-          "startDay":this.startDay,             // 起始日期，必需
-          "endDay":this.endDay,                // 结束日期，必需
-          'type':'summary',
-        }
-        this.exportExcel(data,'/data/IdentityCheckData/download');
-      },
-      searchData(obj){
-        var time1 = Date.parse(new Date(obj.dateTimeArray[0]));
-        var time2 = Date.parse(new Date(obj.dateTimeArray[1]));
-        var nDays = Math.abs(parseInt((time2 - time1)/1000/3600/24));
-        if(nDays>6){
-          this.$message({
-            message: '日期仅限七天内，请重新选择',
-            center: true,
-            type: 'error',
-          });
-          return;
-        }
-        this.initAllStatistics(obj);
-      },
-      initAllStatistics(obj){
-        if(obj==undefined){
-          this.allObj.groupId='';
-          this.allObj.hotelId='';
-          this.allObj.lvyeId='';
-          this.allObj.cityCode='';
-        }else{
-          this.allObj=obj;
-          this.startDay=obj.dateTimeArray[0];
-          this.endDay=obj.dateTimeArray[1];
-        }
-        this.getAllStatistics({
-          data:{
-            "startDay":this.startDay,             // 起始日期，必需
-            "endDay":this.endDay,                // 结束日期，必需
-            "groupId":this.allObj.groupId,                // 集团ID
-            "hotelId":this.allObj.hotelId,                // 酒店ID
-            "lvyeId":this.allObj.lvyeId,                  // 旅业ID
-            'city':this.allObj.cityCode
-          },
-          onsuccess:body=>{
-            this.list=body.data.items;
-            this.countObj=body.data.summanry;
-            this.licenseData=[];
-            this.noLicenseData=[];
-            for(let item of this.list){
-              this.licenseData.push(item.license_summary);
-              this.noLicenseData.push(item.nolicense_summary);
-            }
-            this.drawLine();
-          }
-        });
-
-      },
-
-      drawLine(){
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = this.$echarts.init(this.$refs.myEchart)
-        // 绘制图表
-        var dataArr=this.getDiffDate(this.startDay,this.endDay);
-        myChart.setOption({
-          tooltip: {
-            trigger: 'axis',
-            textStyle:{
-              align:'left',
-            },
-          },
-          legend: {
-            data:['有证身份核验','无证身份核验'],
-            orient: 'vertical',
-            x: 'left',
-            y:'top',
-            show:false,
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          toolbox: {
-            feature: {
-              saveAsImage: {}
-            },
-            show:false,
-          },
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: dataArr,
-          },
-          yAxis: {
-            type: 'value',
-            show:false,
-          },
-          series: [
-            {
-              name:'有证身份核验',
-              type:'line',
-              data:this.licenseData,
-              itemStyle : {
-                normal : {
-                  color:'#35C13D',
-                  lineStyle:{
-                    color:'#35C13D'
-                  }
-                }
-              },
-            },
-            {
-              name:'无证身份核验',
-              type:'line',
-              data:this.noLicenseData,
-              itemStyle : {
-                normal : {
-                  color:'#338BFF',
-                  lineStyle:{
-                    color:'#338BFF'
-                  }
-                }
-              },
-            },
-          ]
-        });
+        ...this.allObj,
+        'startDay': this.startDay, // 起始日期，必需
+        'endDay': this.endDay, // 结束日期，必需
+        'type': 'summary'
       }
-
+      this.exportExcel(data, '/data/IdentityCheckData/download')
     },
-    computed:{
-      ...mapState([
-        'route',
-        'Interface'
-      ]),
+    searchData (obj) {
+      var time1 = Date.parse(new Date(obj.dateTimeArray[0]));
+      var time2 = Date.parse(new Date(obj.dateTimeArray[1]));
+      var nDays = Math.abs(parseInt((time2 - time1)/1000/3600/24));
+      if (nDays > 6) {
+        this.$message({
+          message: '日期仅限七天内，请重新选择',
+          center: true,
+          type: 'error'
+        })
+        return
+      }
+      this.initAllStatistics(obj)
     },
-    mounted(){
-      console.log(12377777777777);
-      this.initAllStatistics();
+    initAllStatistics (obj) {
+      if (obj == undefined) {
+        this.allObj.groupId = ''
+        this.allObj.hotelId = ''
+        this.allObj.lvyeId = ''
+        this.allObj.cityCode = ''
+      } else {
+        this.allObj = obj
+        this.startDay = obj.dateTimeArray[0]
+        this.endDay = obj.dateTimeArray[1]
+      }
+      this.getAllStatistics({
+        data: {
+          'startDay': this.startDay, // 起始日期，必需
+          'endDay': this.endDay, // 结束日期，必需
+          'groupId': this.allObj.groupId, // 集团ID
+          'hotelId': this.allObj.hotelId, // 酒店ID
+          'lvyeId': this.allObj.lvyeId, // 旅业ID
+          'city': this.allObj.cityCode
+        },
+        onsuccess: body => {
+          this.list = body.data.items
+          this.countObj = body.data.summanry
+          this.licenseData = []
+          this.noLicenseData = []
+          for (let item of this.list) {
+            this.licenseData.push(item.license_summary)
+            this.noLicenseData.push(item.nolicense_summary)
+          }
+          this.drawLine()
+        }
+      })
+    },
+    drawLine () {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(this.$refs.myEchart)
+      // 绘制图表
+      var dataArr = this.getDiffDate(this.startDay, this.endDay)
+      myChart.setOption({
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          }
+        },
+        legend: {
+          data: ['有证身份核验', '无证身份核验'],
+          orient: 'vertical',
+          x: 'left',
+          y: 'top',
+          show: false
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          },
+          show: false
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: dataArr
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [
+          {
+            name: '有证身份核验',
+            type: 'line',
+            data: this.licenseData,
+            itemStyle: {
+              normal: {
+                color: '#35C13D',
+                lineStyle: {
+                  color: '#35C13D'
+                }
+              }
+            }
+          },
+          {
+            name: '无证身份核验',
+            type: 'line',
+            data: this.noLicenseData,
+            itemStyle: {
+              normal: {
+                color: '#338BFF',
+                lineStyle: {
+                  color: '#338BFF'
+                }
+              }
+            }
+          }
+        ]
+      })
     }
+  },
+  computed: {
+    ...mapState([
+      'route',
+      'Interface'
+    ])
+  },
+  mounted () {
+    this.initAllStatistics()
   }
+}
 </script>
 <style lang="less" scoped>
   .all {
