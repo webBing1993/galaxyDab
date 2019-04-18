@@ -164,6 +164,20 @@ export default {
            }
          })
       },
+    formatdate1(param, status) {
+      if (param) {
+        var date = new Date(param);
+        var Y = date.getFullYear() + '.';
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '.';
+        var D = date.getDate();
+        D = D < 10 ? ('0' + D): D;
+        if (status == 'YYYY-MM-DD') {
+          return Y + M + D
+        } else {
+          return Y + M + D + h + m + s;
+        }
+      }
+    },
       initInterfaceStatistics(){
       this.getInterfaceStatistics({
             data: {
@@ -175,12 +189,28 @@ export default {
                'city':'',
             },
             onsuccess:body=>{
-              if(body.data!=null){
-                this.list =body.data
-                for(let item of body.data){
-                  this.lineList.push(item.total);
+              let arr=this.getDiffDate(this.qianDate,this.nowDate)
+              this.lineList=[];
+              if(body.data!=null) {
+                for (let i = 0; i < arr.length; i++) {
+                  this.lineList[i]=0;
+                  for (let item of body.data) {
+                    if (item.day == arr[i]) {
+                      console.log(item.day,arr[i])
+                      this.lineList[i]=item.total;
+                      console.log( this.lineList)
+                      continue;
+                    }
+                  }
                 }
               }
+              else
+                {
+                  for (let i = 0; i < arr.length; i++) {
+                    this.lineList.push(0);
+                  }
+                }
+
               this.drawLine();
             }
          })
