@@ -35,15 +35,14 @@
         <div class="allHoteltext">
           所有酒店
         </div>
-        <tableInterfaceStatistics :list="list"></tableInterfaceStatistics>
+        <tableInterfaceStatistics :list="list" :page="page" :pageSizeNum="pageSizeNum"></tableInterfaceStatistics>
         <div class="page_box" v-if="list.length>0">
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="currentPage4"
               background
-              :page-sizes="[10, 20, 30, 40]"
+              :page-sizes="[10,20]"
               :page-size="pageSizeNum"
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
@@ -63,6 +62,7 @@ let day = now.getDate()
 if (cmonth < 10) cmonth = '0' + cmonth
 if (day < 10) day = '0' + day
 const nowDate1 = now.getFullYear() + '-' + cmonth + '-' + day// 获取当前的日期
+
 now.setDate(now.getDate() - 6)
 var y = now.getFullYear()
 var m = now.getMonth() + 1
@@ -85,9 +85,8 @@ export default {
       lineList: [],
       page: 1,
       nums: 10,
-      total: 10,
-      pageSizeNum: 10,
-      currentPage4: 4
+      total: 0,
+      pageSizeNum: 10
     }
   },
   methods: {
@@ -151,8 +150,8 @@ export default {
             "hotelId": "",                // 酒店ID
             "lvyeId": "",                  // 旅业ID
             "city": "",                   // 城市
-            "pageNo": 1,                  // 分页查询参数，当前页数
-            "pageSize": this.pageSizeNum                // 分页查询参数，每页大小
+            "pageNo": this.page,                  // 分页查询参数，当前页数
+            "pageSize": this.nums                // 分页查询参数，每页大小
           },
            onsuccess:body=> {
              if (body.data != null) {
@@ -164,20 +163,6 @@ export default {
            }
          })
       },
-    formatdate1(param, status) {
-      if (param) {
-        var date = new Date(param);
-        var Y = date.getFullYear() + '.';
-        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '.';
-        var D = date.getDate();
-        D = D < 10 ? ('0' + D): D;
-        if (status == 'YYYY-MM-DD') {
-          return Y + M + D
-        } else {
-          return Y + M + D + h + m + s;
-        }
-      }
-    },
       initInterfaceStatistics(){
       this.getInterfaceStatistics({
             data: {

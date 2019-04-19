@@ -9,11 +9,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(obj, index) of list">
-        <td>{{ ++index }}</td>
-        <td>{{ obj.hotelName }}</td>
-        <td>{{ obj.day }}</td>
-      </tr>
+        <tr v-for="(obj, index) of list">
+          <td>{{page>1?(pageSizeNum)*(page-1)+1+index:index+1}}</td>
+          <td>{{ obj.hotelName }}</td>
+          <td>{{ obj.day }}</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -28,6 +28,8 @@
         type: Array,
         default: []
       },
+      page:'',
+      pageSizeNum:'',
     },
     methods: {
 
