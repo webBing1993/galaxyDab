@@ -32,7 +32,7 @@
                 <span>{{index+1}}</span>
               </div>
               <div class="main_row_left_div">{{item.name}}</div>
-              <div class="main_row_left_div">{{item.key?0:0}}</div>
+              <div class="main_row_left_div">{{item.total?item.total:0}}</div>
               <div class="main_row_left_div">  <img :src="item.icon || '' " alt="" class="imgsize"></div>
             </div>
             <div class="main_row_right">
