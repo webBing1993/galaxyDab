@@ -41,7 +41,10 @@
             </div>
           </div>
         </main>
-        <div class="page_box">
+        <div class="page_box" v-if="liveInServiceList.length==0">
+           暂无数据
+        </div>
+        <div class="page_box" v-if="liveInServiceList.length>0">
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -93,7 +96,7 @@
   </div>
 </template>
 <script>
-import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: 'hotelConfig',
   data () {
@@ -109,7 +112,7 @@ export default {
         serviceName: '',
         picUrl: ''
       },
-      liveInServiceList: [],
+      liveInServiceList: [], // 在住服务列表
       showpicUrl: false,
       rules: {
         // 现在只是简单的验证后面要改验证
@@ -128,13 +131,13 @@ export default {
           }
         ]
       },
-      handleType: '',
-      title: ''
+      handleType: '', // 弹框类型
+      title: ''// 弹框标题
     }
   },
   methods: {
-    ...mapActions(['getLiveInConfigList', 'addLiveInConfig', 'updateLiveInConfig', 'delLiveInConfig', 'getLiveInConfigPage']),
-    //
+    ...mapActions(['addLiveInConfig', 'updateLiveInConfig', 'delLiveInConfig', 'getLiveInConfigPage']),
+    // 取消弹框
     cancelDialog () {
       this.addDialog = false
       this.$refs['addService'].resetFields()
@@ -200,10 +203,12 @@ export default {
         this.$refs.uploadImg.clearValidate()
       }
     },
-    deleteImg (e, url) {
+    // 删除图片
+    deleteImg () {
       this.addServiceForm.picUrl = ''
       this.showpicUrl = false
     },
+    // 添加或者编辑确认框
     sureDialog () {
       this.$refs['addService'].validate((valid) => {
         if (valid) {
@@ -236,12 +241,8 @@ export default {
         }
       })
     },
+    // 在住服务列表
     initLiveInConfig () {
-      // this.getLiveInConfigList({
-      //   onsuccess: body => {
-      //     this.liveInServiceList = body.data
-      //   }
-      // })
       this.getLiveInConfigPage(
         {
           data: {
@@ -258,14 +259,12 @@ export default {
     // 分页
     handleSizeChange (val) {
       // 每页多少条
-      console.log(`每页 ${val} 条`)
       this.pageSizeNum = val
       this.nums = val
       this.initLiveInConfig()
     },
     // 当前页
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
       this.page = val
       this.initLiveInConfig()
     }
@@ -358,7 +357,7 @@ export default {
           display: flex;
           flex: 2;
           justify-content: flex-start;
-          align-items: center; v
+          align-items: center;
           font-family: PingFangSC-Medium;
           font-size: 14px;
           color: #000000;
