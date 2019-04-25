@@ -32,6 +32,7 @@ const esadvertising = resolve => require(['@/components/collection/establishAdve
 const editAdvertising = resolve => require(['@/components/collection/editAdvertising/editAdvertising'], resolve)
 const editContent = resolve => require(['@/components/collection/editContent/editContent'], resolve)
 const hotelList = resolve => require(['@/components/collection/hotelList'], resolve)
+const hotelConfigList = resolve => require(['@/components/collection/hotelConfig'], resolve)
 const configure = resolve => require(['@/components/collection/hotelList/configure'], resolve)
 const userListDetail =  resolve => require(['@/components/Buser/userListDetails/index'], resolve)
 
@@ -222,8 +223,8 @@ const main = [
           // }
         ]
 
-      } ,
-      ///////--------------配置管理开始------------
+      },
+      // ///// --------------配置管理开始------------
       {
         path: '/',
         name: 'Whome',
@@ -232,7 +233,7 @@ const main = [
           name: 'hotelList'
         },
         children: [
-          //酒店列表
+          // 酒店列表
           {
             name: 'hotelList',
             path: 'hotelList',
@@ -240,11 +241,17 @@ const main = [
           },
           // 酒店配置
           {
+            name: 'hotelConfigList',
+            path: 'hotelConfigList',
+            component: hotelConfigList
+          },
+          // 酒店配置
+          {
             name: 'configure',
             path: 'configure',
             component: configure
           },
-          //添加分类
+          // 添加分类
           {
             name: 'classify',
             path: 'classify',

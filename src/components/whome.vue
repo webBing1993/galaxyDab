@@ -22,6 +22,10 @@
                   <i class="el-icon-menu"></i>
                   <span slot="title">{{tag.name}}</span>
                 </el-menu-item>
+                <!--<el-menu-item index="hotelConfigList" v-if="item.name=='酒店配置管理'">-->
+                  <!--<i class="el-icon-menu"></i>-->
+                  <!--<span slot="title">酒店配置</span>-->
+                <!--</el-menu-item>-->
               </el-submenu>
             </el-menu>
           </el-col>

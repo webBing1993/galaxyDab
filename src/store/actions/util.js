@@ -19,7 +19,7 @@ module.exports = {
   //------------------当是ecard-dashboard的时候走下面的路径---------------------
   resource: (ctx, param) => {
     let baseurl = base_api.baseurl;
-    console.log ('baseurl:', baseurl);
+    // console.log ('baseurl:', baseurl);
     let headers = param.headers || {};
     Vue.http ({
       url: baseurl + param.url,//wqtenv/wqtversion

@@ -154,8 +154,8 @@
       },
       activeName(val) {
         let nowPath = this.$route.path.replace('/', '')
-        console.log('===========')
-        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising"]
+       // console.log('===========')
+        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising",'hotelConfigList']
         if(routePath.indexOf(nowPath) != -1){
           this.activeName = 'second'
         }
@@ -167,7 +167,7 @@
         if((routePath2.indexOf(nowPath) != -1)){
           this.activeName = 'four'
         }
-        if((routePath.indexOf(nowPath) == -1)&& (routePath1.indexOf(nowPath) == -1) && (routePath2.indexOf(nowPath) == -1)){
+        if((routePath.indexOf(nowPath) == -1) && (routePath1.indexOf(nowPath) == -1) && (routePath2.indexOf(nowPath) == -1)){
           this.activeName = 'third'
         }
 
@@ -223,8 +223,6 @@
               margin-bottom: 0;
             }
           }
-
-
         }
         .tab_style{
           .el-tabs__nav-wrap::after{
