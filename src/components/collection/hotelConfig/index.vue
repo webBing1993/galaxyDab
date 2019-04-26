@@ -29,7 +29,7 @@
           <div class="main_row" v-for="(item, index) in liveInServiceList">
             <div class="main_row_left">
               <div class="main_row_left_div">
-                <span>{{index+1}}</span>
+                <span>{{page>1?(pageSizeNum)*(page-1)+1+index:index+1}}</span>
               </div>
               <div class="main_row_left_div">{{item.name}}</div>
               <div class="main_row_left_div">{{item.total?item.total:0}}</div>
