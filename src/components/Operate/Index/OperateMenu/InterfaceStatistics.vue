@@ -30,7 +30,7 @@
           </el-col>
         </el-row>
         <div class="myChart11">
-          <div id="myChart3" :style="{width: '1550px', height: '300px'}"></div>
+          <div id="myChart3" :style="{width: '1400px', height: '300px'}"></div>
         </div>
         <div class="allHoteltext">
           所有酒店
