@@ -449,7 +449,7 @@ export default {
   }
   /deep/ .el-form-item{
       margin-bottom:25px;
-  }bb
+  }
   /deep/ .el-button {
     margin-top:0px;
     /*margin-bottom:20px;*/
