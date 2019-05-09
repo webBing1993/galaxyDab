@@ -33,7 +33,7 @@
               </div>
               <div class="main_row_left_div">{{item.name}}</div>
               <div class="main_row_left_div">{{item.total?item.total:0}}</div>
-              <div class="main_row_left_div">  <img :src="item.icon || '' " alt="" class="imgsize"></div>
+              <div class="main_row_left_div">  <img :src="item.icon || '' " alt=""  width="80px" height="80px"></div>
             </div>
             <div class="main_row_right">
               <div @click="editLiveInService('edit',item)">编辑</div>
@@ -84,7 +84,7 @@
               重新上传</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item label=""  label-width="120px" prop="" style="margin-top:-10px;" >
+        <el-form-item label=""  label-width="120px" prop="" style="margin-top:10px;" >
           <span class="imageSize">上传图片尺寸80*80px</span>
         </el-form-item>
       </el-form>
@@ -399,20 +399,6 @@ export default {
     line-height: 25px;
     margin-top: 60.5px;
     margin-left: 50px;
-  }
-  .tpicture {
-    line-height: 150px;
-    .picture {
-      width: 150px;
-      height: 150px;
-      float: left;
-
-      background: #f7f7f7;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
   }
   .tupian{
     width:80px;
