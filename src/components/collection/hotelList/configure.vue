@@ -112,20 +112,20 @@
 
           <div class="checkButton">
             <div>
-              <p class="hotel_server_main_p1">客房服务</p>
+              <p class="hotel_server_main_p1">专属管家</p>
               <p class="hotel_server_main_p2">（客房享有的餐券，SPA，迷你吧）</p>
+              <!--<div class="hotel_server_main_checkList">-->
+                <!--<span class="hotel_server_main_checkList_span">选择服务标签</span>-->
+                <!--<div>-->
+                  <!--<el-checkbox-group-->
+                    <!--v-model="checkedServer1"-->
+                    <!--@change="checkedServerType">-->
+                    <!--<el-checkbox v-for="list1 in optionList1" :disabled="roomService == false" :label="list1.id" :key="list1.id">{{list1.value}}</el-checkbox>-->
+                  <!--</el-checkbox-group>-->
+                <!--</div>-->
+              <!--</div>-->
               <div class="hotel_server_main_checkList">
-                <span class="hotel_server_main_checkList_span">选择服务标签</span>
-                <div>
-                  <el-checkbox-group
-                    v-model="checkedServer1"
-                    @change="checkedServerType">
-                    <el-checkbox v-for="list1 in optionList1" :disabled="roomService == false" :label="list1.id" :key="list1.id">{{list1.value}}</el-checkbox>
-                  </el-checkbox-group>
-                </div>
-              </div>
-              <div class="hotel_server_main_checkList">
-                <p class="hotel_server_main_checkList_span2">选择支持在线客服的房型</p>
+                <p class="hotel_server_main_checkList_span2">选择支持专属管家的房型</p>
                 <p class="hotel_server_main_p2">（不选表示不启用该功能）</p>
                 <div style="margin-top: 10px">
                   <el-checkbox-group
