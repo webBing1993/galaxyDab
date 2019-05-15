@@ -218,7 +218,6 @@ export default {
               data: {
                 name: this.addServiceForm.serviceName,
                 icon: this.addServiceForm.picUrl,
-                type:'room_service'
               },
               onsuccess: (body) => {
                 this.initLiveInConfig()
@@ -249,7 +248,6 @@ export default {
           data: {
             pageNo: this.page,
             pageSize: this.nums,
-            type:'room_service'
           },
           onsuccess: body => {
             this.liveInServiceList = body.data.list
