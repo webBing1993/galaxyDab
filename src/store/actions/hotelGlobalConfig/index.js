@@ -2,7 +2,7 @@ import qs from 'qs'
 
 module.exports = {
   // 获取在住服务配置项列表
-  getLiveInConfigList (ctx, params) {
+  getConfigList (ctx, params) {
     ctx.dispatch('request', {
       url: '/hotelGlobalConfig/all',
       method: 'post',
@@ -15,7 +15,7 @@ module.exports = {
     })
   },
   // 获取在住服务配置项分页列表
-  getLiveInConfigPage (ctx, params) {
+  getConfigPage (ctx, params) {
     ctx.dispatch('request', {
       url: '/hotelGlobalConfig/page',
       method: 'post',
@@ -29,7 +29,7 @@ module.exports = {
     })
   },
   // 添加在住服务配置
-  addLiveInConfig (ctx, params) {
+  addConfig (ctx, params) {
     ctx.dispatch('request', {
       url: '/hotelGlobalConfig/save',
       method: 'put',
@@ -43,7 +43,7 @@ module.exports = {
     })
   },
   // 修改在住服务配置
-  updateLiveInConfig (ctx, params) {
+  updateConfig (ctx, params) {
     ctx.dispatch('request', {
       url: '/hotelGlobalConfig/update',
       method: 'post',
@@ -57,7 +57,7 @@ module.exports = {
     })
   },
   // 删除在住服务配置
-  delLiveInConfig (ctx, params) {
+  delConfig (ctx, params) {
     ctx.dispatch('request', {
       url: '/hotelGlobalConfig/delete',
       method: 'post',

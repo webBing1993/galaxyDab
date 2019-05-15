@@ -155,7 +155,7 @@
       activeName(val) {
         let nowPath = this.$route.path.replace('/', '')
        // console.log('===========')
-        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising",'hotelConfigList']
+        let routePath = ["hotelList","classify","content","advertising","configure","editContent","editAdvertising",'hotelConfigList','liveInService','hotelFacilties']
         if(routePath.indexOf(nowPath) != -1){
           this.activeName = 'second'
         }
