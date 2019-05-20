@@ -76,6 +76,9 @@
         if (this.$route.path.replace('/', '') == 'hotelList') {
           return 'hotelList';
         }
+        if (this.$route.path.replace('/', '') == 'hotelConfigList') {
+          return 'hotelConfigList';
+        }
         else if (this.$route.path.replace('/', '') == 'classify') {
           return 'classify'
         }
