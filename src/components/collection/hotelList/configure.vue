@@ -60,21 +60,21 @@
             </div>
           </div>
 
-            <div class="main_hotel_server_name_main">
-              <div>
-                <p class="hotel_server_main_p1">WIFI管理</p>
-                <p class="hotel_server_main_p2">（酒店企业微信关闭wifi管理权限，C端小程序不可点，提示“当前酒店暂未开通”）</p>
-              </div>
-            <div>
-              <el-switch
-                v-model="wifi"
-                active-color="#13ce66"
-                inactive-color="#E8E8E8"
-                @change="changeTypeWifi"
-                :width="40">
-              </el-switch>
-            </div>
-            </div>
+            <!--<div class="main_hotel_server_name_main">-->
+              <!--<div>-->
+                <!--<p class="hotel_server_main_p1">WIFI管理</p>-->
+                <!--<p class="hotel_server_main_p2">（酒店企业微信关闭wifi管理权限，C端小程序不可点，提示“当前酒店暂未开通”）</p>-->
+              <!--</div>-->
+            <!--<div>-->
+              <!--<el-switch-->
+                <!--v-model="wifi"-->
+                <!--active-color="#13ce66"-->
+                <!--inactive-color="#E8E8E8"-->
+                <!--@change="changeTypeWifi"-->
+                <!--:width="40">-->
+              <!--</el-switch>-->
+            <!--</div>-->
+            <!--</div>-->
 
             <div class="main_hotel_server_name_main">
               <div>
