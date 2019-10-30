@@ -25,6 +25,17 @@
         </div>
       </div>
     </div>
+    <div class="hotelConfig_item">
+      <div class="hotelConfig_item_title">
+        <div class="hotelConfig_item_title_left">
+          <span>在线收银配置</span>
+          <p>(酒店对应的企业微信可配置是否开启以下服务类目)</p>
+        </div>
+        <div class="hotelConfig_item_btn" @click="goto('/onlineCashier')">
+          编辑
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
