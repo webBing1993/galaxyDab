@@ -20,7 +20,8 @@
               <div class="main_title_left_div1_div">编号</div>
               <div class="main_title_left_div1_div">服务名称</div>
               <div class="main_title_left_div1_div">在用酒店</div>
-              <div class="main_title_left_div1_div">图片素材</div>
+              <div class="main_title_left_div1_div">选中图标</div>
+              <div class="main_title_left_div1_div">未选中图标</div>
             </div>
             <div class="main_title_left_div2">
               <div style="margin-right:40px;">操作</div>
@@ -34,6 +35,7 @@
               <div class="main_row_left_div">{{item.name}}</div>
               <div class="main_row_left_div">{{item.total?item.total:0}}</div>
               <div class="main_row_left_div">  <img :src="item.icon || '' " alt=""  width="80px" height="80px"></div>
+              <div class="main_row_left_div">  <img :src="item.images || '' " alt=""  width="80px" height="80px"></div>
             </div>
             <div class="main_row_right">
               <div @click="editConfig('edit',item)">编辑</div>
@@ -65,10 +67,10 @@
         <el-form-item label="服务名称"  label-width="120px" prop="serviceName">
           <el-input v-model="addServiceForm.serviceName" placeholder="请输入服务名称"></el-input>
         </el-form-item>
-        <el-form-item label="服务图标" prop="picUrl" ref="uploadImg" label-width="120px" class="tubiao">
-          <div class="tupian" v-if="showpicUrl" style="margin-bottom:10px;">
+        <el-form-item label="选中图标" prop="picUrl" ref="uploadImg" label-width="120px" class="tubiao">
+          <div class="tupian" v-if="showpicUrl1" style="margin-bottom:10px;">
             <img :src="addServiceForm.picUrl" alt="" width="80px" height="80px" >
-            <span class="cancelImg" v-if="showpicUrl" @click="deleteImg($event,addServiceForm.picUrl)">X</span>
+            <span class="cancelImg" v-if="showpicUrl1" @click="deleteImg1($event,addServiceForm.picUrl)">X</span>
           </div>
           <el-upload
             class="upload-demo el-right"
@@ -76,9 +78,28 @@
             :show-file-list=false
             :headers="setHeader"
             name="file"
-            :on-success="filterScriptSuccess"
+            :on-success="filterScriptSuccess1"
             list-type="picture-card">
             <el-button size="small" type="primary" v-if="addServiceForm.picUrl==''">
+              点击上传</el-button>
+            <el-button size="small" type="primary" v-else>
+              重新上传</el-button>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="未选中图标" prop="picUrl" ref="uploadImg1" label-width="120px" class="tubiao">
+          <div class="tupian" v-if="showpicUrl2" style="margin-bottom:10px;">
+            <img :src="addServiceForm.images" alt="" width="80px" height="80px" >
+            <span class="cancelImg" v-if="showpicUrl2" @click="deleteImg2($event,addServiceForm.images)">X</span>
+          </div>
+          <el-upload
+            class="upload-demo el-right"
+            :action="scriptUpload"
+            :show-file-list=false
+            :headers="setHeader"
+            name="file"
+            :on-success="filterScriptSuccess2"
+            list-type="picture-card">
+            <el-button size="small" type="primary" v-if="addServiceForm.images==''">
               点击上传</el-button>
             <el-button size="small" type="primary" v-else>
               重新上传</el-button>
@@ -110,10 +131,13 @@
         addServiceForm: {
           id: '',
           serviceName: '',
-          picUrl: ''
+          picUrl: '',
+          images:'',
+
         },
         configList: [], // 在住服务列表
-        showpicUrl: false,
+        showpicUrl1: false,
+        showpicUrl2:false,
         rules: {
           // 现在只是简单的验证后面要改验证
           serviceName: [
@@ -183,30 +207,45 @@
         this.addDialog = true
         this.handleType = type
         if (type == 'edit') {
-          this.showpicUrl = true
+          this.showpicUrl1= true
+          this.showpicUrl2= true
           this.addServiceForm.serviceName = obj.name
           this.addServiceForm.picUrl = obj.icon
           this.addServiceForm.id = obj.id
+          this.addServiceForm.images = obj.images
           this.title = '编辑服务'
         } else {
           this.title = '添加服务'
-          this.showpicUrl = false
+          this.showpicUrl1= false
+          this.showpicUrl2= false
           this.addServiceForm.serviceName = ''
           this.addServiceForm.picUrl = ''
           this.addServiceForm.id = ''
+          this.addServiceForm.images = ''
         }
       },
-      filterScriptSuccess (res, file, list) {
+      filterScriptSuccess1 (res, file, list) {
         if (res.data) {
           this.addServiceForm.picUrl = res.data
-          this.showpicUrl = true
+          this.showpicUrl1= true
           this.$refs.uploadImg.clearValidate()
         }
       },
+      filterScriptSuccess2 (res, file, list) {
+        if (res.data) {
+          this.addServiceForm.images= res.data
+          this.showpicUrl2= true
+          this.$refs.uploadImg1.clearValidate()
+        }
+      },
       // 删除图片
-      deleteImg () {
+      deleteImg1 () {
         this.addServiceForm.picUrl = ''
-        this.showpicUrl = false
+        this.showpicUrl1 = false
+      },
+      deleteImg2 () {
+        this.addServiceForm.images = ''
+        this.showpicUrl2 = false
       },
       // 添加或者编辑确认框
       sureDialog () {
@@ -218,6 +257,7 @@
                 data: {
                   name: this.addServiceForm.serviceName,
                   icon: this.addServiceForm.picUrl,
+                  images:this.addServiceForm.images,
                   type:'trade_tags'
                 },
                 onsuccess: (body) => {
@@ -229,7 +269,8 @@
                 data: {
                   id: this.addServiceForm.id,
                   name: this.addServiceForm.serviceName,
-                  icon: this.addServiceForm.picUrl
+                  icon: this.addServiceForm.picUrl,
+                  images:this.addServiceForm.images,
                 },
                 onsuccess: (body) => {
                   this.initConfig()
