@@ -493,4 +493,7 @@
     align-items: center;
     margin-top: 30px;
   }
+  .tubiao{
+    margin-bottom:46px;
+  }
 </style>

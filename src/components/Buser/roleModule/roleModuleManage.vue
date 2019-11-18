@@ -159,23 +159,26 @@
           tempid: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
+            console.log(this.authTableDate);
+            this.authTree({
+              onsuccess: body => {
+                if (body.data) {
+                  this.AuthNodeTree[0].subPermissions = body.data
+                  let temp=[]
+                  this.authTableDate.map(item=>{
+                    temp.push(item.id)
+                  })
+                  this.$nextTick(function () {
+                     this.haveSetedAuth = temp
+                  })
+                } else {
+                }
+
+              }
+            })
           }
         })
-        this.authTree({
-          onsuccess: body => {
-            if (body.data) {
-              this.AuthNodeTree[0].subPermissions = body.data
-              let temp=[]
-              this.authTableDate.map(item=>{
-                temp.push(item.id)
-              })
-              this.$nextTick(function () {
-                this.haveSetedAuth = temp
-              })
-            } else {
-            }
-          }
-        })
+
       },
 
       handleViewAuth(parm) {
