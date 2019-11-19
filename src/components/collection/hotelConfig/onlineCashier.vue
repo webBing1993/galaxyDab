@@ -86,7 +86,7 @@
               重新上传</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item label="未选中图标" prop="picUrl" ref="uploadImg1" label-width="120px" class="tubiao">
+        <el-form-item label="未选中图标" prop="images" ref="uploadImg1" label-width="120px" class="tubiao">
           <div class="tupian" v-if="showpicUrl2" style="margin-bottom:10px;">
             <img :src="addServiceForm.images" alt="" width="80px" height="80px" >
             <span class="cancelImg" v-if="showpicUrl2" @click="deleteImg2($event,addServiceForm.images)">X</span>
@@ -153,6 +153,13 @@
               message: '图片不能为空',
               trigger: 'change'
             }
+          ],
+          images:[
+            {
+              required: true,
+              message: '图片1不能为空',
+              trigger: 'change'
+            }
           ]
         },
         handleType: '', // 弹框类型
@@ -204,8 +211,17 @@
       },
       // 编辑在住服务
       editConfig (type, obj) {
-        this.addDialog = true
         this.handleType = type
+        if(this.total==10 && type != 'edit'){
+
+          this.$message({
+            type: 'info',
+            message: '不能添加，最多添加10条数据'
+          })
+          return
+        }
+        this.addDialog = true
+
         if (type == 'edit') {
           this.showpicUrl1= true
           this.showpicUrl2= true
