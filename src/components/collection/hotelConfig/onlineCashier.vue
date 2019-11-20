@@ -157,7 +157,7 @@
           images:[
             {
               required: true,
-              message: '图片1不能为空',
+              message: '图片不能为空',
               trigger: 'change'
             }
           ]
