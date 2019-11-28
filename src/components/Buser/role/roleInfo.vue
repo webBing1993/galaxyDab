@@ -108,7 +108,6 @@
         node-key="id"
         default-expand-all
         show-checkbox
-        check-strictly
         @check="handelNodeChecked"
         >
       </el-tree>

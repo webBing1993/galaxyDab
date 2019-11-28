@@ -62,7 +62,6 @@
         :check-on-click-node="true"
         :highlight-current="true"
         :default-checked-keys="haveSetedAuth"
-        check-strictly
         ref="tree"
         node-key="id"
         default-expand-all
