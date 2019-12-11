@@ -36,6 +36,7 @@ const hotelConfigList = resolve => require(['@/components/collection/hotelConfig
 const configure = resolve => require(['@/components/collection/hotelList/configure'], resolve)
 const userListDetail =  resolve => require(['@/components/Buser/userListDetails/index'], resolve)
 const liveInService = resolve => require(['@/components/collection/hotelConfig/liveInService'],resolve)
+const  onlineCashier= resolve => require(['@/components/collection/hotelConfig/onlineCashier'],resolve)
 const hotelFacilties = resolve => require(['@/components/collection/hotelConfig/hotelFacilties'],resolve)
 //合并路由添加
 const List1 =  resolve => require(['@/components/ecardDashboard/list1'], resolve)
@@ -257,6 +258,11 @@ const main = [
             name: 'hotelFacilties',
             path: '/hotelFacilties',
             component: hotelFacilties,
+          },
+          {
+            name: 'onlineCashier',
+            path: '/onlineCashier',
+            component: onlineCashier,
           },
           // 酒店配置
           {
