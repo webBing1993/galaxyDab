@@ -189,7 +189,7 @@
             "id": "0",
             "status": null,
             "subPermissions": [],
-             disabled: true
+             disabled: false
           }
         ],
         defaultProps: {
