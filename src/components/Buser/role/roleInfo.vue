@@ -475,7 +475,9 @@
                   tempPermissions.push(item.permissionId)
                   let parentNodeDelete = (item.name!='管理后台') && (item.name!='B端用户管理') && (item.name!='组织管理') && (item.name!='配置管理') && (item.name!='酒店配置管理') && (item.name!='发现') && (item.name!='系统配置');
                   let parentNodeDelete1 = (item.name!='企业微信') && (item.name!='人证通') && (item.name!='E卡通') && (item.name!='酒店服务') && (item.name != '酒店设置')&& (item.name != '客房中心')&& (item.name != '双屏权限')&& (item.name != '小程序商城')
-                  if(parentNodeDelete && parentNodeDelete1){
+                  let parentNodeDelete2 = (item.name!='独立支付') && (item.name!='收款') && (item.tag!='independent_trade_deposit') && (item.name!='独立支付-交易记录')
+
+                  if(parentNodeDelete && parentNodeDelete1 && parentNodeDelete2  ){
                     if(item!=null) {
                       temp.push(item.permissionId)
                     }
@@ -488,7 +490,6 @@
                 this.haveSetedAuth = temp
                 console.log("选中",this.haveSetedAuth );
               })
-            } else {
             }
           }
         })
@@ -515,7 +516,7 @@
         this.getAuthByAuth({
           roleId: parm.id,
           onsuccess: body => {
-            // console.log('查看权限列表',body.data)
+             console.log('查看权限列表',body.data)
             this.authTableDate = body.data
             this.haveSetedAuth=[]
             this.getAllAuthTree()
@@ -541,6 +542,7 @@
         })
       },
       handelNodeChecked(parm1,parm2){
+           console.log('选中ID11111111',parm2);
            if(parm2.halfCheckedKeys.length != 1){
              parm2.halfCheckedKeys.splice(0,1)
              this.selectedAuthId = parm2.halfCheckedKeys.concat(parm2.checkedKeys)
@@ -549,6 +551,7 @@
 
              this.selectedAuthId = parm2.checkedKeys
            }
+           console.log('选中ID',this.selectedAuthId);
 
       },
     },

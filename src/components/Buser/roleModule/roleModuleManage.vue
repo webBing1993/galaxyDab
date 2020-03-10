@@ -147,37 +147,48 @@
 //        })
 //      },
       handelNodeChecked(parm1,parm2){
-        this.selectedAuthId = parm2.checkedKeys
+        // this.selectedAuthId = parm2.checkedKeys
+
+        console.log('选中ID11111111',parm2);
+        if(parm2.halfCheckedKeys.length != 1){
+          parm2.halfCheckedKeys.splice(0,1)
+          this.selectedAuthId = parm2.halfCheckedKeys.concat(parm2.checkedKeys)
+        }
+        else{
+
+          this.selectedAuthId = parm2.checkedKeys
+        }
+        console.log('选中ID',this.selectedAuthId);
       },
       handleSetAuth(parm) {
         this.authTitle = '设置权限'
         this.showSetAuth = true
         this.setAuthStatus = true
         this.currentTempItemId = parm.id
-        this.getAuthByTemp({
-          tempid: parm.id,
-          onsuccess: body => {
-            this.authTableDate = body.data
-            console.log(this.authTableDate);
-            this.authTree({
-              onsuccess: body => {
-                if (body.data) {
-                  this.AuthNodeTree[0].subPermissions = body.data
-                  let temp=[]
-                  this.authTableDate.map(item=>{
-                    temp.push(item.id)
-                  })
-                  this.$nextTick(function () {
-                     this.haveSetedAuth = temp
-                  })
-                } else {
-                }
-
-              }
-            })
-          }
-        })
-
+        // this.getAuthByTemp({
+        //   tempid: parm.id,
+        //   onsuccess: body => {
+        //     this.authTableDate = body.data
+        //     console.log(this.authTableDate);
+        //     this.authTree({
+        //       onsuccess: body => {
+        //         if (body.data) {
+        //           this.AuthNodeTree[0].subPermissions = body.data
+        //           let temp=[]
+        //           this.authTableDate.map(item=>{
+        //             temp.push(item.id)
+        //           })
+        //           this.$nextTick(function () {
+        //              this.haveSetedAuth = temp
+        //           })
+        //         } else {
+        //         }
+        //
+        //       }
+        //     })
+        //   }
+        // })
+        this.getAllAuthTree(parm)
       },
 
       handleViewAuth(parm) {
@@ -192,25 +203,56 @@
 //            this.authTableDate = body.data
 //          }
 //        })
+        this.getAllAuthTree(parm)
+
+
+      },
+      getAllAuthTree(parm){
         this.getAuthByTemp({
           tempid: parm.id,
           onsuccess: body => {
             this.authTableDate = body.data
-          }
-        })
-        this.authTree({
-          onsuccess: body => {
-            if (body.data) {
-              this.AuthNodeTree[0].subPermissions = body.data
-              let temp=[]
-              this.authTableDate.map(item=>{
-                temp.push(item.id)
-              })
-              this.$nextTick(function () {
-                this.haveSetedAuth = temp
-              })
-            } else {
-            }
+            this.authTree({
+              onsuccess: body => {
+                // if (body.data) {
+                //   this.AuthNodeTree[0].subPermissions = body.data
+                //   let temp=[]
+                //   this.authTableDate.map(item=>{
+                //     temp.push(item.id)
+                //   })
+                //   this.$nextTick(function () {
+                //     this.haveSetedAuth = temp
+                //   })
+                // } else {
+                // }
+                if (body.data) {
+                  this.AuthNodeTree[0].subPermissions = body.data
+                  let temp=[]
+                  let tempPermissions = []
+                  console.log("选中zhiaiqn",this.authTableDate );
+                  this.authTableDate.map(item=>{
+                    if(item!=null){
+                      console.log('1111111111',item.name);
+                      tempPermissions.push(item.permissionId)
+                      let parentNodeDelete = (item.name!='管理后台') && (item.name!='B端用户管理') && (item.name!='组织管理') && (item.name!='配置管理') && (item.name!='酒店配置管理') && (item.name!='发现') && (item.name!='系统配置');
+                      let parentNodeDelete1 = (item.name!='企业微信') && (item.name!='人证通') && (item.name!='E卡通') && (item.name!='酒店服务') && (item.name != '酒店设置')&& (item.name != '客房中心')&& (item.name != '双屏权限')&& (item.name != '小程序商城')
+                      let parentNodeDelete2 = (item.name!='独立支付') && (item.name!='收款') && (item.tag!='independent_trade_deposit') && (item.name!='独立支付-交易记录')
+                      console.log(parentNodeDelete && parentNodeDelete1);
+                      if(parentNodeDelete && parentNodeDelete1 && parentNodeDelete2){
+                        temp.push(item.id)
+                        console.log('temp',temp);
+                      }
+                    }
+
+                  })
+                  this.selectedAuthId = tempPermissions
+                  this.$nextTick(function () {
+                    this.haveSetedAuth = temp
+                    console.log("选中",this.haveSetedAuth );
+                  })
+                }
+              }
+            })
           }
         })
       },
