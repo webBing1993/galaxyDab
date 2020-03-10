@@ -229,18 +229,17 @@
                   this.AuthNodeTree[0].subPermissions = body.data
                   let temp=[]
                   let tempPermissions = []
-                  console.log("选中zhiaiqn",this.authTableDate );
+
                   this.authTableDate.map(item=>{
                     if(item!=null){
-                      console.log('1111111111',item.name);
-                      tempPermissions.push(item.permissionId)
+
+                      tempPermissions.push(item.id)
                       let parentNodeDelete = (item.name!='管理后台') && (item.name!='B端用户管理') && (item.name!='组织管理') && (item.name!='配置管理') && (item.name!='酒店配置管理') && (item.name!='发现') && (item.name!='系统配置');
                       let parentNodeDelete1 = (item.name!='企业微信') && (item.name!='人证通') && (item.name!='E卡通') && (item.name!='酒店服务') && (item.name != '酒店设置')&& (item.name != '客房中心')&& (item.name != '双屏权限')&& (item.name != '小程序商城')
                       let parentNodeDelete2 = (item.name!='独立支付') && (item.name!='收款') && (item.tag!='independent_trade_deposit') && (item.name!='独立支付-交易记录')
-                      console.log(parentNodeDelete && parentNodeDelete1);
+
                       if(parentNodeDelete && parentNodeDelete1 && parentNodeDelete2){
                         temp.push(item.id)
-                        console.log('temp',temp);
                       }
                     }
 
@@ -248,7 +247,6 @@
                   this.selectedAuthId = tempPermissions
                   this.$nextTick(function () {
                     this.haveSetedAuth = temp
-                    console.log("选中",this.haveSetedAuth );
                   })
                 }
               }
@@ -303,6 +301,7 @@
           roleTempId: this.currentTempItemId,
           pemissionIds: this.selectedAuthId,
         }
+        console.log('1111111111',this.selectedAuthId);
         this.setTempAuth({
           fields: fields,
           onsuccess: body => {

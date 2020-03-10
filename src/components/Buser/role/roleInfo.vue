@@ -488,7 +488,6 @@
               this.selectedAuthId = tempPermissions
               this.$nextTick(function () {
                 this.haveSetedAuth = temp
-                console.log("选中",this.haveSetedAuth );
               })
             }
           }
